@@ -1,0 +1,59 @@
+<div id="request-summary" class="col-md-5 col-md-offset-1">
+    <div class="well">
+        <h3 class="page-header">Order summary</h3>
+        <div id="ticketSummaryView" class="row">
+            <div class="col-md-12">
+                <div ng-show="tickets.length > 0" class="table-stack">
+                    <table class="table table-bordered table-striped table-condensed" style="background-color: #fffffa;">
+                        <thead>
+                        <tr>
+                            <th colspan="7"><strong>Requested tickets</strong></th>
+                        </tr>
+                        <tr>
+                            <th>Section</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="ticketRequestSummary" ng-repeat="ticketRequest in tickets">
+                        <tr>
+                            <td data-title="Section">{{ticketRequest.ticketPrice.section.name}}</td>
+                            <td data-title="Category">{{ticketRequest.ticketPrice.ticketCategory.description}}</td>
+                            <td data-title="Quantity">{{ticketRequest.quantity}}</td>
+                            <td data-title="Price">{{ticketRequest.ticketPrice.price}}</td>
+                            <td><span class="glyphicon glyphicon-trash" ng-click="removeTicket($index)" /></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p/>
+                    <div class="row">
+                        <div class="col-md-5"><strong>Total ticket count:</strong> {{totals.tickets}}</div>
+                        <div class="col-md-5"><strong>Total price:</strong> ${{totals.price}}</div>
+                    </div>
+                </div>
+                <div ng-show="tickets.length == 0">
+                    <p>
+                        No tickets requested.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <h3 class="page-header">Checkout</h3>
+        <div class="row">
+            <div class="col-md-12">
+                <form name="submitForm">
+                    <div class="form-group">
+                        <input ng-model="bookingRequest.email" type='email' id="email" name="email" class="form-control" placeholder="Email" required/>
+                        <p class="help-block error-notification" id="error-email" ng-show="submitForm.email.$invalid && !submitForm.email.$pristine">Please enter a valid e-mail address</p>
+                    </div>
+                    <div class="form-group visible-md-block visible-lg-block">
+                        <input type='button' class="btn btn-primary" name="submit" value="Checkout"
+                               ng-disabled="enableCheckout()" ng-click="checkout()" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

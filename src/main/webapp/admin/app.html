@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ticketmonster">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Ticket-monster</title>
+    <link href='http://fonts.googleapis.com/css?family=Rokkitt' rel='stylesheet' type='text/css'/>
+    <link href="styles/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="styles/bootstrap-theme.css" rel="stylesheet" media="screen">
+    <link href="styles/main.css" rel="stylesheet" media="screen">
+    <link href="styles/custom-forge.css" rel="stylesheet" media="screen">
+</head>
+<body>
+    <div id="wrap">
+    	
+    	<div id="logo" class="hidden-xs"><div class="wrap"><h1>Ticket Monster</h1></div></div>
+    	<div class="navbar">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle pull-left" data-toggle="collapse" data-target="#navbar-items">
+                    <span class="glyphicon glyphicon-list"> Links</span>
+                </button>
+                <button type="button" class="navbar-toggle" data-toggle="offcanvas">
+                    TicketMonster Entities <span class="glyphicon glyphicon-th text-right"></span>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="navbar-items" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="../index.html#about">About</a></li>
+                    <li><a href="../index.html#events">Events</a></li>
+                    <li><a href="../index.html#venues">Venues</a></li>
+                    <li><a href="../index.html#bookings">Bookings</a></li>
+                    <li><a href="../index.html#monitor">Monitor</a></li>
+                    <li><a href="#">Administration</a></li>
+                </ul>
+            </div>
+    	</div>
+        
+        <div class="container">
+            <div class="row row-offcanvas row-offcanvas-left">
+                <!-- sidebar -->
+                <div class="col-xs-6 col-sm-3 well sidebar-offcanvas">
+                    <a href="app.html">
+                        <img class="hidden-xs img-responsive" src="img/forge-logo.png" alt="JBoss Forge"></img>
+                    </a>
+                    <nav class="sidebar-nav" ng-controller="NavController" role="navigation">
+                        <div id="sidebar-entries" class="list-group">
+                        	<a class="list-group-item" ng-class="{active: matchesRoute('Bookings')}" href="#/Bookings" data-toggle="offcanvas">Bookings</a>
+                        	<a class="list-group-item" ng-class="{active: matchesRoute('Events')}" href="#/Events" data-toggle="offcanvas">Events</a>
+                        	<a class="list-group-item" ng-class="{active: matchesRoute('EventCategories')}" href="#/EventCategories" data-toggle="offcanvas">EventCategories</a>
+                        	<a class="list-group-item" ng-class="{active: matchesRoute('MediaItems')}" href="#/MediaItems" data-toggle="offcanvas">MediaItems</a>
+                        	<a class="list-group-item" ng-class="{active: matchesRoute('Performances')}" href="#/Performances" data-toggle="offcanvas">Performances</a>
+                        	<a class="list-group-item" ng-class="{active: matchesRoute('Sections')}" href="#/Sections" data-toggle="offcanvas">Sections</a>
+                        	<a class="list-group-item" ng-class="{active: matchesRoute('SectionAllocations')}" href="#/SectionAllocations" data-toggle="offcanvas">SectionAllocations</a>
+                        	<a class="list-group-item" ng-class="{active: matchesRoute('Shows')}" href="#/Shows" data-toggle="offcanvas">Shows</a>
+                        	<a class="list-group-item" ng-class="{active: matchesRoute('Tickets')}" href="#/Tickets" data-toggle="offcanvas">Tickets</a>
+                        	<a class="list-group-item" ng-class="{active: matchesRoute('TicketCategories')}" href="#/TicketCategories" data-toggle="offcanvas">TicketCategories</a>
+                        	<a class="list-group-item" ng-class="{active: matchesRoute('TicketPrices')}" href="#/TicketPrices" data-toggle="offcanvas">TicketPrices</a>
+                        	<a class="list-group-item" ng-class="{active: matchesRoute('Venues')}" href="#/Venues" data-toggle="offcanvas">Venues</a>
+                        </div>
+                    </nav>
+                </div>
+                <!-- main area-->
+                <div class="col-sm-offset-1 col-xs-12 col-sm-8 well mainarea">
+                    <div ng-controller="FlashController" class="alert alert-dismissible" ng-class="'alert-' + flash.getMessage().cssClass" role="alert" ng-show="showAlert">
+                        <button type="button" class="close" ng-click="hideAlert()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        {{flash.getMessage().text}}
+                    </div>
+                    <div id="main" ng-view>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="footer">
+        <div class="container">
+            <p>Powered by <a href="http://jboss.org/forge">Forge</a></p>
+            <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        </div>
+    </div>
+    
+    <script src="scripts/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="scripts/vendor/jquery-2.1.1.js"></script>
+    <script src="scripts/vendor/bootstrap.js"></script>
+    <script src="scripts/vendor/angular.js"></script>
+    <script src="scripts/vendor/angular-route.js"></script>
+    <script src="scripts/vendor/angular-resource.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/offcanvas.js"></script>
+    <script src="scripts/directives/datepicker.js"></script>
+    <script src="scripts/directives/timepicker.js"></script>
+    <script src="scripts/directives/datetimepicker.js"></script>
+    <script src="scripts/filters/startFromFilter.js"></script>
+    <script src="scripts/filters/genericSearchFilter.js"></script>
+    <script src="scripts/services/flash.js"></script>
+    <script src="scripts/services/locationParser.js"></script>
+    <script src="scripts/controllers/flashController.js"></script>
+    <script src="scripts/services/BookingFactory.js"></script>
+    <script src="scripts/controllers/newBookingController.js"></script>
+    <script src="scripts/controllers/searchBookingController.js"></script>
+    <script src="scripts/controllers/editBookingController.js"></script>
+    <script src="scripts/services/EventFactory.js"></script>
+    <script src="scripts/controllers/newEventController.js"></script>
+    <script src="scripts/controllers/searchEventController.js"></script>
+    <script src="scripts/controllers/editEventController.js"></script>
+    <script src="scripts/services/EventCategoryFactory.js"></script>
+    <script src="scripts/controllers/newEventCategoryController.js"></script>
+    <script src="scripts/controllers/searchEventCategoryController.js"></script>
+    <script src="scripts/controllers/editEventCategoryController.js"></script>
+    <script src="scripts/services/MediaItemFactory.js"></script>
+    <script src="scripts/controllers/newMediaItemController.js"></script>
+    <script src="scripts/controllers/searchMediaItemController.js"></script>
+    <script src="scripts/controllers/editMediaItemController.js"></script>
+    <script src="scripts/services/PerformanceFactory.js"></script>
+    <script src="scripts/controllers/newPerformanceController.js"></script>
+    <script src="scripts/controllers/searchPerformanceController.js"></script>
+    <script src="scripts/controllers/editPerformanceController.js"></script>
+    <script src="scripts/services/SectionFactory.js"></script>
+    <script src="scripts/controllers/newSectionController.js"></script>
+    <script src="scripts/controllers/searchSectionController.js"></script>
+    <script src="scripts/controllers/editSectionController.js"></script>
+    <script src="scripts/services/SectionAllocationFactory.js"></script>
+    <script src="scripts/controllers/newSectionAllocationController.js"></script>
+    <script src="scripts/controllers/searchSectionAllocationController.js"></script>
+    <script src="scripts/controllers/editSectionAllocationController.js"></script>
+    <script src="scripts/services/ShowFactory.js"></script>
+    <script src="scripts/controllers/newShowController.js"></script>
+    <script src="scripts/controllers/searchShowController.js"></script>
+    <script src="scripts/controllers/editShowController.js"></script>
+    <script src="scripts/services/TicketFactory.js"></script>
+    <script src="scripts/controllers/newTicketController.js"></script>
+    <script src="scripts/controllers/searchTicketController.js"></script>
+    <script src="scripts/controllers/editTicketController.js"></script>
+    <script src="scripts/services/TicketCategoryFactory.js"></script>
+    <script src="scripts/controllers/newTicketCategoryController.js"></script>
+    <script src="scripts/controllers/searchTicketCategoryController.js"></script>
+    <script src="scripts/controllers/editTicketCategoryController.js"></script>
+    <script src="scripts/services/TicketPriceFactory.js"></script>
+    <script src="scripts/controllers/newTicketPriceController.js"></script>
+    <script src="scripts/controllers/searchTicketPriceController.js"></script>
+    <script src="scripts/controllers/editTicketPriceController.js"></script>
+    <script src="scripts/services/VenueFactory.js"></script>
+    <script src="scripts/controllers/newVenueController.js"></script>
+    <script src="scripts/controllers/searchVenueController.js"></script>
+    <script src="scripts/controllers/editVenueController.js"></script>
+</body>
+</html>

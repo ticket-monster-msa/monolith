@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0"
+	id="org.jboss.examples.ticketmonster.cordova" version="1.0.0">
+	<name>TicketMonster-Cordova</name>
+
+	<description>
+		The hybrid mobile app for TicketMonster.
+	</description>
+
+	<author href="http://www.jboss.org/jdf/examples/get-started/"
+		email="jdf-users@lists.jboss.org">
+		JBoss by Red Hat
+	</author>
+
+	<!-- The application start page -->
+	<content src="mobileapp.html" />
+
+	<!-- Add the TicketMonster cloud app to the domain whitelist. Domains are 
+		assumed blocked unless set otherwise. -->
+	<access origin="http://ticketmonster-jdf.rhcloud.com" />
+	<preference name="fullscreen" value="true" />
+	<preference name="webviewbounce" value="true" />
+
+	<feature name="App">
+		<param name="android-package" value="org.apache.cordova.App" />
+	</feature>
+	<feature name="StatusBar">
+		<param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+		<param name="ios-package" value="CDVStatusBar" />
+		<param name="id" value="org.apache.cordova.statusbar" />
+	</feature>
+	<feature name="Device">
+		<param name="android-package" value="org.apache.cordova.device.Device" />
+		<param name="ios-package" value="CDVDevice" />
+		<param name="id" value="org.apache.cordova.device" />
+	</feature>
+	<feature name="Notification">
+		<param name="android-package" value="org.apache.cordova.dialogs.Notification" />
+		<param name="ios-package" value="CDVNotification" />
+		<param name="id" value="org.apache.cordova.dialogs" />
+	</feature>
+
+</widget>

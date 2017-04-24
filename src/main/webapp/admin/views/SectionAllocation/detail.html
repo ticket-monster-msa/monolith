@@ -1,0 +1,43 @@
+<header ng-switch on="$location.path().indexOf('/SectionAllocations/new') > -1">
+    <h3 ng-switch-when="true">Create a new SectionAllocation</h3>
+    <h3 ng-switch-when="false">View or edit SectionAllocation</h3>
+</header>
+<form id="SectionAllocationForm" name="SectionAllocationForm" class="form-horizontal" role="form">
+        <div class="form-group" ng-class="{'has-error': SectionAllocationForm.occupiedCount.$invalid}">
+        <label for="occupiedCount" class="col-sm-2 control-label">Occupied Count</label>
+        <div id="occupiedCountControls" class="col-sm-10">
+            <input id="occupiedCount" name="occupiedCount" type="number" class="form-control" ng-model="sectionAllocation.occupiedCount" placeholder="Enter the SectionAllocation Occupied Count"></input>
+            <span class="help-block error" ng-show="SectionAllocationForm.occupiedCount.$error.number">not a number</span>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': SectionAllocationForm.performance.$invalid}">
+        <label for="performance" class="col-sm-2 control-label">Performance</label>
+        <div id="performanceControls" class="col-sm-10">
+        <select id="performance" name="performance" class="form-control" ng-model="performanceSelection" ng-options="p.text for p in performanceSelectionList" required >
+            <option value="">Choose a Performance</option>
+        </select>
+        <span class="help-block error" ng-show="SectionAllocationForm.performance.$error.required">required</span> 
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': SectionAllocationForm.section.$invalid}">
+        <label for="section" class="col-sm-2 control-label">Section</label>
+        <div id="sectionControls" class="col-sm-10">
+        <select id="section" name="section" class="form-control" ng-model="sectionSelection" ng-options="s.text for s in sectionSelectionList" required >
+            <option value="">Choose a Section</option>
+        </select>
+        <span class="help-block error" ng-show="SectionAllocationForm.section.$error.required">required</span> 
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="saveSectionAllocation" name="saveSectionAllocation" class="btn btn-primary" ng-disabled="isClean() || SectionAllocationForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
+            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
+            <button id="deleteSectionAllocation" name="deleteSectionAllocation" class="btn btn-danger" ng-show="sectionAllocation.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,53 @@
+<header ng-switch on="$location.path().indexOf('/Shows/new') > -1">
+    <h3 ng-switch-when="true">Create a new Show</h3>
+    <h3 ng-switch-when="false">View or edit Show</h3>
+</header>
+<form id="ShowForm" name="ShowForm" class="form-horizontal" role="form">
+    
+    <div class="form-group" ng-class="{'has-error': ShowForm.event.$invalid}">
+        <label for="event" class="col-sm-2 control-label">Event</label>
+        <div id="eventControls" class="col-sm-10">
+        <select id="event" name="event" class="form-control" ng-model="eventSelection" ng-options="e.text for e in eventSelectionList" required >
+            <option value="">Choose a Event</option>
+        </select>
+        <span class="help-block error" ng-show="ShowForm.event.$error.required">required</span> 
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': ShowForm.performances.$invalid}">
+        <label for="performances" class="col-sm-2 control-label">Performances</label>
+        <div id="performancesControls" class="col-sm-10">
+            <select id="performances" name="performances" multiple class="form-control" ng-model="performancesSelection" ng-options="p.text for p in performancesSelectionList">
+                <option value="">Choose a Performances</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': ShowForm.venue.$invalid}">
+        <label for="venue" class="col-sm-2 control-label">Venue</label>
+        <div id="venueControls" class="col-sm-10">
+        <select id="venue" name="venue" class="form-control" ng-model="venueSelection" ng-options="v.text for v in venueSelectionList" required >
+            <option value="">Choose a Venue</option>
+        </select>
+        <span class="help-block error" ng-show="ShowForm.venue.$error.required">required</span> 
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': ShowForm.ticketPrices.$invalid}">
+        <label for="ticketPrices" class="col-sm-2 control-label">Ticket Prices</label>
+        <div id="ticketPricesControls" class="col-sm-10">
+            <select id="ticketPrices" name="ticketPrices" multiple class="form-control" ng-model="ticketPricesSelection" ng-options="t.text for t in ticketPricesSelectionList">
+                <option value="">Choose a Ticket Prices</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="saveShow" name="saveShow" class="btn btn-primary" ng-disabled="isClean() || ShowForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
+            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
+            <button id="deleteShow" name="deleteShow" class="btn btn-danger" ng-show="show.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        </div>
+    </div>
+</form>

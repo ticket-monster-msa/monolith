@@ -1,0 +1,68 @@
+@CHARSET "UTF-8";
+
+/* Sticky footer styles
+ -------------------------------------------------- */
+
+html, body {
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
+    /* Pad bottom by footer height */
+    padding: 0 0 60px;
+}
+
+#wrap > .container {
+    padding-top: 50px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+    height: 60px;
+}
+
+#footer {
+    background-color: #F5F5F5;
+    text-align: center;
+    border-top: 1px solid #E5E5E5;
+}
+
+h2 i.icon-check {
+    vertical-align: middle;
+}
+
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+    table {
+        table-layout: auto;
+    }
+    .row-offcanvas {
+        position: relative;
+        transition: all 0.25s ease-out;
+    }
+    .row-offcanvas-left .sidebar-offcanvas {
+        display:none;
+    }
+    .row-offcanvas-left.active .sidebar-offcanvas {
+        display:inherit;
+    }
+    .row-offcanvas-left.active .mainarea {
+        display:none;
+    }
+    .sidebar-offcanvas {
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+}

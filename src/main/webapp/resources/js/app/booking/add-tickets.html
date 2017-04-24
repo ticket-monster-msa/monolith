@@ -1,0 +1,44 @@
+<div class="col-md-4">
+    <div class="well">
+        <h3 class="page-header">Select tickets</h3>
+        <form class="form-horizontal">
+            <div id="sectionSelectorPlaceholder">
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="sectionSelect"><strong>Section</strong></label>
+                    <div class="col-md-9">
+                        <select id="sectionSelect" class="form-control" ng-options="section as (section.name + ' - ' + section.description) for section in sections" ng-model="selectedSection">
+                            <option value="">Choose a section</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div id="ticketCategoriesViewPlaceholder">
+            <form class="form-horizontal" ng-if="ticketPrices.length > 0">
+                <div ng-repeat="ticketPrice in ticketPrices" class="form-group" id="ticket-category-fieldset-{{ticketPrice.id}}">
+                    <label class="col-md-3 control-label"><strong>{{ticketPrice.ticketCategory.description}}</strong></label>
+
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <input class="form-control col-md-6" rel="tooltip" title="Enter value"
+                                   data-tm-id="{{ticketPrice.id}}"
+                                   placeholder="Number of tickets"
+                                   name="tickets-{{ticketPrice.ticketCategory.id}}" type="number" min="0" ng-model="ticketPrice.quantity" />
+                            <span class="input-group-addon">@ ${{ticketPrice.price}}</span>
+
+                            <p class="help-block" id="error-input-{{ticketPrice.id}}"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <p>&nbsp;</p>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2">
+                        <input type="button" class="btn btn-primary visible-md-inline visible-lg-inline" ng-disabled="checkTickets()" ng-click="addTickets()" name="add" value="Add tickets"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
