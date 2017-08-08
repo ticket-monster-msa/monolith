@@ -35,6 +35,17 @@
             <enabled>false</enabled>
           </snapshots>
         </repository>
+        <repository>
+          <id>redhat.ga</id>
+          <name>Red Hat GA Repository</name>
+          <url>https://maven.repository.redhat.com/ga</url>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+        </repository>
       </repositories>
       <pluginRepositories>
         <pluginRepository>
@@ -46,6 +57,17 @@
           <snapshots>
             <enabled>false</enabled>
           </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+          <id>redhat.ga</id>
+          <name>Red Hat GA Repository</name>
+          <url>https://maven.repository.redhat.com/ga</url>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
         </pluginRepository>
       </pluginRepositories>
     </profile>
@@ -62,6 +84,17 @@
           <snapshots>
             <enabled>false</enabled>
           </snapshots>
+        </repository>
+        <repository>
+          <id>redhat.ea</id>
+          <name>Red Hat Early Access Repository</name>
+          <url>https://maven.repository.redhat.com/earlyaccess/all</url>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
         </repository>
       </repositories>
       <pluginRepositories>
