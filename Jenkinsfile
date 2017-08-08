@@ -1,5 +1,5 @@
 #!/usr/bin/groovy
-@library('github.com/fabric8io/fabric8-pipeline-library@d436410')
+@Library('github.com/fabric8io/fabric8-pipeline-library@d436410')
 def appName="ticketmonster"
 def project=""
 
