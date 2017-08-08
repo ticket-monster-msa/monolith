@@ -1,4 +1,4 @@
-def appName="ticket-monster-full"
+def appName="ticketmonster"
 def project=""
 
 node("maven") {
