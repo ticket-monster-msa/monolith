@@ -5,7 +5,7 @@ def project=""
 
 
 mavenNode {
-    checkout "http://gogs-cicd.192.168.64.2.nip.io/gogsadmin/ticketmonster-monolith"
+    checkout scm
 
     container(name: 'maven') {
         stage('Build Release'){
