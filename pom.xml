@@ -20,16 +20,6 @@
         https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Application_Platform/
     -->
     <repositories>
-<!--        <repository>
-            <id>jboss-developer-staging-repository</id>
-            <url>http://jboss-developer.github.io/temp-maven-repo/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>-->
         <repository>
             <id>redhat-ga-repository</id>
             <url>https://maven.repository.redhat.com/ga/</url>
@@ -74,16 +64,6 @@
     </repositories>
 
     <pluginRepositories>
-<!--        <pluginRepository>
-            <id>jboss-developer-staging-repository</id>
-            <url>http://jboss-developer.github.io/temp-maven-repo/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>-->
         <pluginRepository>
             <id>redhat-ga-repository</id>
             <url>https://maven.repository.redhat.com/ga/</url>
@@ -119,13 +99,6 @@
         <!-- Specify the JBoss EAP directory to be the JBOSS_HOME environment
             variable -->
         <jboss.home>${env.JBOSS_HOME}</jboss.home>
-        <!-- Define the version of JBoss' Java EE APIs and Tools we want
-            to import. -->
-        <!-- <jboss.bom.version>1.0.4.Final-redhat-9</jboss.bom.version> -->
-        <!-- Alternatively, comment out the above line, and un-comment the 
-            line below to use version 1.0.4.Final-redhat-9 which is a release certified 
-            to work with JBoss EAP 7. It requires you have access to the JBoss EAP 7
-            maven repository. -->
         <version.jboss.bom.eap>7.0.7.GA</version.jboss.bom.eap>
         <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
         <version.surefire.plugin>2.10</version.surefire.plugin>
@@ -134,12 +107,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- JBoss distributes a complete set of Java EE APIs including
-                a Bill of Materials (BOM). A BOM specifies the versions of a "stack" (or 
-                a collection) of artifacts. We use this here so that we always get the correct 
-                versions of artifacts. Here we use the jboss-javaee-7.0-eap-with-tools stack
-                (you can read this as the JBoss stack of the Java EE APIs, with some extras
-                tools for your project, such as Arquillian for testing). -->
             <dependency>
                 <groupId>org.jboss.bom</groupId>
                 <artifactId>jboss-eap-javaee7-with-tools</artifactId>
