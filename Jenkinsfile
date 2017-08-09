@@ -9,7 +9,7 @@ mavenNode {
 
     container(name: 'maven') {
         stage('Build Release'){
-            sh "mvn clean package -Pmysql-openshift"
+            sh "mvn clean package -Pmysql-openshift -Dtest=false -DfailIfNoTests=false"
         }
     }
 }
