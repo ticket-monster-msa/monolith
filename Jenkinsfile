@@ -9,7 +9,10 @@ mavenNode {
 
     container(name: 'maven') {
         stage('Build Release'){
-            sh "mvn clean -e -U package -Pmysql,openshift -Dmaven.test.skip=true"
+            mavenCanaryRelease {
+                skipTests = true
+            }
+//            sh "mvn clean -e -U package -Pmysql,openshift -Dmaven.test.skip=true"
         }
     }
 }
