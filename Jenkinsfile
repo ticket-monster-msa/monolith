@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 @Library('github.com/christian-posta/fabric8-pipeline-library@ceposta-profile')
 
-def appName="ticketmonster"
+def appName="ticketmonster-monolith"
 
 
 
@@ -16,7 +16,7 @@ mavenNode {
                 useContentRepository = false
                 runBayesianScanner = false
             }
-            sh "oc start-build ${appName} --from-dir=. --follow"
+            sh "oc start-build ${appName} --from-dir=./target/openshift --follow"
 //            sh "mvn clean -e -U package -Pmysql,openshift -Dmaven.test.skip=true"
         }
     }

@@ -418,7 +418,7 @@
 		        <plugin>
 		          <artifactId>maven-war-plugin</artifactId>
 		          <configuration>
-		            <outputDirectory>deployments</outputDirectory>
+		            <outputDirectory>${project.build.directory}/openshift/deployments</outputDirectory>
 		            <warName>ROOT</warName>
 		          </configuration>
 		        </plugin>
