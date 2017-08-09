@@ -11,6 +11,8 @@ mavenNode {
         stage('Build Release'){
             mavenCanaryRelease {
                 skipTests = true
+                useContentRepository = false
+                runBayesianScanner = false
             }
 //            sh "mvn clean -e -U package -Pmysql,openshift -Dmaven.test.skip=true"
         }
