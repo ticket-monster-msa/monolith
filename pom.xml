@@ -21,8 +21,8 @@
     -->
     <repositories>
         <repository>
-            <id>jboss-developer-staging-repository</id>
-            <url>http://jboss-developer.github.io/temp-maven-repo/</url>
+            <id>redhat-ga-repository</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -31,8 +31,8 @@
             </snapshots>
         </repository>
         <repository>
-            <id>redhat-ga-repository</id>
-            <url>https://maven.repository.redhat.com/ga/</url>
+            <id>jboss-ga-repository</id>
+            <url>http://maven.repository.redhat.com/techpreview/all</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -40,12 +40,33 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>jboss-earlyaccess-repository</id>
+            <url>http://maven.repository.redhat.com/earlyaccess/all/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>redhat.ea</id>
+            <name>Red Hat Early Access Repository</name>
+            <url>https://maven.repository.redhat.com/earlyaccess/all</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
-            <id>jboss-developer-staging-repository</id>
-            <url>http://jboss-developer.github.io/temp-maven-repo/</url>
+            <id>redhat-ga-repository</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -54,8 +75,8 @@
             </snapshots>
         </pluginRepository>
         <pluginRepository>
-            <id>redhat-ga-repository</id>
-            <url>https://maven.repository.redhat.com/ga/</url>
+            <id>jboss-earlyaccess-plugin-repository</id>
+            <url>http://maven.repository.redhat.com/earlyaccess/all/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
