@@ -1,5 +1,5 @@
 #!/usr/bin/groovy
-@Library('github.com/fabric8io/fabric8-pipeline-library@master')
+@Library('github.com/christian-posta/fabric8-pipeline-library@ceposta-profile')
 def appName="ticketmonster"
 def project=""
 
@@ -11,6 +11,7 @@ mavenNode {
         stage('Build Release'){
             mavenCanaryRelease {
                 skipTests = true
+                mavenProfiles = "openshift,mysql"
                 useContentRepository = false
                 runBayesianScanner = false
             }
