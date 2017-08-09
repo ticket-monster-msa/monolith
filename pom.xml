@@ -20,7 +20,7 @@
         https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Application_Platform/
     -->
     <repositories>
-        <repository>
+<!--        <repository>
             <id>jboss-developer-staging-repository</id>
             <url>http://jboss-developer.github.io/temp-maven-repo/</url>
             <releases>
@@ -29,7 +29,7 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-        </repository>
+        </repository>-->
         <repository>
             <id>redhat-ga-repository</id>
             <url>https://maven.repository.redhat.com/ga/</url>
@@ -74,7 +74,7 @@
     </repositories>
 
     <pluginRepositories>
-        <pluginRepository>
+<!--        <pluginRepository>
             <id>jboss-developer-staging-repository</id>
             <url>http://jboss-developer.github.io/temp-maven-repo/</url>
             <releases>
@@ -83,7 +83,7 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-        </pluginRepository>
+        </pluginRepository>-->
         <pluginRepository>
             <id>redhat-ga-repository</id>
             <url>https://maven.repository.redhat.com/ga/</url>
@@ -126,7 +126,7 @@
             line below to use version 1.0.4.Final-redhat-9 which is a release certified 
             to work with JBoss EAP 7. It requires you have access to the JBoss EAP 7
             maven repository. -->
-        <version.jboss.bom.eap>7.0.0-build-5</version.jboss.bom.eap>
+        <version.jboss.bom.eap>7.0.7.GA</version.jboss.bom.eap>
         <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
         <version.surefire.plugin>2.10</version.surefire.plugin>
         <buildhelper.plugin.version>1.7</buildhelper.plugin.version>
@@ -142,7 +142,7 @@
                 tools for your project, such as Arquillian for testing). -->
             <dependency>
                 <groupId>org.jboss.bom</groupId>
-                <artifactId>jboss-javaee-7.0-eap-with-tools</artifactId>
+                <artifactId>jboss-eap-javaee7-with-tools</artifactId>
                 <version>${version.jboss.bom.eap}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -381,45 +381,13 @@
             </dependencies>
         </profile>
 
-        <profile>
-            <!-- An optional profile that produces a WAR to be used 
-                with a PostgreSQL cartridge on OpenShift -->
-            <id>postgresql-openshift</id>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources-postgresql-openshift</directory>
-                    </resource>
-                    <resource>
-                        <directory>src/main/resources</directory>
-                        <includes>
-                            <include>**/*</include>
-                        </includes>
-                        <excludes>
-                            <exclude>META-INF/*</exclude>
-                        </excludes>
-                    </resource>
-                </resources>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.surefire.plugin}</version>
-                        <configuration>
-                            <skip>true</skip>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
 
         <profile>
-            <!-- An optional profile that produces a WAR to be used 
-                with a MySQL cartridge on OpenShift -->
-            <id>mysql-openshift</id>
+            <id>mysql</id>
             <build>
                 <resources>
                     <resource>
-                        <directory>src/main/resources-mysql-openshift</directory>
+                        <directory>src/main/resources-mysql</directory>
                     </resource>
                     <resource>
                         <directory>src/main/resources</directory>
@@ -432,30 +400,6 @@
                     </resource>
                 </resources>
                 <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy</id>
-                                <phase>package</phase>
-                                <goals>
-                                   <goal>copy</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>          
-                            <outputDirectory>${project.build.directory}/openshift/deployments</outputDirectory>
-                            <artifactItems>
-                                <artifactItem>
-                                <groupId>${project.groupId}</groupId>
-                                <artifactId>${project.artifactId}</artifactId>
-                                <version>${project.version}</version>
-                                <type>${project.packaging}</type>
-                                <destFileName>ROOT.war</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </plugin>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>${version.surefire.plugin}</version>
@@ -468,7 +412,6 @@
         </profile>
         
         <profile>
-            <!-- An optional profile that enables a server managed postgresql data source-->
             <id>postgresql</id>
             <build>
                 <resources>
@@ -497,68 +440,6 @@
             </build>
         </profile>
 
-        <profile>
-            <!-- An optional profile that enables a server managed mysql data source-->
-            <id>mysql</id>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources-mysql</directory>
-                    </resource>
-                    <resource>
-                        <directory>src/main/resources</directory>
-                        <includes>
-                            <include>**/*</include>
-                        </includes>
-                        <excludes>
-                            <exclude>META-INF/*</exclude>
-                        </excludes>
-                    </resource>
-                </resources>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.surefire.plugin}</version>
-                        <configuration>
-                            <skip>true</skip>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <!-- Create a release distribution with the right directory layout. -->
-            <!-- product build specific assembly -->
-            <id>release-dist</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>src/main/assembly/assembly.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <skip>true</skip>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        
         <profile>
 		  <!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
 		  <!-- Use this profile for any OpenShift specific customization your app will need. -->

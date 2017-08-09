@@ -19,7 +19,7 @@
 data source, this example data source is just for development and testing! -->
         <!-- The datasource is deployed as WEB-INF/ticket-monster-ds.xml, you
 can find it in the source at src/main/webapp/WEB-INF/ticket-monster-ds.xml -->
-        <jta-data-source>java:jboss/datasources/TicketMonsterPostgreSQLDS</jta-data-source>
+        <jta-data-source>java:jboss/datasources/PostgreSQLDS</jta-data-source>
         <properties>
             <!-- Properties for Hibernate -->
             <property name="hibernate.hbm2ddl.auto" value="create-drop" />
