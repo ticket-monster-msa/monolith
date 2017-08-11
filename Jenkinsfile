@@ -16,7 +16,7 @@ mavenNode {
                 useContentRepository = false
                 runBayesianScanner = false
             }
-            echo "${openshift.startBuild('bc/ticketmonster-monolith', '--from-dir=target/openshift', '--follow').out }"
+           // echo "${openshift.startBuild('bc/ticketmonster-monolith', '--from-dir=target/openshift', '--follow').out }"
 //            sh "oc start-build ${appName} --from-dir=./target/openshift --follow"
 //            sh "mvn clean -e -U package -Pmysql,openshift -Dmaven.test.skip=true"
         }
