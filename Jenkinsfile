@@ -16,6 +16,7 @@ mavenNode {
                 useContentRepository = false
                 runBayesianScanner = false
             }
+            echo "${openshift.raw('version').out}"
            echo "${openshift.withCluster() { openshift.raw('start-build', 'bc/ticketmonster-monolith', '--from-dir=target/openshift', '--follow').err }}"
 
 //            sh "oc start-build ${appName} --from-dir=./target/openshift --follow"
