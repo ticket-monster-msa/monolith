@@ -16,9 +16,7 @@ mavenNode {
                 useContentRepository = false
                 runBayesianScanner = false
             }
-            openshift.withCluster {
-                openshift.selector("bc/${appName}").startBuild("--from-dir=target/openshift", "--follow")
-            }
+            echo 'openshift.withCluster {; openshift.selector("bc/${appName}").startBuild("--from-dir=target/openshift", "--follow") }.out'
 //            sh "oc start-build ${appName} --from-dir=./target/openshift --follow"
 //            sh "mvn clean -e -U package -Pmysql,openshift -Dmaven.test.skip=true"
         }
