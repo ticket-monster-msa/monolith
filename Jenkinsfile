@@ -16,17 +16,12 @@ mavenNode {
                 useContentRepository = false
                 runBayesianScanner = false
             }
-//            sh "oc start-build ${appName} --from-dir=./target/openshift --follow"
-//            sh "mvn clean -e -U package -Pmysql,openshift -Dmaven.test.skip=true"
         }
     }
 
     container(name: 'jnlp'){
         stage('Build Docker Image'){
             sh "oc start-build ${appName} --from-dir=./target/openshift --follow"
-//            openshift.withCluster() {
-//                openshift.raw('start-build', 'bc/ticketmonster-monolith', '--from-dir=target/openshift', '--follow')
-//            }
         }
     }
 }
