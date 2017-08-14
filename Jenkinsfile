@@ -23,9 +23,10 @@ mavenNode {
 
     container(name: 'jnlp'){
         stage('Build Docker Image'){
-            openshift.withCluster() {
-                openshift.raw('start-build', 'bc/ticketmonster-monolith', '--from-dir=target/openshift', '--follow')
-            }
+            sh "oc start-build ${appName} --from-dir=./target/openshift --follow"
+//            openshift.withCluster() {
+//                openshift.raw('start-build', 'bc/ticketmonster-monolith', '--from-dir=target/openshift', '--follow')
+//            }
         }
     }
 }
