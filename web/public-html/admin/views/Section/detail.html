@@ -1,0 +1,63 @@
+<header ng-switch on="$location.path().indexOf('/Sections/new') > -1">
+    <h3 ng-switch-when="true">Create a new Section</h3>
+    <h3 ng-switch-when="false">View or edit Section</h3>
+</header>
+<form id="SectionForm" name="SectionForm" class="form-horizontal" role="form">
+    
+    <div class="form-group" ng-class="{'has-error': SectionForm.name.$invalid}">
+        <label for="name" class="col-sm-2 control-label">Name</label>
+        <div id="nameControls" class="col-sm-10">
+            <input id="name" name="name" type="text" class="form-control" ng-model="section.name" placeholder="Enter the Section Name"></input>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': SectionForm.description.$invalid}">
+        <label for="description" class="col-sm-2 control-label">Description</label>
+        <div id="descriptionControls" class="col-sm-10">
+            <input id="description" name="description" type="text" class="form-control" ng-model="section.description" placeholder="Enter the Section Description"></input>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': SectionForm.numberOfRows.$invalid}">
+        <label for="numberOfRows" class="col-sm-2 control-label">Number Of Rows</label>
+        <div id="numberOfRowsControls" class="col-sm-10">
+            <input id="numberOfRows" name="numberOfRows" type="number" class="form-control" ng-model="section.numberOfRows" placeholder="Enter the Section Number Of Rows"></input>
+            <span class="help-block error" ng-show="SectionForm.numberOfRows.$error.number">not a number</span>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': SectionForm.rowCapacity.$invalid}">
+        <label for="rowCapacity" class="col-sm-2 control-label">Row Capacity</label>
+        <div id="rowCapacityControls" class="col-sm-10">
+            <input id="rowCapacity" name="rowCapacity" type="number" class="form-control" ng-model="section.rowCapacity" placeholder="Enter the Section Row Capacity"></input>
+            <span class="help-block error" ng-show="SectionForm.rowCapacity.$error.number">not a number</span>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': SectionForm.capacity.$invalid}">
+        <label for="capacity" class="col-sm-2 control-label">Capacity</label>
+        <div id="capacityControls" class="col-sm-10">
+            <input id="capacity" name="capacity" type="number" class="form-control" ng-model="section.capacity" placeholder="Enter the Section Capacity"></input>
+            <span class="help-block error" ng-show="SectionForm.capacity.$error.number">not a number</span>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': SectionForm.venue.$invalid}">
+        <label for="venue" class="col-sm-2 control-label">Venue</label>
+        <div id="venueControls" class="col-sm-10">
+        <select id="venue" name="venue" class="form-control" ng-model="venueSelection" ng-options="v.text for v in venueSelectionList" required >
+            <option value="">Choose a Venue</option>
+        </select>
+        <span class="help-block error" ng-show="SectionForm.venue.$error.required">required</span> 
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="saveSection" name="saveSection" class="btn btn-primary" ng-disabled="isClean() || SectionForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
+            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
+            <button id="deleteSection" name="deleteSection" class="btn btn-danger" ng-show="section.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        </div>
+    </div>
+</form>

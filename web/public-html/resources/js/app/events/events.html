@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-md-3 col-md-offset-1">
+        <div class="panel" id="itemMenu">
+
+            <div class="panel panel-default" ng-repeat="category in categories">
+                <div class="panel-heading">
+                    <a class="panel-toggle"
+                       data-target="#category-{{category.id}}-collapsible" data-toggle="collapse"
+                       data-parent="#itemMenu">{{category.description}}</a>
+                </div>
+                <div id="category-{{category.id}}-collapsible" class="panel-collapse collapse">
+                    <div id="category-{{category.id}}" class="panel-body">
+                        <p ng-repeat="event in events" ng-if="event.category.id == category.id">
+                            <a menu-popover href="#events/{{event.id}}" rel="popover"
+                              data-content="{{event.description}}"
+                              data-original-title="{{event.name}}">{{event.name}}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='itemSummary' class="col-md-8 hidden-xs">
+        <div class="carousel-container">
+            <div id="eventCarousel" class="carousel slide">
+                <!-- Carousel items -->
+                <div class="carousel-inner">
+                    <div class="item" ng-repeat="event in events" ng-if="event.mediaItem" ng-class="{'active':$first}">
+                        <img ng-src='{{config.baseUrl + "rest/media/" + event.mediaItem.id}}'/>
+
+                        <div class="carousel-caption">
+                            <div class="row">
+                                <div class="col-md-7 col-md-offset-1">
+                                    <h4>{{event.name}}</h4>
+                                    <p>{{event.description}}</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <a class="btn btn-danger action" href="#events/{{event.id}}">Book tickets</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Carousel nav -->
+                <a class="carousel-control left" href="#eventCarousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="carousel-control right" href="#eventCarousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

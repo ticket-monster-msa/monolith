@@ -1,0 +1,53 @@
+<header ng-switch on="$location.path().indexOf('/TicketPrices/new') > -1">
+    <h3 ng-switch-when="true">Create a new TicketPrice</h3>
+    <h3 ng-switch-when="false">View or edit TicketPrice</h3>
+</header>
+<form id="TicketPriceForm" name="TicketPriceForm" class="form-horizontal" role="form">
+    
+    <div class="form-group" ng-class="{'has-error': TicketPriceForm.show.$invalid}">
+        <label for="show" class="col-sm-2 control-label">Show</label>
+        <div id="showControls" class="col-sm-10">
+        <select id="show" name="show" class="form-control" ng-model="showSelection" ng-options="s.text for s in showSelectionList" required >
+            <option value="">Choose a Show</option>
+        </select>
+        <span class="help-block error" ng-show="TicketPriceForm.show.$error.required">required</span> 
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': TicketPriceForm.section.$invalid}">
+        <label for="section" class="col-sm-2 control-label">Section</label>
+        <div id="sectionControls" class="col-sm-10">
+        <select id="section" name="section" class="form-control" ng-model="sectionSelection" ng-options="s.text for s in sectionSelectionList" required >
+            <option value="">Choose a Section</option>
+        </select>
+        <span class="help-block error" ng-show="TicketPriceForm.section.$error.required">required</span> 
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': TicketPriceForm.ticketCategory.$invalid}">
+        <label for="ticketCategory" class="col-sm-2 control-label">Ticket Category</label>
+        <div id="ticketCategoryControls" class="col-sm-10">
+        <select id="ticketCategory" name="ticketCategory" class="form-control" ng-model="ticketCategorySelection" ng-options="t.text for t in ticketCategorySelectionList" required >
+            <option value="">Choose a Ticket Category</option>
+        </select>
+        <span class="help-block error" ng-show="TicketPriceForm.ticketCategory.$error.required">required</span> 
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': TicketPriceForm.price.$invalid}">
+        <label for="price" class="col-sm-2 control-label">Price</label>
+        <div id="priceControls" class="col-sm-10">
+            <input id="price" name="price" type="number" class="form-control" ng-model="ticketPrice.price" placeholder="Enter the TicketPrice Price"></input>
+            <span class="help-block error" ng-show="TicketPriceForm.price.$error.number">not a number</span>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="saveTicketPrice" name="saveTicketPrice" class="btn btn-primary" ng-disabled="isClean() || TicketPriceForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
+            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
+            <button id="deleteTicketPrice" name="deleteTicketPrice" class="btn btn-danger" ng-show="ticketPrice.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        </div>
+    </div>
+</form>

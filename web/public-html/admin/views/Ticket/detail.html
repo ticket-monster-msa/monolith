@@ -1,0 +1,60 @@
+<header ng-switch on="$location.path().indexOf('/Tickets/new') > -1">
+    <h3 ng-switch-when="true">Create a new Ticket</h3>
+    <h3 ng-switch-when="false">View or edit Ticket</h3>
+</header>
+<form id="TicketForm" name="TicketForm" class="form-horizontal" role="form">
+    
+    <div class="form-group" ng-class="{'has-error': TicketForm.ticketCategory.$invalid}">
+        <label for="ticketCategory" class="col-sm-2 control-label">Ticket Category</label>
+        <div id="ticketCategoryControls" class="col-sm-10">
+        <select id="ticketCategory" name="ticketCategory" class="form-control" ng-model="ticketCategorySelection" ng-options="t.text for t in ticketCategorySelectionList" required >
+            <option value="">Choose a Ticket Category</option>
+        </select>
+        <span class="help-block error" ng-show="TicketForm.ticketCategory.$error.required">required</span> 
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': TicketForm.price.$invalid}">
+        <label for="price" class="col-sm-2 control-label">Price</label>
+        <div id="priceControls" class="col-sm-10">
+            <input id="price" name="price" type="number" class="form-control" ng-model="ticket.price" placeholder="Enter the Ticket Price"></input>
+            <span class="help-block error" ng-show="TicketForm.price.$error.number">not a number</span>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': TicketForm.seat.section.$invalid}">
+        <label for="seat.section" class="col-sm-2 control-label">Section</label>
+        <div id="seat.sectionControls" class="col-sm-10">
+        <select id="seat.section" name="seat.section" class="form-control" ng-model="seatsectionSelection" ng-options="s.text for s in seatsectionSelectionList"  >
+            <option value="">Choose a Section</option>
+        </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': TicketForm.seat.rowNumber.$invalid}">
+        <label for="seat.rowNumber" class="col-sm-2 control-label">Row Number</label>
+        <div id="seat.rowNumberControls" class="col-sm-10">
+            <input id="seat.rowNumber" name="seat.rowNumber" type="number" min="1" class="form-control" ng-model="ticket.seat.rowNumber" placeholder="Enter the Ticket Row Number"></input>
+            <span class="help-block error" ng-show="TicketForm.seat.rowNumber.$error.number">not a number</span>
+            <span class="help-block error" ng-show="TicketForm.seat.rowNumber.$error.min">minimum allowed is 1</span>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': TicketForm.seat.number.$invalid}">
+        <label for="seat.number" class="col-sm-2 control-label">Number</label>
+        <div id="seat.numberControls" class="col-sm-10">
+            <input id="seat.number" name="seat.number" type="number" min="1" class="form-control" ng-model="ticket.seat.number" placeholder="Enter the Ticket Number"></input>
+            <span class="help-block error" ng-show="TicketForm.seat.number.$error.number">not a number</span>
+            <span class="help-block error" ng-show="TicketForm.seat.number.$error.min">minimum allowed is 1</span>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="saveTicket" name="saveTicket" class="btn btn-primary" ng-disabled="isClean() || TicketForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
+            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
+            <button id="deleteTicket" name="deleteTicket" class="btn btn-danger" ng-show="ticket.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        </div>
+    </div>
+</form>

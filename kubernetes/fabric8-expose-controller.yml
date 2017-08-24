@@ -1,0 +1,95 @@
+---
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    labels:
+      provider: fabric8
+      project: exposecontroller
+      version: 2.2.327
+      group: io.fabric8.devops.apps
+    name: exposecontroller
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      fabric8.io/target-platform: kubernetes
+    labels:
+      provider: fabric8
+      project: exposecontroller
+      version: 2.2.327
+      group: io.fabric8.devops.apps
+    name: exposecontroller
+  data:
+    config.yml: |
+      domain:
+      exposer:
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+      configmap.fabric8.io/update-on-change: exposecontroller
+      fabric8.io/git-commit: f7967da2069f486a3e6dbef233574eccac3e0dae
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=exposecontroller&var-version=2.2.327
+      fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/exposecontroller
+      fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/exposecontroller
+      fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/exposecontroller/src/main/fabric8/icon.png
+      fabric8.io/git-branch: release-v2.2.327
+      fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/exposecontroller
+      fabric8.io/scm-tag: fabric8-devops-2.0.1
+    labels:
+      provider: fabric8
+      project: exposecontroller
+      version: 2.2.327
+      group: io.fabric8.devops.apps
+    name: exposecontroller
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        project: exposecontroller
+        provider: fabric8
+        version: 2.2.327
+        group: io.fabric8.devops.apps
+    template:
+      metadata:
+        annotations:
+          fabric8.io/git-commit: f7967da2069f486a3e6dbef233574eccac3e0dae
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=exposecontroller&var-version=2.2.327
+          fabric8.io/scm-con-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/exposecontroller
+          fabric8.io/scm-url: http://github.com/fabric8io/fabric8-devops/exposecontroller
+          fabric8.io/iconUrl: https://cdn.rawgit.com/fabric8io/fabric8-devops/master/exposecontroller/src/main/fabric8/icon.png
+          configmap.fabric8.io/update-on-change: exposecontroller
+          fabric8.io/git-branch: release-v2.2.327
+          fabric8.io/scm-devcon-url: scm:git:git@github.com:fabric8io/fabric8-devops.git/exposecontroller
+          fabric8.io/scm-tag: fabric8-devops-2.0.1
+        labels:
+          provider: fabric8
+          project: exposecontroller
+          version: 2.2.327
+          group: io.fabric8.devops.apps
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          image: fabric8/exposecontroller:2.3.4
+          livenessProbe:
+            exec:
+              command:
+              - cat
+              - /tmp/restarteveryday
+            initialDelaySeconds: 86164
+          name: exposecontroller
+          volumeMounts:
+          - mountPath: /etc/exposecontroller
+            name: config-volume
+        serviceAccountName: exposecontroller
+        volumes:
+        - configMap:
+            name: exposecontroller
+          name: config-volume

@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="special-title light-font">{{show.event.name}}
+            <small>{{show.venue.name}}, {{performance.date | date : "EEE d MMMM yyyy 'at' h:mma"}}</p></small>
+        </h2>
+    </div>
+</div>
+<div class="row">
+    <div class="visible-md-block visible-lg-block">
+        <div add-tickets />
+        <div checkout-booking />
+    </div>
+    <div class="visible-xs-block visible-sm-block">
+        <div ng-show="displayView" add-tickets>
+        </div>
+        <div ng-show="!displayView" checkout-booking>
+        </div>
+    </div>
+</div>
+<footer class="mobile-footer visible-xs-block visible-sm-block">
+    <div class="container" ng-show="displayView">
+        <div id="ticketFooter" class="row top4">
+            <div class="col-xs-6">
+                <input type="button" class="btn btn-primary" ng-disabled="checkTickets()" ng-click="addTickets()" name="add" value="Add tickets"/>
+            </div>
+            <div class="col-xs-6">
+                <input type="button" class="btn btn-primary" ng-disabled="disableToggle()" ng-click="toggleView()" name="add" value="Checkout" />
+            </div>
+        </div>
+    </div>
+    <div class="container" ng-show="!displayView">
+        <div id="checkoutFooter" class="row top4">
+            <div class="col-xs-6">
+                <input type="button" class="btn btn-primary" ng-click="toggleView()" name="add" value="Add more tickets"/>
+            </div>
+            <div class="col-xs-6">
+                <input type='button' class="btn btn-primary" name="submit" value="Checkout"
+                       ng-disabled="disableCheckout()" ng-click="checkout()" />
+            </div>
+        </div>
+    </div>
+</footer>

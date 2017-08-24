@@ -1,0 +1,136 @@
+/* Core styles for the page */
+body {
+   margin: 0;
+   padding: 0;
+   font-family: Verdana, sans-serif;
+}
+
+p {
+   margin-left: 8px;
+   margin-right: 8px;
+}
+
+code {
+   font-size: 1.1em;
+}
+
+a {
+   color: #369;
+   text-decoration: none;
+}
+
+a:hover {
+   color: #369;
+   text-decoration: underline;
+}
+
+/* Header and footer styles */
+
+.header_logo{
+   float: left;
+   margin-top: 3px;
+   margin-left: 8px;
+}
+
+.footer_left {
+   float: left;
+   margin-left: 8px;
+}
+
+.footer_right {
+   float: right;
+   margin-right: 8px;
+}
+
+.footer a:hover {
+   text-decoration: none;
+}
+
+/* Member registration styles */
+
+/* override default jquery mobile style */
+.ui-mobile fieldset {
+   padding-left: 5px;
+   padding-right: 5px;
+}
+
+.ui-header {
+   border-top: 1px solid #3C3C3C;
+}
+
+/* Decrease margins applied on headers */
+.ui-header .ui-title {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+span.invalid {
+   padding-left: 3px;
+   color: red;
+}
+
+span.success {
+   padding-left: 3px;
+   color: green;
+}
+
+/* Member table styles */
+table {
+   background-color: #E6E7E8;
+   clear: both;
+   width: 100%;
+}
+
+td {
+   height: 2em;
+   padding-left: 6px;
+   font-size: 11px;
+}
+
+th {
+   font-weight: normal;
+   padding: 0 10px 0 5px;
+   border-bottom: #999999 dotted 1px;
+}
+
+thead {
+   font-weight: bold;
+   color: #FFFFFF;
+   background-color: black;
+   text-align: left;
+}
+
+tfoot {
+   height: 20px;
+   font-weight: bold;
+   background-color: #EAECEE;
+   text-align: center;
+}
+
+/* Using new CSS3 selectors for styling*/
+tbody tr:nth-child(odd) {
+   background: #f4f3f3;
+}
+
+tbody tr:nth-child(even) {
+   background: #ffffff;
+}
+
+.readonly-listview {
+    background:             #f9f9f9 /*{c-body-background-color}*/;
+    background-image: -webkit-gradient(linear, left top, left bottom, from( #f9f9f9 /*{c-body-background-start}*/), to( #eee /*{c-body-background-end}*/)); /* Saf4+, Chrome */
+    background-image: -webkit-linear-gradient( #f9f9f9 /*{c-body-background-start}*/, #eee /*{c-body-background-end}*/); /* Chrome 10+, Saf5.1+ */
+    background-image:    -moz-linear-gradient( #f9f9f9 /*{c-body-background-start}*/, #eee /*{c-body-background-end}*/); /* FF3.6 */
+    background-image:     -ms-linear-gradient( #f9f9f9 /*{c-body-background-start}*/, #eee /*{c-body-background-end}*/); /* IE10 */
+    background-image:      -o-linear-gradient( #f9f9f9 /*{c-body-background-start}*/, #eee /*{c-body-background-end}*/); /* Opera 11.10+ */
+    background-image:         linear-gradient( #f9f9f9 /*{c-body-background-start}*/, #eee /*{c-body-background-end}*/);
+    cursor: default !important;
+}
+
+.error {
+    color: #FF0000;
+}
+
+.ui-footer .block-btn {
+    display: block;
+}
