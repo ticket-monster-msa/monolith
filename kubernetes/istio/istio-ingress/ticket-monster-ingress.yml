@@ -6,5 +6,5 @@ metadata:
     kubernetes.io/ingress.class: "istio"
 spec:
   backend:
-    serviceName: ticket-monster
-    servicePort: 8080
+    serviceName: tm-ui
+    servicePort: 80
