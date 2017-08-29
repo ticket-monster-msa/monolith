@@ -1,0 +1,175 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {},
+  "id": "http://example.com/example.json",
+  "properties": {
+    "cancellationCode": {
+      "default": "abc",
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/cancellationCode",
+      "title": "The cancellationcode schema",
+      "type": "string"
+    },
+    "contactEmail": {
+      "default": "foo@bar.com",
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/contactEmail",
+      "title": "The contactemail schema",
+      "type": "string"
+    },
+    "createdOn": {
+      "default": 1504014829268,
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/createdOn",
+      "title": "The createdon schema",
+      "type": "integer"
+    },
+    "id": {
+      "default": 1,
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/id",
+      "title": "The id schema",
+      "type": "integer"
+    },
+    "performance": {
+      "id": "/properties/performance",
+      "properties": {
+        "date": {
+          "default": 1422212400000,
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/performance/properties/date",
+          "title": "The date schema",
+          "type": "integer"
+        },
+        "id": {
+          "default": 2,
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/performance/properties/id",
+          "title": "The id schema",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "tickets": {
+      "id": "/properties/tickets",
+      "items": {
+        "id": "/properties/tickets/items",
+        "properties": {
+          "id": {
+            "default": 1,
+            "description": "An explanation about the purpose of this instance.",
+            "id": "/properties/tickets/items/properties/id",
+            "title": "The id schema",
+            "type": "integer"
+          },
+          "price": {
+            "default": 219.5,
+            "description": "An explanation about the purpose of this instance.",
+            "id": "/properties/tickets/items/properties/price",
+            "title": "The price schema",
+            "type": "number"
+          },
+          "seat": {
+            "id": "/properties/tickets/items/properties/seat",
+            "properties": {
+              "number": {
+                "default": 1,
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/tickets/items/properties/seat/properties/number",
+                "title": "The number schema",
+                "type": "integer"
+              },
+              "rowNumber": {
+                "default": 1,
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/tickets/items/properties/seat/properties/rowNumber",
+                "title": "The rownumber schema",
+                "type": "integer"
+              },
+              "section": {
+                "id": "/properties/tickets/items/properties/seat/properties/section",
+                "properties": {
+                  "capacity": {
+                    "default": 2000,
+                    "description": "An explanation about the purpose of this instance.",
+                    "id": "/properties/tickets/items/properties/seat/properties/section/properties/capacity",
+                    "title": "The capacity schema",
+                    "type": "integer"
+                  },
+                  "description": {
+                    "default": "Premier platinum reserve",
+                    "description": "An explanation about the purpose of this instance.",
+                    "id": "/properties/tickets/items/properties/seat/properties/section/properties/description",
+                    "title": "The description schema",
+                    "type": "string"
+                  },
+                  "id": {
+                    "default": 1,
+                    "description": "An explanation about the purpose of this instance.",
+                    "id": "/properties/tickets/items/properties/seat/properties/section/properties/id",
+                    "title": "The id schema",
+                    "type": "integer"
+                  },
+                  "name": {
+                    "default": "A",
+                    "description": "An explanation about the purpose of this instance.",
+                    "id": "/properties/tickets/items/properties/seat/properties/section/properties/name",
+                    "title": "The name schema",
+                    "type": "string"
+                  },
+                  "numberOfRows": {
+                    "default": 20,
+                    "description": "An explanation about the purpose of this instance.",
+                    "id": "/properties/tickets/items/properties/seat/properties/section/properties/numberOfRows",
+                    "title": "The numberofrows schema",
+                    "type": "integer"
+                  },
+                  "rowCapacity": {
+                    "default": 100,
+                    "description": "An explanation about the purpose of this instance.",
+                    "id": "/properties/tickets/items/properties/seat/properties/section/properties/rowCapacity",
+                    "title": "The rowcapacity schema",
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "ticketCategory": {
+            "id": "/properties/tickets/items/properties/ticketCategory",
+            "properties": {
+              "description": {
+                "default": "Adult",
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/tickets/items/properties/ticketCategory/properties/description",
+                "title": "The description schema",
+                "type": "string"
+              },
+              "id": {
+                "default": 1,
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/tickets/items/properties/ticketCategory/properties/id",
+                "title": "The id schema",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "totalTicketPrice": {
+      "default": 219.5,
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/totalTicketPrice",
+      "title": "The totalticketprice schema",
+      "type": "number"
+    }
+  },
+  "type": "object"
+}

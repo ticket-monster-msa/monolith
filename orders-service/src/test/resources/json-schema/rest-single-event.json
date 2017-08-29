@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {},
+  "id": "http://example.com/example.json",
+  "properties": {
+    "category": {
+      "id": "/properties/category",
+      "properties": {
+        "description": {
+          "default": "Concert",
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/category/properties/description",
+          "title": "The description schema",
+          "type": "string"
+        },
+        "id": {
+          "default": 1,
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/category/properties/id",
+          "title": "The id schema",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "default": "Get ready to rock your night away with this megaconcert extravaganza from 10 of the biggest rock stars of the 80's",
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/description",
+      "title": "The description schema",
+      "type": "string"
+    },
+    "id": {
+      "default": 1,
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/id",
+      "title": "The id schema",
+      "type": "integer"
+    },
+    "mediaItem": {
+      "id": "/properties/mediaItem",
+      "properties": {
+        "id": {
+          "default": 1,
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/mediaItem/properties/id",
+          "title": "The id schema",
+          "type": "integer"
+        },
+        "mediaType": {
+          "default": "IMAGE",
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/mediaItem/properties/mediaType",
+          "title": "The mediatype schema",
+          "type": "string"
+        },
+        "url": {
+          "default": "https://dl.dropbox.com/u/65660684/640px-Weir%2C_Bob_(2007)_2.jpg",
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/mediaItem/properties/url",
+          "title": "The url schema",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "name": {
+      "default": "Rock concert of the decade",
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/name",
+      "title": "The name schema",
+      "type": "string"
+    }
+  },
+  "type": "object"
+}

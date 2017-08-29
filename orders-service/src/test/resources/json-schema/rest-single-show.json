@@ -1,0 +1,345 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {},
+  "id": "http://example.com/example.json",
+  "properties": {
+    "event": {
+      "id": "/properties/event",
+      "properties": {
+        "category": {
+          "id": "/properties/event/properties/category",
+          "properties": {
+            "description": {
+              "default": "Concert",
+              "description": "An explanation about the purpose of this instance.",
+              "id": "/properties/event/properties/category/properties/description",
+              "title": "The description schema",
+              "type": "string"
+            },
+            "id": {
+              "default": 1,
+              "description": "An explanation about the purpose of this instance.",
+              "id": "/properties/event/properties/category/properties/id",
+              "title": "The id schema",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "description": {
+          "default": "Get ready to rock your night away with this megaconcert extravaganza from 10 of the biggest rock stars of the 80's",
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/event/properties/description",
+          "title": "The description schema",
+          "type": "string"
+        },
+        "id": {
+          "default": 1,
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/event/properties/id",
+          "title": "The id schema",
+          "type": "integer"
+        },
+        "mediaItem": {
+          "id": "/properties/event/properties/mediaItem",
+          "properties": {
+            "id": {
+              "default": 1,
+              "description": "An explanation about the purpose of this instance.",
+              "id": "/properties/event/properties/mediaItem/properties/id",
+              "title": "The id schema",
+              "type": "integer"
+            },
+            "mediaType": {
+              "default": "IMAGE",
+              "description": "An explanation about the purpose of this instance.",
+              "id": "/properties/event/properties/mediaItem/properties/mediaType",
+              "title": "The mediatype schema",
+              "type": "string"
+            },
+            "url": {
+              "default": "https://dl.dropbox.com/u/65660684/640px-Weir%2C_Bob_(2007)_2.jpg",
+              "description": "An explanation about the purpose of this instance.",
+              "id": "/properties/event/properties/mediaItem/properties/url",
+              "title": "The url schema",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "name": {
+          "default": "Rock concert of the decade",
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/event/properties/name",
+          "title": "The name schema",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "id": {
+      "default": 1,
+      "description": "An explanation about the purpose of this instance.",
+      "id": "/properties/id",
+      "title": "The id schema",
+      "type": "integer"
+    },
+    "performances": {
+      "id": "/properties/performances",
+      "items": {
+        "id": "/properties/performances/items",
+        "properties": {
+          "date": {
+            "default": 1422126000000,
+            "description": "An explanation about the purpose of this instance.",
+            "id": "/properties/performances/items/properties/date",
+            "title": "The date schema",
+            "type": "integer"
+          },
+          "id": {
+            "default": 1,
+            "description": "An explanation about the purpose of this instance.",
+            "id": "/properties/performances/items/properties/id",
+            "title": "The id schema",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "ticketPrices": {
+      "id": "/properties/ticketPrices",
+      "items": {
+        "id": "/properties/ticketPrices/items",
+        "properties": {
+          "id": {
+            "default": 3,
+            "description": "An explanation about the purpose of this instance.",
+            "id": "/properties/ticketPrices/items/properties/id",
+            "title": "The id schema",
+            "type": "integer"
+          },
+          "price": {
+            "default": 179.5,
+            "description": "An explanation about the purpose of this instance.",
+            "id": "/properties/ticketPrices/items/properties/price",
+            "title": "The price schema",
+            "type": "number"
+          },
+          "section": {
+            "id": "/properties/ticketPrices/items/properties/section",
+            "properties": {
+              "capacity": {
+                "default": 3000,
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/ticketPrices/items/properties/section/properties/capacity",
+                "title": "The capacity schema",
+                "type": "integer"
+              },
+              "description": {
+                "default": "Premier silver reserve",
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/ticketPrices/items/properties/section/properties/description",
+                "title": "The description schema",
+                "type": "string"
+              },
+              "id": {
+                "default": 3,
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/ticketPrices/items/properties/section/properties/id",
+                "title": "The id schema",
+                "type": "integer"
+              },
+              "name": {
+                "default": "C",
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/ticketPrices/items/properties/section/properties/name",
+                "title": "The name schema",
+                "type": "string"
+              },
+              "numberOfRows": {
+                "default": 30,
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/ticketPrices/items/properties/section/properties/numberOfRows",
+                "title": "The numberofrows schema",
+                "type": "integer"
+              },
+              "rowCapacity": {
+                "default": 100,
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/ticketPrices/items/properties/section/properties/rowCapacity",
+                "title": "The rowcapacity schema",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "ticketCategory": {
+            "id": "/properties/ticketPrices/items/properties/ticketCategory",
+            "properties": {
+              "description": {
+                "default": "Adult",
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/ticketPrices/items/properties/ticketCategory/properties/description",
+                "title": "The description schema",
+                "type": "string"
+              },
+              "id": {
+                "default": 1,
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/ticketPrices/items/properties/ticketCategory/properties/id",
+                "title": "The id schema",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "venue": {
+      "id": "/properties/venue",
+      "properties": {
+        "address": {
+          "id": "/properties/venue/properties/address",
+          "properties": {
+            "city": {
+              "default": "Toronto",
+              "description": "An explanation about the purpose of this instance.",
+              "id": "/properties/venue/properties/address/properties/city",
+              "title": "The city schema",
+              "type": "string"
+            },
+            "country": {
+              "default": "Canada",
+              "description": "An explanation about the purpose of this instance.",
+              "id": "/properties/venue/properties/address/properties/country",
+              "title": "The country schema",
+              "type": "string"
+            },
+            "street": {
+              "default": "60 Simcoe Street",
+              "description": "An explanation about the purpose of this instance.",
+              "id": "/properties/venue/properties/address/properties/street",
+              "title": "The street schema",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "capacity": {
+          "default": 11000,
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/venue/properties/capacity",
+          "title": "The capacity schema",
+          "type": "integer"
+        },
+        "description": {
+          "default": "Roy Thomson Hall is the home of the Toronto Symphony Orchestra and the Toronto Mendelssohn Choir.",
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/venue/properties/description",
+          "title": "The description schema",
+          "type": "string"
+        },
+        "id": {
+          "default": 1,
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/venue/properties/id",
+          "title": "The id schema",
+          "type": "integer"
+        },
+        "mediaItem": {
+          "id": "/properties/venue/properties/mediaItem",
+          "properties": {
+            "id": {
+              "default": 4,
+              "description": "An explanation about the purpose of this instance.",
+              "id": "/properties/venue/properties/mediaItem/properties/id",
+              "title": "The id schema",
+              "type": "integer"
+            },
+            "mediaType": {
+              "default": "IMAGE",
+              "description": "An explanation about the purpose of this instance.",
+              "id": "/properties/venue/properties/mediaItem/properties/mediaType",
+              "title": "The mediatype schema",
+              "type": "string"
+            },
+            "url": {
+              "default": "https://dl.dropbox.com/u/65660684/640px-Roy_Thomson_Hall_Toronto.jpg",
+              "description": "An explanation about the purpose of this instance.",
+              "id": "/properties/venue/properties/mediaItem/properties/url",
+              "title": "The url schema",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "name": {
+          "default": "Roy Thomson Hall",
+          "description": "An explanation about the purpose of this instance.",
+          "id": "/properties/venue/properties/name",
+          "title": "The name schema",
+          "type": "string"
+        },
+        "sections": {
+          "id": "/properties/venue/properties/sections",
+          "items": {
+            "id": "/properties/venue/properties/sections/items",
+            "properties": {
+              "capacity": {
+                "default": 2000,
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/venue/properties/sections/items/properties/capacity",
+                "title": "The capacity schema",
+                "type": "integer"
+              },
+              "description": {
+                "default": "Premier gold reserve",
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/venue/properties/sections/items/properties/description",
+                "title": "The description schema",
+                "type": "string"
+              },
+              "id": {
+                "default": 2,
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/venue/properties/sections/items/properties/id",
+                "title": "The id schema",
+                "type": "integer"
+              },
+              "name": {
+                "default": "B",
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/venue/properties/sections/items/properties/name",
+                "title": "The name schema",
+                "type": "string"
+              },
+              "numberOfRows": {
+                "default": 20,
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/venue/properties/sections/items/properties/numberOfRows",
+                "title": "The numberofrows schema",
+                "type": "integer"
+              },
+              "rowCapacity": {
+                "default": 100,
+                "description": "An explanation about the purpose of this instance.",
+                "id": "/properties/venue/properties/sections/items/properties/rowCapacity",
+                "title": "The rowcapacity schema",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "type": "object"
+}
