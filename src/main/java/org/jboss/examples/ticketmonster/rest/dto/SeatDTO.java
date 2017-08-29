@@ -32,6 +32,11 @@ public class SeatDTO implements Serializable
       {
          entity = new Seat();
       }
+      entity.setNumber(this.number);
+      entity.setRowNumber(this.rowNumber);
+      if (this.section != null) {
+         entity.setSection(this.section.fromDTO(null, em));
+      }
       return entity;
    }
 

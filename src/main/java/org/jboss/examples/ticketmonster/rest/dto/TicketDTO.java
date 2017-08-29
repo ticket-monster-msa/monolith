@@ -38,6 +38,13 @@ public class TicketDTO implements Serializable
       {
          entity = new Ticket();
       }
+      entity.setPrice(this.price);
+      if (this.seat != null) {
+         entity.setSeat(seat.fromDTO(null, em));
+      }
+      if (this.ticketCategory != null) {
+         entity.setTicketCategory(ticketCategory.fromDTO(null, em));
+      }
       entity = em.merge(entity);
       return entity;
    }
