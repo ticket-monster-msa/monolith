@@ -18,7 +18,6 @@ package org.ticketmonster.orders;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +26,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
 
 /**
  * Created by ceposta 
@@ -45,10 +46,15 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void testSimpleBooking() {
+    public void testSimpleBooking() throws InterruptedException {
+
+
         given().contentType(ContentType.JSON).body("{\"ticketRequests\":[{\"ticketPrice\":4,\"quantity\":3}],\"email\":\"foo@bar.coom\",\"performance\":1}")
                 .and().expect()
-                .body(Matchers.equalTo("{\"id\":2,\"tickets\":[{\"id\":2,\"seat\":{\"rowNumber\":1,\"number\":3,\"section\":{\"id\":4,\"name\":\"D\",\"description\":\"General\",\"numberOfRows\":40,\"rowCapacity\":100,\"capacity\":4000}},\"ticketCategory\":{\"id\":1,\"description\":\"Adult\"},\"price\":149.5},{\"id\":3,\"seat\":{\"rowNumber\":1,\"number\":1,\"section\":{\"id\":4,\"name\":\"D\",\"description\":\"General\",\"numberOfRows\":40,\"rowCapacity\":100,\"capacity\":4000}},\"ticketCategory\":{\"id\":1,\"description\":\"Adult\"},\"price\":149.5},{\"id\":4,\"seat\":{\"rowNumber\":1,\"number\":2,\"section\":{\"id\":4,\"name\":\"D\",\"description\":\"General\",\"numberOfRows\":40,\"rowCapacity\":100,\"capacity\":4000}},\"ticketCategory\":{\"id\":1,\"description\":\"Adult\"},\"price\":149.5}],\"performance\":{\"id\":1,\"date\":1422126000000},\"cancellationCode\":\"abc\",\"createdOn\":1504043366446,\"contactEmail\":\"foo@bar.coom\",\"totalTicketPrice\":448.5}"))
+//                .body(equalTo("foo"))
+                .body("tickets.seat.number", hasItems(1,2,3)).and()
+                .body("contactEmail", equalTo("foo@bar.coom"))
+                .body("totalTicketPrice", equalTo(448.5f))
                 .when().post("/rest/bookings");
 
     }

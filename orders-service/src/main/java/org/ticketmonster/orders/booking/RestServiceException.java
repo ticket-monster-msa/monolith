@@ -14,45 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ticketmonster.orders;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.ticketmonster.orders.booking;
 
 /**
- * Created by ceposta 
+ * Created by ceposta
  * <a href="http://christianposta.com/blog>http://christianposta.com/blog</a>.
  */
-public class BookingRequested {
-
-    private List<TicketRequest> ticketRequests = new ArrayList<TicketRequest>();
-    private long performance;
-    private String email;
-
-    public BookingRequested() {
-    }
-
-    public List<TicketRequest> getTicketRequests() {
-        return ticketRequests;
-    }
-
-    public void setTicketRequests(List<TicketRequest> ticketRequests) {
-        this.ticketRequests = ticketRequests;
-    }
-
-    public long getPerformance() {
-        return performance;
-    }
-
-    public void setPerformance(long performance) {
-        this.performance = performance;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+public class RestServiceException extends RuntimeException {
+    public RestServiceException(Object build) {
     }
 }

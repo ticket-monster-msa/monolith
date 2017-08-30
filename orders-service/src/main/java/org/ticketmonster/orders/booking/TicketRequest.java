@@ -14,11 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ticketmonster.orders;
+package org.ticketmonster.orders.booking;
 
 /**
  * Created by ceposta 
  * <a href="http://christianposta.com/blog>http://christianposta.com/blog</a>.
  */
-public class BookingStatus {
+public class TicketRequest {
+
+    // todo actually, this is "ticket price ID"
+    private long ticketPrice;
+
+    private int quantity;
+
+    public TicketRequest() {
+    }
+
+    public long getTicketPriceGuideId() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(long ticketPrice) {
+        this.ticketPrice = ticketPrice;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

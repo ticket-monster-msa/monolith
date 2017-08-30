@@ -14,33 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ticketmonster.orders;
+package org.ticketmonster.orders.booking;
+
+import org.ticketmonster.orders.domain.Booking;
 
 /**
  * Created by ceposta 
  * <a href="http://christianposta.com/blog>http://christianposta.com/blog</a>.
  */
-public class TicketRequest {
-    private long ticketPrice;
+public class BookingStatus {
 
-    private int quantity;
+    public enum Status { ACCEPTED, REJECTED, FAILURE}
+    public Status status;
+    public Booking booking;
 
-    public TicketRequest() {
+    public BookingStatus() {
     }
 
-    public long getTicketPrice() {
-        return ticketPrice;
+    public BookingStatus(Status status, Booking booking) {
+        this.status = status;
+        this.booking = booking;
     }
 
-    public void setTicketPrice(long ticketPrice) {
-        this.ticketPrice = ticketPrice;
+    public Status getStatus() {
+        return status;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 }
