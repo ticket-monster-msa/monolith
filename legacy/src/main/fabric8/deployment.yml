@@ -1,0 +1,12 @@
+spec:
+  template:
+    spec:
+      containers:
+      - livenessProbe:
+          httpGet:
+            path: /rest/ping
+            port: 8080
+        readinessProbe:
+          httpGet:
+            path: /rest/ping
+            port: 8080

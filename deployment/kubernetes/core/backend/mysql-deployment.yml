@@ -1,0 +1,31 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mysql-backend
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ticketmonster
+        component: backend
+    spec:
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        env:
+          # Use secret in real usage
+        - name: MYSQL_ROOT_PASSWORD
+          value: admin
+        - name: MYSQL_DATABASE
+          value: ticketmonster
+        - name: MYSQL_USER
+          value: ticket
+        - name: MYSQL_PASSWORD
+          value: monster
+        ports:
+        - containerPort: 3306
+          name: mysql
+

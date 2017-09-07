@@ -5,15 +5,19 @@ It also helps us avoid tripping the browser Same Origin policy
 
 Build the docker container:
 
-> docker build -t ticketmonster/ui:1.0 .
+> docker build -t ceposta/tm-ui:1.0 .
 
 Run in kubernetes
 
-> kubectl run tm-ui --image=ticketmonster/ui:1.0 --port=80
+> kubectl run tm-ui --image=ceposta/tm-ui:1.0 --port=80
+
+Or using the resource file:
+
+> kubectl apply -f ../deployment/kubernetes/backend/tm-ui-deployment.yml
 
 Let's create the kubernetes service:
 
-> kubectl apply -f tm-ui-svc.yml
+> kubectl apply -f ../deployment/kubernetes/backend/tm-ui-svc.yml
 
 When it comes time to include this UI service in the routing between services, you may want to inject it with the istio side proxy:
 
