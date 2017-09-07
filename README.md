@@ -33,15 +33,15 @@ If you want the test runner to _start_ an application server instance, use the `
 	
 ### Building TicketMonster with Postgresql (for OpenShift)
 
-If you intend to deploy into [OpenShift](http://openshift.com), you can use the `postgresql-openshift` profile
+If you intend to deploy into [OpenShift](http://openshift.com), you can use the `postgresql` and `openshift` profile
 
-    mvn clean package -Ppostgresql,openshift
+    mvn clean package -Ppostgresql,openshift,default
 
 ### Building TicketMonster with MySQL (for OpenShift)
 
-If you intend to deploy into [OpenShift](http://openshift.com), you can use the `mysql-openshift` profile
+If you intend to deploy into [OpenShift](http://openshift.com), you can use the `mysql` and `openshift` profiles
 
-    mvn clean package -Pmysql,openshift
+    mvn clean package -Pmysql,openshift,deafult
 	
 ## Running TicketMonster
 
