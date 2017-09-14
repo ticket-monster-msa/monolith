@@ -1,6 +1,8 @@
 package org.ticketmonster.orders.domain;
 
 
+import org.teiid.spring.annotations.SelectQuery;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
@@ -29,6 +31,7 @@ import javax.validation.constraints.NotNull;
  * @author Marius Bogoevici
  * @author Pete Muir
  */
+@SelectQuery("SELECT id, allocated, occupied_count, occupied_count, performance_id, performance_name, version, section_id FROM legacyDS.section_allocation")
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "performance_id", "section_id" }))
 public class SectionAllocation implements Serializable {

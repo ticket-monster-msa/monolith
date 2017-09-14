@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.teiid.spring.annotations.SelectQuery;
 
 /**
  * <p>
@@ -33,7 +34,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @SuppressWarnings("serial")
 @Entity
 @JsonIgnoreProperties("show")
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "section_id", "show_id", "ticketcategory_id" }))
+@Table(name = "ticket_price_guide", uniqueConstraints = @UniqueConstraint(columnNames = { "section_id", "show_id", "ticketcategory_id" }))
+@SelectQuery("SELECT id, show_id, section_id, ticketcategory_id, price FROM legacyDS.ticket_price_guide")
 public class TicketPriceGuide implements Serializable {
 
     /* Declaration of fields */

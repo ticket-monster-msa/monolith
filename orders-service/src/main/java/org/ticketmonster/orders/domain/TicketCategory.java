@@ -4,12 +4,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.teiid.spring.annotations.SelectQuery;
 
 /**
  * <p>
@@ -24,6 +22,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  * generate the serialVersionUID for us. When we put this app into production, we'll generate and embed the serialVersionUID
  */
 @SuppressWarnings("serial")
+@SelectQuery("SELECT id, description FROM legacyDS.ticket_category")
+@Table(name = "ticket_category")
 @Entity
 public class TicketCategory implements Serializable {
 

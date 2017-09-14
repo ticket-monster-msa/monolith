@@ -1,5 +1,7 @@
 package org.ticketmonster.orders.domain;
 
+import org.teiid.spring.annotations.SelectQuery;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -31,7 +33,11 @@ import static javax.persistence.GenerationType.IDENTITY;
  * We suppress the warning about not specifying a serialVersionUID, as we are still developing this app, and want the JVM to
  * generate the serialVersionUID for us. When we put this app into production, we'll generate and embed the serialVersionUID
  */
+// todo note that this "show" is not the exact same show that we have in the backend
+// because it doesn't really represent a collection of performances; in this model, we don't
+// care about performances
 @SuppressWarnings("serial")
+@SelectQuery("SELECT id, event_id, event_name, venue_id, venue_name FROM legacyDS.appearance")
 @Entity
 @Table(name="Appearance", uniqueConstraints = @UniqueConstraint(columnNames = { "event_id", "venue_id" }))
 public class Show implements Serializable {
@@ -83,14 +89,13 @@ public class Show implements Serializable {
      * is removed, then all of it's performances will also be removed.
      * </p>
      * 
-     * <p>
-     * Normally a collection is loaded from the database in the order of the rows, but here we want to make sure that
-     * performances are ordered by date - we let the RDBMS do the heavy lifting. The
-     * <code>@OrderBy<code> annotation instructs JPA to do this.
-     * </p>
+     * UPDATED: actually, this is a great opporunity to point out the differences in the model between
+     * the orders bounded context. For example: our pricing is fairly coarse grained (by business rules)...
+     * we only price by the over all show, not individual performances. So our "show" doesn't really care about
+     * the rest of the performances; this information would be necessary (and stored) where it matters (in its
+     * respective service)
      */
-    @Embedded
-    private Set<PerformanceId> performances = new HashSet<PerformanceId>();
+//    private Set<PerformanceId> performances = new HashSet<PerformanceId>();
 
     /**
      * <p>
@@ -125,13 +130,6 @@ public class Show implements Serializable {
         this.eventId = eventId;
     }
 
-    public Set<PerformanceId> getPerformances() {
-        return performances;
-    }
-
-    public void setPerformances(Set<PerformanceId> performances) {
-        this.performances = performances;
-    }
 
     public VenueId getVenueId() {
         return venueId;

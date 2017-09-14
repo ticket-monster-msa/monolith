@@ -1,13 +1,12 @@
 package org.ticketmonster.orders.domain;
 
+import org.teiid.spring.annotations.SelectQuery;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -24,6 +23,7 @@ import javax.validation.constraints.NotNull;
  * generate the serialVersionUID for us. When we put this app into production, we'll generate and embed the serialVersionUID
  */
 @SuppressWarnings("serial")
+@SelectQuery("SELECT id, price, number, row_number, section_id, ticket_category_id, tickets_id FROM legacyDS.ticket")
 @Entity
 public class Ticket implements Serializable {
 
@@ -46,6 +46,7 @@ public class Ticket implements Serializable {
      * </p>
      */
     @NotNull
+    @Embedded
     private Seat seat;
 
     /**

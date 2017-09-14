@@ -112,6 +112,16 @@
         </dependency>
       </dependencies>
     </profile>
+    <profile>
+      <id>teiid</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.teiid.spring</groupId>
+          <artifactId>teiid-spring-boot-starter</artifactId>
+          <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+      </dependencies>
+    </profile>
   </profiles>
 
 

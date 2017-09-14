@@ -5,7 +5,7 @@ import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +15,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.teiid.spring.annotations.InsertQuery;
+import org.teiid.spring.annotations.SelectQuery;
 
 /**
  * <p>
@@ -29,6 +31,12 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Marius Bogoevici
  */
 @SuppressWarnings("serial")
+@Table(name="all_bookings")
+@SelectQuery("SELECT id, cancellation_code, contact_email, created_on, performance_id, performance_name FROM legacyDS.booking UNION ALL SELECT id, cancellation_code, contact_email, created_on, performance_id, performance_name FROM ordersDS.booking")
+@InsertQuery("FOR EACH ROW \n"+
+        "BEGIN ATOMIC \n" +
+        "INSERT INTO ordersDS.booking (id, cancellation_code, contact_email, created_on, performance_id, performance_name) values (NEW.id, NEW.cancellationCode, NEW.contactEmail, NEW.createdOn, NEW.performance_id, NEW.performance_name);\n" +
+        "END")
 @Entity
 public class Booking implements Serializable {
 
@@ -88,15 +96,14 @@ public class Booking implements Serializable {
      * <p>
      * The date the booking was made.
      * </p>
-     * 
+     * <p>
      * <p>
      * The <code>@NotNull</code> Bean Validation constraint means that the booking date must be set. By default, it is set to
      * the date the object was created.
      * </p>
-     * 
      */
     @NotNull
-    private Date createdOn = new Date();
+    private Date createdOn = new Date(new java.util.Date().getTime());
 
     /**
      * <p>
@@ -114,7 +121,7 @@ public class Booking implements Serializable {
      * </ol>
      * 
      */
-    @NotEmpty
+//    @NotEmpty
     @Email(message = "Not a valid email format")
     private String contactEmail;
 

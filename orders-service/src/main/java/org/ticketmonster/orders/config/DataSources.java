@@ -22,28 +22,31 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
 @Configuration
+@Profile("teiid")
 public class DataSources {
 
-//    @ConfigurationProperties(prefix = "spring.datasource.legacyDS")
-//    @Bean
-//    public DataSource accountsDS() {
-//        return DataSourceBuilder.create().build();
-//    }
+    @ConfigurationProperties(prefix = "spring.datasource.legacyDS")
+    @Bean
+    public DataSource legacyDS() {
+        return DataSourceBuilder.create().build();
+    }
     
-//    @ConfigurationProperties(prefix = "spring.datasource.customerDS")
-//    @Bean
-//    public DataSource customerDS() {
-//        return DataSourceBuilder.create().build();
-//    }
+    @ConfigurationProperties(prefix = "spring.datasource.ordersDS")
+    @Bean
+    public DataSource ordersDS() {
+        return DataSourceBuilder.create().build();
+    }
 
     @Bean
     @Autowired
     public JdbcTemplate teiidJdbcTemplate(@Qualifier("dataSource") DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
+        JdbcTemplate tc = new JdbcTemplate(dataSource);
+        return tc;
     }
 }

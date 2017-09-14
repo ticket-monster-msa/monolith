@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.teiid.spring.annotations.SelectQuery;
 
 /**
  * <p>
@@ -27,8 +28,9 @@ import org.hibernate.validator.constraints.NotEmpty;
  * generate the serialVersionUID for us. When we put this app into production, we'll generate and embed the serialVersionUID
  */
 @SuppressWarnings("serial")
+@SelectQuery("SELECT id, name, description, venue_id, venue_name,  number_of_rows, row_capacity FROM legacyDS.section")
 @Entity
-@Table(uniqueConstraints=@UniqueConstraint(columnNames={"name", "venue_id"}))
+@Table(name = "section", uniqueConstraints=@UniqueConstraint(columnNames={"name", "venue_id"}))
 /*
  * We indicate that some properties of the class shouldn't be marshalled in JSON format
  */
@@ -85,11 +87,13 @@ public class Section implements Serializable {
     /**
      * The number of rows that make up the section.
      */
+    @Column(name = "number_of_rows")
     private int numberOfRows;
 
     /**
      * The number of seats in a row.
      */
+    @Column(name = "row_capacity")
     private int rowCapacity;
 
     /* Boilerplate getters and setters */
