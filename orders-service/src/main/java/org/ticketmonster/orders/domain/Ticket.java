@@ -1,8 +1,11 @@
 package org.ticketmonster.orders.domain;
 
+import org.teiid.spring.annotations.InsertQuery;
 import org.teiid.spring.annotations.SelectQuery;
+import org.teiid.spring.annotations.UpdateQuery;
 
 import static javax.persistence.GenerationType.IDENTITY;
+import static javax.persistence.GenerationType.TABLE;
 
 import java.io.Serializable;
 
@@ -23,17 +26,32 @@ import javax.validation.constraints.NotNull;
  * generate the serialVersionUID for us. When we put this app into production, we'll generate and embed the serialVersionUID
  */
 @SuppressWarnings("serial")
-@SelectQuery("SELECT id, price, number, row_number, section_id, ticket_category_id, tickets_id FROM legacyDS.ticket")
+@SelectQuery("SELECT id, CAST(price AS double), number,  row_number, section_id, ticket_category_id, tickets_id AS booking_id  FROM legacyDS.ticket UNION ALL SELECT id, price, number,  row_number, section_id, ticket_category_id, booking_id FROM ordersDS.ticket")
+@InsertQuery("FOR EACH ROW \n"+
+        "BEGIN ATOMIC \n" +
+        "INSERT INTO ordersDS.ticket (id, price, number,  row_number, section_id, ticket_category_id) values (NEW.id, CAST(NEW.price as float),  NEW.number,  NEW.row_number, NEW.section_id, NEW.ticket_category_id);\n" +
+        "END")
+@UpdateQuery("FOR EACH ROW\n" +
+        "BEGIN\n" +
+        "  IF(changing.booking_id) \n" +
+        "  BEGIN\n" +
+        "      UPDATE ordersDS.ticket set booking_id=NEW.booking_id where id = old.id;\n" +
+        "  END\n" +
+        "END")
 @Entity
+@Table(name = "ticket")
 public class Ticket implements Serializable {
 
     /* Declaration of fields */
 
-    /**
-     * The synthetic id of the object.
-     */
+    @TableGenerator(name = "ticket",
+            table = "id_generator",
+            pkColumnName = "idKey",
+            valueColumnName = "idvalue",
+            pkColumnValue = "ticket",
+            allocationSize = 1)
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = TABLE, generator = "ticket")
     private Long id;
 
     /**
@@ -60,7 +78,7 @@ public class Ticket implements Serializable {
      */
     @ManyToOne
     @NotNull
-    private TicketCategory ticketCategory;
+    private TicketCategory ticket_category;
 
     /**
      * The price which was charged for the ticket.
@@ -74,7 +92,7 @@ public class Ticket implements Serializable {
 
     public Ticket(Seat seat, TicketCategory ticketCategory, float price) {
         this.seat = seat;
-        this.ticketCategory = ticketCategory;
+        this.ticket_category = ticketCategory;
         this.price = price;
     }
 
@@ -85,7 +103,7 @@ public class Ticket implements Serializable {
     }
 
     public TicketCategory getTicketCategory() {
-        return ticketCategory;
+        return ticket_category;
     }
 
     public float getPrice() {

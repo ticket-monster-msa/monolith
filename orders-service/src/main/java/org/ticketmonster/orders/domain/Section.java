@@ -28,7 +28,7 @@ import org.teiid.spring.annotations.SelectQuery;
  * generate the serialVersionUID for us. When we put this app into production, we'll generate and embed the serialVersionUID
  */
 @SuppressWarnings("serial")
-@SelectQuery("SELECT id, name, description, venue_id, venue_name,  number_of_rows, row_capacity FROM legacyDS.section")
+@SelectQuery("SELECT id, description, name, number_of_rows, row_capacity, venue_id, venue_name  FROM legacyDS.section")
 @Entity
 @Table(name = "section", uniqueConstraints=@UniqueConstraint(columnNames={"name", "venue_id"}))
 /*

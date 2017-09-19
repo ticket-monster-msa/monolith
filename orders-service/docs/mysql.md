@@ -19,6 +19,14 @@ If you port forward the mysql ports to the docker container, you can run a mysql
 mysql ticketmonster -h127.0.0.1 -uticket -pmonster 
 ```
 
+You will need to set up the databases:
+
+```
+mysql ticketmonster -h127.0.0.1 -uticket -pmonster < ./scripts/grants.sql
+mysql ticketmonster -h127.0.0.1 -uticket -pmonster < ./scripts/orders.sql
+mysql ticketmonster -h127.0.0.1 -uticket -pmonster < ./scripts/ticketmonster.sql
+```
+
 An simple script to port forward minikube:
 
 ```

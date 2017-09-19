@@ -39,7 +39,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @SuppressWarnings("serial")
 @SelectQuery("SELECT id, event_id, event_name, venue_id, venue_name FROM legacyDS.appearance")
 @Entity
-@Table(name="Appearance", uniqueConstraints = @UniqueConstraint(columnNames = { "event_id", "venue_id" }))
+@Table(name="appearance", uniqueConstraints = @UniqueConstraint(columnNames = { "event_id", "venue_id" }))
 public class Show implements Serializable {
 
     /* Declaration of fields */

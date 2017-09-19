@@ -1,5 +1,6 @@
 package org.ticketmonster.orders.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
@@ -12,9 +13,11 @@ import javax.validation.constraints.Min;
 public class Seat {
 
     @Min(1)
+    @Column(name = "row_number")
     private int rowNumber;
 
     @Min(1)
+    @Column(name = "number")
     private int number;
 
     /**

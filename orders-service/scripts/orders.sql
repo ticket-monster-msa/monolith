@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS orders;
 USE orders;
 CREATE TABLE `section` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -21,6 +22,7 @@ CREATE TABLE `appearance` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UKfgr2nkyi0qpjhjvji0mdfvudc` (`event_id`,`venue_id`)
 ) ;
+
 
 CREATE TABLE `booking` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -53,6 +55,7 @@ CREATE TABLE `ticket_category` (
   UNIQUE KEY `UK_hbsjuus8lw4socklmianxb00r` (`description`)
 ) ;
 
+# we write to this table, so definitely need it
 CREATE TABLE `ticket` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `price` float NOT NULL,
@@ -60,14 +63,12 @@ CREATE TABLE `ticket` (
   `row_number` int(11) NOT NULL,
   `section_id` bigint(20) DEFAULT NULL,
   `ticket_category_id` bigint(20) NOT NULL,
-  `tickets_id` bigint(20) DEFAULT NULL,
+  `booking_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK43lerp18busrqen2gd43vhepi` (`section_id`),
   KEY `FKbt7yntrpp48qd82aubrq6lbx8` (`ticket_category_id`),
-  KEY `FK8h02qtjhsys9q4ibyomkoctu6` (`tickets_id`),
-  CONSTRAINT `FK43lerp18busrqen2gd43vhepi` FOREIGN KEY (`section_id`) REFERENCES `section` (`id`),
-  CONSTRAINT `FK8h02qtjhsys9q4ibyomkoctu6` FOREIGN KEY (`tickets_id`) REFERENCES `booking` (`id`),
-  CONSTRAINT `FKbt7yntrpp48qd82aubrq6lbx8` FOREIGN KEY (`ticket_category_id`) REFERENCES `ticket_category` (`id`)
+  KEY `FK8h02qtjhsys9q4ibyomkoctu6` (`booking_id`),
+  CONSTRAINT `FK8h02qtjhsys9q4ibyomkoctu6` FOREIGN KEY (`booking_id`) REFERENCES `booking` (`id`)
 ) ;
 
 CREATE TABLE `ticket_price_guide` (
@@ -84,3 +85,15 @@ CREATE TABLE `ticket_price_guide` (
   CONSTRAINT `FKbdxqxoxov15nyypxdryur5fs5` FOREIGN KEY (`ticketcategory_id`) REFERENCES `ticket_category` (`id`),
   CONSTRAINT `FKt21lxux6lmhmw6jyx3schteio` FOREIGN KEY (`show_id`) REFERENCES `appearance` (`id`)
 ) ;
+
+CREATE TABLE id_generator
+(
+  IDKEY char(20) NOT NULL,
+  IDVALUE bigint NOT NULL
+);
+
+INSERT INTO id_generator(IDKEY, IDVALUE) VALUES ('booking', 1);
+INSERT INTO id_generator(IDKEY, IDVALUE) VALUES ('ticket', 1);
+INSERT INTO id_generator(IDKEY, IDVALUE) VALUES ('section_allocation', 1);
+
+commit;

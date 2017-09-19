@@ -1,9 +1,12 @@
 package org.ticketmonster.orders.domain;
 
 
+import org.teiid.spring.annotations.InsertQuery;
 import org.teiid.spring.annotations.SelectQuery;
+import org.teiid.spring.annotations.UpdateQuery;
 
 import static javax.persistence.GenerationType.IDENTITY;
+import static javax.persistence.GenerationType.TABLE;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,19 +34,31 @@ import javax.validation.constraints.NotNull;
  * @author Marius Bogoevici
  * @author Pete Muir
  */
-@SelectQuery("SELECT id, allocated, occupied_count, occupied_count, performance_id, performance_name, version, section_id FROM legacyDS.section_allocation")
+@SelectQuery("SELECT id, allocated, occupied_count, performance_id, performance_name, version, section_id  FROM legacyDS.section_allocation")
+@InsertQuery("FOR EACH ROW \n"+
+        "BEGIN ATOMIC \n" +
+        "INSERT INTO legacyDS.section_allocation (id, allocated, occupied_count, performance_id, performance_name, section_id, version ) values (NEW.id, NEW.allocated,  NEW.occupied_count, NEW.performance_id, NEW.performance_name, NEW.section_id,  NEW.version);\n" +
+        "END")
+@UpdateQuery("FOR EACH ROW \n" +
+        "BEGIN ATOMIC \n " +
+        "UPDATE legacyDS.section_allocation SET version=NEW.version, allocated=NEW.allocated, occupied_count=NEW.occupied_count WHERE id=OLD.id;" +
+        "END")
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "performance_id", "section_id" }))
+@Table(name="section_allocation", uniqueConstraints = @UniqueConstraint(columnNames = { "performance_id", "section_id" }))
 public class SectionAllocation implements Serializable {
-    public static final int EXPIRATION_TIME = 60 * 1000;
+    @Transient
+    private static final int EXPIRATION_TIME = 60 * 1000;
 
     /* Declaration of fields */
 
-    /**
-     * The synthetic id of the object.
-     */
+    @TableGenerator(name = "section_allocation",
+            table = "id_generator",
+            pkColumnName = "idKey",
+            valueColumnName = "idvalue",
+            pkColumnValue = "section_allocation",
+            allocationSize = 1)
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = TABLE, generator = "section_allocation")
     private Long id;
 
     /**
@@ -114,6 +129,7 @@ public class SectionAllocation implements Serializable {
      *     it is intended to be used for analytics purposes only.
      * </p>
      */
+    @Column(name = "occupied_count")
     private int occupiedCount = 0;
 
     /**
@@ -126,7 +142,7 @@ public class SectionAllocation implements Serializable {
         this.performanceId = performanceId;
         this.section = section;
         this.allocated = new long[section.getNumberOfRows()][section.getRowCapacity()];
-        for (long[] seatStates : allocated) {
+        for (long[] seatStates : (long[][])allocated) {
             Arrays.fill(seatStates, 0l);
         }
     }

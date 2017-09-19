@@ -16,24 +16,18 @@
  */
 package org.ticketmonster.orders;
 
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.ticketmonster.orders.domain.TicketPriceGuide;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.assertj.core.api.Java6Assertions.not;
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
 
 /**
  * Created by ceposta 
@@ -41,21 +35,27 @@ import static org.hamcrest.Matchers.is;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TeiidVdbTests {
+public class BookingServiceIT {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @LocalServerPort
+    int port;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    @Before
+    public void init() {
+        RestAssured.port=port;
+    }
 
     @Test
-    public void testQueryTicketPriceGuideWithEntityManager() {
-        Set<Long> priceCategoryIds = new HashSet<>();
-        priceCategoryIds.add(4L);
-        List<TicketPriceGuide> ticketPriceGuides = (List<TicketPriceGuide>) entityManager
-                .createQuery("select p from TicketPriceGuide p where p.id in :ids", TicketPriceGuide.class)
-                .setParameter("ids", priceCategoryIds).getResultList();
-        assertThat(ticketPriceGuides, is(not(empty())));
+    public void testSimpleBooking() throws InterruptedException {
+
+
+        given().contentType(ContentType.JSON).body("{\"ticketRequests\":[{\"ticketPrice\":4,\"quantity\":3}],\"email\":\"foo@bar.coom\",\"performance\":1}")
+                .and().expect()
+//                .body(equalTo("foo"))
+                .body("tickets.seat.number", hasItems(1,2,3)).and()
+                .body("contactEmail", equalTo("foo@bar.coom"))
+                .body("totalTicketPrice", equalTo(448.5f))
+                .when().post("/rest/bookings");
+
     }
 }

@@ -28,8 +28,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 
 @Configuration
-@Profile("teiid")
-public class DataSources {
+@Profile("mysql")
+public class TeiidDataSources {
 
     @ConfigurationProperties(prefix = "spring.datasource.legacyDS")
     @Bean

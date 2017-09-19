@@ -3,9 +3,11 @@ package org.ticketmonster.orders.domain;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
+import static javax.persistence.GenerationType.TABLE;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +19,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.teiid.spring.annotations.InsertQuery;
 import org.teiid.spring.annotations.SelectQuery;
+import org.teiid.spring.annotations.UpdateQuery;
 
 /**
  * <p>
@@ -35,18 +38,21 @@ import org.teiid.spring.annotations.SelectQuery;
 @SelectQuery("SELECT id, cancellation_code, contact_email, created_on, performance_id, performance_name FROM legacyDS.booking UNION ALL SELECT id, cancellation_code, contact_email, created_on, performance_id, performance_name FROM ordersDS.booking")
 @InsertQuery("FOR EACH ROW \n"+
         "BEGIN ATOMIC \n" +
-        "INSERT INTO ordersDS.booking (id, cancellation_code, contact_email, created_on, performance_id, performance_name) values (NEW.id, NEW.cancellationCode, NEW.contactEmail, NEW.createdOn, NEW.performance_id, NEW.performance_name);\n" +
+        "INSERT INTO ordersDS.booking (id, performance_id, performance_name, cancellation_code, created_on, contact_email ) values (NEW.id, NEW.performance_id, NEW.performance_name, NEW.cancellation_code, NEW.created_on, NEW.contact_email);\n" +
         "END")
 @Entity
 public class Booking implements Serializable {
 
     /* Declaration of fields */
 
-    /**
-     * The synthetic ID of the object.
-     */
+    @TableGenerator(name = "booking",
+    table = "id_generator",
+    pkColumnName = "idKey",
+    valueColumnName = "idvalue",
+    pkColumnValue = "booking",
+    allocationSize = 1)
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = TABLE, generator = "booking")
     private Long id;
 
     /**
@@ -66,7 +72,7 @@ public class Booking implements Serializable {
      * 
      */
     @OneToMany(fetch = EAGER, cascade = ALL)
-    @JoinColumn
+    @JoinColumn(name = "booking_id")
     @NotEmpty
     @Valid
     private Set<Ticket> tickets = new HashSet<Ticket>();
@@ -90,6 +96,7 @@ public class Booking implements Serializable {
      * </p>
      */
     @NotEmpty
+    @Column(name = "cancellation_code")
     private String cancellationCode;
 
     /**
@@ -103,7 +110,8 @@ public class Booking implements Serializable {
      * </p>
      */
     @NotNull
-    private Date createdOn = new Date(new java.util.Date().getTime());
+    @Column(name = "created_on")
+    private Timestamp createdOn = new Timestamp(new Date().getTime());
 
     /**
      * <p>
@@ -123,6 +131,7 @@ public class Booking implements Serializable {
      */
 //    @NotEmpty
     @Email(message = "Not a valid email format")
+    @Column(name = "contact_email")
     private String contactEmail;
 
     /**
@@ -150,11 +159,11 @@ public class Booking implements Serializable {
         this.tickets = tickets;
     }
 
-    public Date getCreatedOn() {
+    public Timestamp getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(Timestamp createdOn) {
         this.createdOn = createdOn;
     }
 
