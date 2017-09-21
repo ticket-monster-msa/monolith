@@ -34,14 +34,18 @@ import javax.validation.constraints.NotNull;
  * @author Marius Bogoevici
  * @author Pete Muir
  */
-@SelectQuery("SELECT id, allocated, occupied_count, performance_id, performance_name, version, section_id  FROM legacyDS.section_allocation")
+@SelectQuery("SELECT sa.id, sa.allocated, sa.occupiedCount AS occupied_count, sa.performance_id, e.name as performance_name, sa.version, sa.section_id " +
+        "FROM legacyDS.SectionAllocation sa " +
+        "JOIN legacyDS.Performance p ON sa.performance_id=p.id " +
+        "JOIN legacyDS.Appearance s ON p.show_id=s.id " +
+        "JOIN legacyDS.Event e ON s.event_id=e.id;")
 @InsertQuery("FOR EACH ROW \n"+
         "BEGIN ATOMIC \n" +
-        "INSERT INTO legacyDS.section_allocation (id, allocated, occupied_count, performance_id, performance_name, section_id, version ) values (NEW.id, NEW.allocated,  NEW.occupied_count, NEW.performance_id, NEW.performance_name, NEW.section_id,  NEW.version);\n" +
+        "INSERT INTO legacyDS.SectionAllocation (id, allocated, occupiedCount, version, performance_id, section_id) values (NEW.id, NEW.allocated, NEW.occupied_count, NEW.version, NEW.performance_id, NEW.section_id);\n" +
         "END")
 @UpdateQuery("FOR EACH ROW \n" +
         "BEGIN ATOMIC \n " +
-        "UPDATE legacyDS.section_allocation SET version=NEW.version, allocated=NEW.allocated, occupied_count=NEW.occupied_count WHERE id=OLD.id;" +
+        "UPDATE legacyDS.SectionAllocation SET version=NEW.version, allocated=NEW.allocated, occupiedCount=NEW.occupied_count WHERE id=OLD.id;" +
         "END")
 @Entity
 @Table(name="section_allocation", uniqueConstraints = @UniqueConstraint(columnNames = { "performance_id", "section_id" }))

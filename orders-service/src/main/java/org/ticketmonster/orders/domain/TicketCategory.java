@@ -22,7 +22,7 @@ import org.teiid.spring.annotations.SelectQuery;
  * generate the serialVersionUID for us. When we put this app into production, we'll generate and embed the serialVersionUID
  */
 @SuppressWarnings("serial")
-@SelectQuery("SELECT id, description FROM legacyDS.ticket_category")
+@SelectQuery("SELECT id, description FROM legacyDS.TicketCategory")
 @Table(name = "ticket_category")
 @Entity
 public class TicketCategory implements Serializable {

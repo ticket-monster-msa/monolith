@@ -37,7 +37,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 // because it doesn't really represent a collection of performances; in this model, we don't
 // care about performances
 @SuppressWarnings("serial")
-@SelectQuery("SELECT id, event_id, event_name, venue_id, venue_name FROM legacyDS.appearance")
+@SelectQuery("SELECT a.id, a.event_id, e.name AS event_name, a.venue_id, v.name AS venue_name " +
+        "FROM legacyDS.Appearance a " +
+        "JOIN legacyDS.Event e ON a.event_id=e.id " +
+        "JOIN legacyDS.Venue v ON a.venue_id=v.id;")
 @Entity
 @Table(name="appearance", uniqueConstraints = @UniqueConstraint(columnNames = { "event_id", "venue_id" }))
 public class Show implements Serializable {

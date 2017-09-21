@@ -28,7 +28,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 
 @Configuration
-@Profile("mysql")
+@Profile({"mysql", "kube"})
 public class TeiidDataSources {
 
     @ConfigurationProperties(prefix = "spring.datasource.legacyDS")

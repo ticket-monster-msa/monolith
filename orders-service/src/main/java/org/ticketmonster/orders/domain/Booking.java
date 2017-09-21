@@ -35,7 +35,14 @@ import org.teiid.spring.annotations.UpdateQuery;
  */
 @SuppressWarnings("serial")
 @Table(name="all_bookings")
-@SelectQuery("SELECT id, cancellation_code, contact_email, created_on, performance_id, performance_name FROM legacyDS.booking UNION ALL SELECT id, cancellation_code, contact_email, created_on, performance_id, performance_name FROM ordersDS.booking")
+@SelectQuery("SELECT b.id, b.cancellationCode AS cancellation_code, b.contactEmail AS contact_email, b.createdOn AS created_on, b.performance_id, e.name as performance_name " +
+        "FROM legacyDS.Booking b " +
+        "JOIN legacyDS.Performance p ON b.performance_id=p.id " +
+        "JOIN legacyDS.Appearance s ON p.show_id = s.id " +
+        "JOIN legacyDS.Event e ON s.event_id=e.id " +
+        "UNION ALL " +
+        "SELECT id, cancellation_code, contact_email, created_on, performance_id, performance_name " +
+        "FROM ordersDS.booking;")
 @InsertQuery("FOR EACH ROW \n"+
         "BEGIN ATOMIC \n" +
         "INSERT INTO ordersDS.booking (id, performance_id, performance_name, cancellation_code, created_on, contact_email ) values (NEW.id, NEW.performance_id, NEW.performance_name, NEW.cancellation_code, NEW.created_on, NEW.contact_email);\n" +

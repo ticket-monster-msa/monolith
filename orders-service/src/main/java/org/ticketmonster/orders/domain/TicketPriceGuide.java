@@ -35,7 +35,7 @@ import org.teiid.spring.annotations.SelectQuery;
 @Entity
 @JsonIgnoreProperties("show")
 @Table(name = "ticket_price_guide", uniqueConstraints = @UniqueConstraint(columnNames = { "section_id", "show_id", "ticketcategory_id" }))
-@SelectQuery("SELECT id, CAST(price AS double), section_id, show_id, ticketcategory_id FROM legacyDS.ticket_price_guide")
+@SelectQuery("SELECT id, CAST(price AS double), section_id, show_id, ticketCategory_id AS ticketcategory_id FROM legacyDS.TicketPrice")
 public class TicketPriceGuide implements Serializable {
 
     /* Declaration of fields */

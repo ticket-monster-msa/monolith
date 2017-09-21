@@ -26,7 +26,8 @@ import javax.validation.constraints.NotNull;
  * generate the serialVersionUID for us. When we put this app into production, we'll generate and embed the serialVersionUID
  */
 @SuppressWarnings("serial")
-@SelectQuery("SELECT id, CAST(price AS double), number,  row_number, section_id, ticket_category_id, tickets_id AS booking_id  FROM legacyDS.ticket UNION ALL SELECT id, price, number,  row_number, section_id, ticket_category_id, booking_id FROM ordersDS.ticket")
+@SelectQuery("SELECT id, CAST(price AS double), number, rowNumber AS row_number, section_id, ticketCategory_id AS ticket_category_id, tickets_id AS booking_id  FROM legacyDS.Ticket " +
+        "UNION ALL SELECT id, price, number,  row_number, section_id, ticket_category_id, booking_id FROM ordersDS.ticket")
 @InsertQuery("FOR EACH ROW \n"+
         "BEGIN ATOMIC \n" +
         "INSERT INTO ordersDS.ticket (id, price, number,  row_number, section_id, ticket_category_id) values (NEW.id, CAST(NEW.price as float),  NEW.number,  NEW.row_number, NEW.section_id, NEW.ticket_category_id);\n" +

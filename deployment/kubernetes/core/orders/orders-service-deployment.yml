@@ -1,0 +1,70 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    fabric8.io/git-commit: d274512765d69ebdd100ca68c1180a7a2bc59753
+    fabric8.io/iconUrl: img/icons/spring-boot.svg
+    fabric8.io/git-branch: migrate-workshop
+    fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=orders-service&var-version=1.0.0-SNAPSHOT
+  labels:
+    app: orders-service
+    provider: fabric8
+    version: 1.0.0-SNAPSHOT
+    group: org.ticketmonster.orders
+  name: orders-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-service
+      provider: fabric8
+      group: org.ticketmonster.orders
+  template:
+    metadata:
+      annotations:
+        fabric8.io/git-commit: d274512765d69ebdd100ca68c1180a7a2bc59753
+        fabric8.io/iconUrl: img/icons/spring-boot.svg
+        fabric8.io/git-branch: migrate-workshop
+        fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=orders-service&var-version=1.0.0-SNAPSHOT
+      labels:
+        app: orders-service
+        provider: fabric8
+        version: 1.0.0-SNAPSHOT
+        group: org.ticketmonster.orders
+    spec:
+      containers:
+      - env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: kube
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        image: ceposta/orders-service:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 180
+        name: spring-boot
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9779
+          name: prometheus
+          protocol: TCP
+        - containerPort: 8778
+          name: jolokia
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+        securityContext:
+          privileged: false

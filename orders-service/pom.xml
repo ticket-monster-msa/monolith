@@ -16,6 +16,8 @@
     <mysql.port>3306</mysql.port>
     <mysql.init.timeout>60000</mysql.init.timeout>
     <skipITs>true</skipITs>
+    <fabric8.maven.plugin.version>3.5.25</fabric8.maven.plugin.version>
+    <docker.image.name>ceposta/%a:%l</docker.image.name>
   </properties>
 
   <dependencyManagement>
@@ -251,11 +253,34 @@
         <activeByDefault>false</activeByDefault>
         <property>
           <name>skipITs</name>
+          <value>true</value>
         </property>
       </activation>
       <properties>
         <docker.skip>true</docker.skip>
       </properties>
+    </profile>
+    <profile>
+      <id>kubernetes</id>
+      <properties>
+        <fabric8.generator.name>${docker.image.name}</fabric8.generator.name>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>fabric8-maven-plugin</artifactId>
+            <version>${fabric8.maven.plugin.version}</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>resource</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 
