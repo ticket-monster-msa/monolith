@@ -3,7 +3,8 @@ kind: Deployment
 metadata:
   labels:
     run: tm-ui
-  name: tm-ui
+    version: v1
+  name: tm-ui-v1
 spec:
   replicas: 1
   selector:
@@ -21,7 +22,7 @@ spec:
         run: tm-ui
     spec:
       containers:
-      - image: ceposta/tm-ui:1.0
+      - image: ceposta/tm-ui:monolith
         imagePullPolicy: IfNotPresent
         name: tm-ui
         ports:

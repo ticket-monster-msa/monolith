@@ -19,6 +19,12 @@ Or to build for kubernetes (and skip Integration tests)
 mvn clean install -Pmysql,kubernetes
 ```
 
+To build the docker image:
+
+```
+mvn clean install -Pmysql,kubernetes fabric8:build
+```
+
 
 A curl command you can use to test everything:
 
