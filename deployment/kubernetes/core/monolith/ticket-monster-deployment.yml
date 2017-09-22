@@ -40,18 +40,10 @@ spec:
               fieldPath: metadata.namespace
         image: ceposta/ticket-monster-mysql:monolith
         imagePullPolicy: IfNotPresent
-        livenessProbe:
-          httpGet:
-            path: /rest/ping
-            port: 8080
         name: webapp
         ports:
         - containerPort: 8080
           name: http
           protocol: TCP
-        readinessProbe:
-          httpGet:
-            path: /rest/ping
-            port: 8080
         securityContext:
           privileged: false

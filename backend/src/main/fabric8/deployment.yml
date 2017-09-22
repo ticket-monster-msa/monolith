@@ -6,7 +6,11 @@ spec:
           httpGet:
             path: /rest/ping
             port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
         readinessProbe:
           httpGet:
             path: /rest/ping
             port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
