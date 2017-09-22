@@ -18,3 +18,5 @@ mvn clean install -Pmysql,kubernetes fabric8:build
 This will create a docker image named `ceposta/backend-mysql:latest`. This image is the same image that should be on Docker Hub: [https://hub.docker.com/r/ceposta/backend-mysql/](https://hub.docker.com/r/ceposta/backend-mysql/) 
 
 This is the same image used in the deployment scripts.
+
+If you want the `backend` service before we added scientist/FF impl, checkout this SHA: a07942b
