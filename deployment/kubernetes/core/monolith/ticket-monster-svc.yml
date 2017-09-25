@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    fabric8.io/git-commit: efc77c8dd69cd0dbfec9187d6630a8b487497789
+    fabric8.io/git-commit: 3279e9bcf74f0f2ef56a583d35535624cf88a5bc
     fabric8.io/git-branch: migrate-workshop
   labels:
     expose: "true"

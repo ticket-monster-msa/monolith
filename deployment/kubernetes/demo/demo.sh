@@ -23,7 +23,7 @@ desc "Now we have our monolith running"
 desc "Let's start to break up the monolith by removing the UI"
 desc "Let's deploy a new UI"
 
-run "kubectl apply -f $(relative ../core/frontend/talk-to-monolith/tm-ui-svc.yml)"
+run "kubectl apply -f $(relative ../core/frontend/tm-ui-svc.yml)"
 run "kubectl apply -f $(relative ../core/frontend/talk-to-monolith/tm-ui-deployment.yml)"
 
 desc "This is a dark release. We can try to proxy and try hit it"
@@ -37,7 +37,7 @@ run "kubectl replace -f $(relative ../core/frontend/ticket-monster-ingress.yml)"
 desc "So this is fine. Let's now deploy a new version of our monolith without the UI"
 
 run "kubectl apply -f $(relative ../core/backend/backend-svc.yml)"
-run "kubectl apply -f $(relative ../core/backend/backend-deployment.yml)"
+run "kubectl apply -f $(relative ../core/backend/v1/backend-v1-deployment.yml)"
 
 desc "Now we have a new deployment but no traffic going through it."
 desc "The new deployment is also connected to the monolith's database"

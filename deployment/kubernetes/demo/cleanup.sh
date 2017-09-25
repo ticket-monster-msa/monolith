@@ -8,7 +8,8 @@ kubectl delete deploy/mysql-backend
 
 # Backend
 kubectl delete svc/backend
-kubectl delete deploy/backend
+kubectl delete deploy/backend-v1
+kubectl delete deploy/backend-v2
 
 # UI
 kubectl delete svc/tm-ui

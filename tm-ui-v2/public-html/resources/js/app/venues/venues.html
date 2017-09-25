@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-md-3 col-md-offset-1">
+        <div class="panel" id="itemMenu">
+
+            <div class="panel panel-default" ng-repeat="city in cities">
+                <div class="panel-heading">
+                    <a class="panel-toggle"
+                       data-target="#city-{{city}}-collapsible" data-toggle="collapse"
+                       data-parent="#itemMenu">{{city}}</a>
+                </div>
+                <div id="city-{{city}}-collapsible" class="panel-collapse collapse">
+                    <div id="city-{{city}}" class="panel-body">
+
+                        <p ng-repeat="venue in venues" ng-if="venue.address.city == city">
+                            <a menu-popover href="#venues/{{venue.id}}" rel="popover"
+                              data-content="{{venue.description}}"
+                              data-original-title="{{venue.name}}">{{venue.name}}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id='itemSummary' class="col-md-8 hidden-xs">
+        <div class="carousel-container">
+            <div id="venueCarousel" class="carousel">
+                <!-- Carousel items -->
+                <div class="carousel-inner">
+                    <div class="item" ng-repeat="venue in venues" ng-if="venue.mediaItem" ng-class="{'active':$first}">
+                        <img ng-src="{{config.baseUrl + 'rest/media/' + venue.mediaItem.id}}"/>
+
+                        <div class="carousel-caption">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <h4>{{venue.name}}</h4>
+                                    <p>{{venue.description}}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <a class="btn btn-danger action" href="#venues/{{venue.id}}">Find shows</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Carousel nav -->
+                <a class="carousel-control left" href="#venueCarousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="carousel-control right" href="#venueCarousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<header ng-switch on="$location.path().indexOf('/EventCategories/new') > -1">
+    <h3 ng-switch-when="true">Create a new EventCategory</h3>
+    <h3 ng-switch-when="false">View or edit EventCategory</h3>
+</header>
+<form id="EventCategoryForm" name="EventCategoryForm" class="form-horizontal" role="form">
+    
+    <div class="form-group" ng-class="{'has-error': EventCategoryForm.description.$invalid}">
+        <label for="description" class="col-sm-2 control-label">Description</label>
+        <div id="descriptionControls" class="col-sm-10">
+            <input id="description" name="description" type="text" class="form-control" ng-model="eventCategory.description" placeholder="Enter the EventCategory Description"></input>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="saveEventCategory" name="saveEventCategory" class="btn btn-primary" ng-disabled="isClean() || EventCategoryForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
+            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
+            <button id="deleteEventCategory" name="deleteEventCategory" class="btn btn-danger" ng-show="eventCategory.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        </div>
+    </div>
+</form>

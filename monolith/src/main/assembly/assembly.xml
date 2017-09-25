@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+    <id>release-dist</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <baseDirectory>${artifactId}-${version}</baseDirectory>
+    <fileSets>
+        <fileSet>            
+            <directory>../</directory>
+            <outputDirectory>/</outputDirectory>
+            <excludes>
+                <exclude>**/.*</exclude>
+                <exclude>.gitignore</exclude>
+                <exclude>**/${project.build.directory}/**</exclude>
+                <exclude>**/README.txt</exclude>
+                <exclude>**/readme.txt</exclude>
+                <exclude>**/docs/</exclude>
+                <exclude>**/dist/**</exclude>
+                <exclude>**/tutorial/**</exclude>
+                <exclude>**/settings.xml</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>../</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>**/.settings/.jsdtscope</include>
+            </includes>
+        </fileSet>
+    </fileSets>   
+</assembly>

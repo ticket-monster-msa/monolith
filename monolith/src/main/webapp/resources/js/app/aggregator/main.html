@@ -1,0 +1,47 @@
+<!--
+    The main layout of the page - contains the menu and the 'content' &lt;div/&gt; in which all the
+    views will render the content.
+-->
+<div id="logo"><div class="wrap visible-md-block visible-lg-block"><h1>Ticket Monster</h1></div></div>
+<div id="container">
+    <div id="menu">
+        <div class="navbar">
+
+            <a class="navbar-brand visible-xs-inline visible-sm-inline" href="#/">Ticket Monster</a>
+
+            <!-- Toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-items">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="navbar-items" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#about" class="hidden-xs">About</a></li>
+                    <li><a data-toggle="collapse" data-target=".navbar-collapse" href="#about" class="visible-xs">About</a></li>
+                    <li><a href="#events" class="hidden-xs">Events</a></li>
+                    <li><a data-toggle="collapse" data-target=".navbar-collapse" href="#events" class="visible-xs">Events</a></li>
+                    <li><a href="#venues" class="hidden-xs">Venues</a></li>
+                    <li><a data-toggle="collapse" data-target=".navbar-collapse" href="#venues" class="visible-xs">Venues</a></li>
+                    <li><a href="#bookings" class="hidden-xs">Bookings</a></li>
+                    <li><a data-toggle="collapse" data-target=".navbar-collapse" href="#bookings" class="visible-xs">Bookings</a></li>
+                    <li><a href="#monitor" class="hidden-xs">Monitor</a></li>
+                    <li><a data-toggle="collapse" data-target=".navbar-collapse" href="#monitor" class="visible-xs">Monitor</a></li>
+                    <li><a href="admin" class="hidden-xs">Administration</a></li>
+                    <li><a data-toggle="collapse" data-target=".navbar-collapse" href="admin" class="visible-xs">Administration</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="content" class="container" ng-view>
+    </div>
+</div>
+
+<footer style="" class="visible-md-block visible-lg-block">
+    <div style="text-align: center;"><img src="resources/img/rhjb_eap_logo.png" alt="HTML5"/></div>
+</footer>

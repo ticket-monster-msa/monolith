@@ -1,0 +1,80 @@
+<div class="row">
+    <h2 class="page-header special-title light-font">{{event.name}}</h2>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="well">
+            <div class="row">
+                <h3 class="page-header col-md-6">What?</h3>
+                <div class="col-md-6" id='eventMedia'>
+                	<img ng-if="event.mediaItem" width="100%" ng-src='{{config.baseUrl + "rest/media/" + event.mediaItem.id}}' />
+                </div>
+            </div>
+            <div class="row top5">
+                <div class="col-md-12">{{event.description}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="well">
+            <div class="row">
+                <h3 class="page-header col-md-6">Where?</h3>
+                <div class="col-md-6" id='venueMedia'>
+                    <img ng-if="selectedShow.venue.mediaItem" width="100%" ng-src='{{config.baseUrl + "rest/media/" + selectedShow.venue.mediaItem.id}}' />
+                </div>
+            </div>
+            <div class="row top5">
+                <div class="col-md-12">
+                    <select id="venueSelector" class="form-control" ng-options="show as (show.venue.address.city + ' : ' + show.venue.name) for show in shows" ng-model="selectedShow">
+                        <option value='' selected>Select a venue</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row top5">
+                <div class="col-md-12">
+                    <div id="eventVenueDescription" ng-if="selectedShow">
+                        <address>
+                            <p>{{selectedShow.venue.description}}</p>
+                            <p><strong>Address:</strong></p>
+                            <p>{{selectedShow.venue.address.street}}</p>
+                            <p>{{selectedShow.venue.address.city}}, {{selectedShow.venue.address.country}}</p>
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id='bookingWhen' ng-hide="!selectedShow" class="col-md-4">
+        <div class="well">
+            <div class="row">
+                <h3 class="page-header col-md-6">When?</h3>
+            </div>
+
+            <div class="row top5">
+                <div class="col-md-12">
+                    <select class="form-control" id="dayPicker" ng-options="performanceDay as (performanceDay.date | date: 'EEE dd MMMM yyyy') for performanceDay in selectedPerformanceDays" ng-model="selectedPerformanceDay" />
+                </div>
+            </div>
+            <div class="row top5">
+                <div class="col-md-12">
+                    <select class="form-control" id="performanceTimes" ng-options="performance as (performance.date | date: 'shortTime') for performance in selectedPerformances" ng-model="selectedPerformance" />
+                </div>
+            </div>
+
+            <div id="bookingOption" class="row top5 visible-md-block visible-lg-block">
+                <div class="col-md-6">
+                    <input name="bookButton" class="btn btn-primary" type="button" value="Order tickets" ng-click="beginBooking()" ng-disabled="!selectedPerformance.id" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="mobile-footer visible-xs-block visible-sm-block">
+    <div class="container">
+        <div id="bookingOptionFooter" class="row top4">
+            <div class="col-xs-6 col-xs-offset-6">
+                <input name="bookButton" class="btn btn-primary" type="button" value="Order tickets" ng-click="beginBooking()" ng-disabled="!selectedPerformance.id" />
+            </div>
+        </div>
+    </div>
+</footer>

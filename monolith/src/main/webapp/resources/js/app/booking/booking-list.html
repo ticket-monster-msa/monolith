@@ -1,0 +1,48 @@
+<div class="container">
+    <h3 class="page-header light-font special-title">Current bookings</h3>
+    <div class="row">
+        <div class='col-md-12'>
+            <div class="table-stack">
+                <table class='table table-bordered table-striped table-condensed' style="background: #fffffa;">
+                    <thead>
+                    <tr>
+                        <th>Booking #</th>
+                        <th>Purchaser</th>
+                        <th>Created on</th>
+                        <th>Total tickets</th>
+                        <th>Total price</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id='bookingList'>
+                    <tr ng-repeat="booking in bookings | offset: (currentPage-1)*itemsPerPage | limitTo: itemsPerPage">
+                        <td data-title="Booking #"><a href="#bookings/{{booking.id}}">{{booking.id}}</a></td>
+                        <td data-title="Purchaser">{{booking.contactEmail}}</td>
+                        <td data-title="Created on">{{booking.createdOn | date: "EEE d MMMM yyyy 'at' h:mma"}}</td>
+                        <td data-title="Quantity">{{booking.tickets.length}}</td>
+                        <td data-title="Price">${{booking.totalTicketPrice}}</td>
+                        <td><span data-tm-role='delete' data-tm-id="{{booking.id}}" ng-click="deleteBooking(booking.id)"
+                               class="glyphicon glyphicon-trash" title="Delete booking"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="pagination pull-right">
+                <li ng-class="prevPageDisabled()">
+                    <a href ng-click="prevPage()">&#171;Previous</a>
+                </li>
+                <li ng-repeat="n in range()"
+                    ng-class="{active: n == currentPage}" ng-click="setPage(n)">
+                    <a href>{{n}}</a>
+                </li>
+                <li ng-class="nextPageDisabled()">
+                    <a href ng-click="nextPage()">Next »</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

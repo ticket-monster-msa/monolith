@@ -1,0 +1,43 @@
+<div class="row">
+    <h2 class="special-title light-font">Booking #{{booking.id}} details</h2>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="well">
+            <h4 class="page-header">Checkout information</h4>
+            <p><strong>Email: </strong>{{booking.contactEmail}}</p>
+            <p><strong>Event: </strong>{{performance.event.name}}</p>
+            <p><strong>Venue: </strong>{{performance.venue.name}}</p>
+            <p><strong>Date: </strong>{{booking.performance.date | date : "EEE d MMMM yyyy 'at' h:mma"}}</p>
+            <p><strong>Created on: </strong>{{booking.createdOn | date : "EEE d MMMM yyyy 'at' h:mma"}}</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="well table-stack">
+            <h4 class="page-header">Ticket allocations</h4>
+            <table class="table table-bordered table-striped table-condensed" style="background-color: #fffffa;">
+                <thead>
+                <tr>
+                    <th>Ticket #</th>
+                    <th>Category</th>
+                    <th>Section</th>
+                    <th>Row</th>
+                    <th>Seat</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="ticket in booking.tickets">
+                <tr>
+                    <td data-title="Ticket #">{{ticket.id}}</td>
+                    <td data-title="Category">{{ticket.ticketCategory.description}}</td>
+                    <td data-title="Section">{{ticket.seat.section.name}}</td>
+                    <td data-title="Row">{{ticket.seat.rowNumber}}</td>
+                    <td data-title="Seat">{{ticket.seat.number}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row" style="padding-bottom:30px;">
+    <div class="col-md-2"><a href="#/" class="highlight-link">Home</a></div>
+</div>

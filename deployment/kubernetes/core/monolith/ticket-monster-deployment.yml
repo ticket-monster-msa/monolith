@@ -3,7 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   annotations:
-    fabric8.io/git-commit: db477eb35c6cc79d57d13d3300590f3a34bb383a
+    fabric8.io/git-commit: 3279e9bcf74f0f2ef56a583d35535624cf88a5bc
     fabric8.io/git-branch: migrate-workshop
     fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=ticket-monster&var-version=3.0.0-SNAPSHOT
   labels:
@@ -14,7 +14,6 @@ metadata:
   name: ticket-monster
 spec:
   replicas: 1
-  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: ticket-monster
@@ -23,7 +22,7 @@ spec:
   template:
     metadata:
       annotations:
-        fabric8.io/git-commit: db477eb35c6cc79d57d13d3300590f3a34bb383a
+        fabric8.io/git-commit: 3279e9bcf74f0f2ef56a583d35535624cf88a5bc
         fabric8.io/git-branch: migrate-workshop
         fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=ticket-monster&var-version=3.0.0-SNAPSHOT
       labels:
@@ -40,7 +39,7 @@ spec:
               fieldPath: metadata.namespace
         image: ceposta/ticket-monster-mysql:monolith
         imagePullPolicy: IfNotPresent
-        name: webapp
+        name: ceposta-ticket-monster
         ports:
         - containerPort: 8080
           name: http

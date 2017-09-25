@@ -1,0 +1,31 @@
+<header ng-switch on="$location.path().indexOf('/MediaItems/new') > -1">
+    <h3 ng-switch-when="true">Create a new MediaItem</h3>
+    <h3 ng-switch-when="false">View or edit MediaItem</h3>
+</header>
+<form id="MediaItemForm" name="MediaItemForm" class="form-horizontal" role="form">
+    
+    <div class="form-group" ng-class="{'has-error': MediaItemForm.mediaType.$invalid}">
+        <label for="mediaType" class="col-sm-2 control-label">Media Type</label>
+        <div id="mediaTypeControls" class="col-sm-10">
+        <select id="mediaType" name="mediaType" class="form-control" ng-model="mediaItem.mediaType" ng-options="m for m in mediaTypeList"  >
+            <option value="">Choose a Media Type</option>
+        </select>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': MediaItemForm.url.$invalid}">
+        <label for="url" class="col-sm-2 control-label">Url</label>
+        <div id="urlControls" class="col-sm-10">
+            <input id="url" name="url" type="text" class="form-control" ng-model="mediaItem.url" placeholder="Enter the MediaItem Url"></input>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="saveMediaItem" name="saveMediaItem" class="btn btn-primary" ng-disabled="isClean() || MediaItemForm.$invalid" ng-click="save()"><span class="glyphicon glyphicon-ok-sign"></span> Save</button>
+            <button id="cancel" name="cancel" class="btn btn-default" ng-click="cancel()"><span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
+            <button id="deleteMediaItem" name="deleteMediaItem" class="btn btn-danger" ng-show="mediaItem.id" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        </div>
+    </div>
+</form>
