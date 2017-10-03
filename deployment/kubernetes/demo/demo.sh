@@ -14,7 +14,7 @@ run "kubectl apply -f $(relative ../core/monolith/ticket-monster-deployment.yml)
 desc "Deploy an ingress point so we can see the application"
 run "kubectl apply -f $(relative ../core/monolith/ticket-monster-ingress.yml)"
 
-GATEWAY_URL=$(kubectl get po -l istio=ingress -o jsonpath={.items[0].status.hostIP}):$(kubectl get svc istio-ingress -o jsonpath={.spec.ports[0].nodePort})
+GATEWAY_URL=$(kubectl get po -l istio=ingress -n istio-system -o jsonpath={.items[0].status.hostIP}):$(kubectl get svc istio-ingress -n istio-system -o jsonpath={.spec.ports[0].nodePort})
 
 echo "Istio Ingress URL: $GATEWAY_URL"
 read -s
