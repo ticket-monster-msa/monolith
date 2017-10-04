@@ -14,40 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.examples.ticketmonster.rest;
+package org.jboss.examples.ticketmonster.util;
 
-import org.ff4j.FF4j;
-import org.ff4j.core.Feature;
+import org.ff4j.web.embedded.ConsoleServlet;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import java.util.Map;
+import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
 
 /**
  * Created by ceposta 
  * <a href="http://christianposta.com/blog>http://christianposta.com/blog</a>.
  */
-@Path("/ping")
-@Stateless
-public class PingService {
-    @Inject
-    FF4j ff;
-
-    @GET
-    public String ping(){
-        StringBuilder sb = new StringBuilder("pong: ");
-
-        Map<String, Feature> features = ff.getFeatures();
-
-        for (Feature feature : features.values()) {
-            if(feature.isEnable()){
-                sb.append("[");
-                sb.append(feature.getUid());
-                sb.append("] ");
-            }
-        }
-        return sb.toString() + " " + ff.getVersion();
-    }
+@WebServlet(value = "/ff4j-console", loadOnStartup = 1,
+        initParams = @WebInitParam(name = "ff4jProvider", value = "org.jboss.examples.ticketmonster.util.FF4jFactory"))
+public class FF4jConsoleServlet extends ConsoleServlet{
 }

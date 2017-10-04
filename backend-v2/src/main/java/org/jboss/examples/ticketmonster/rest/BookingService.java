@@ -22,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
 
+import org.ff4j.FF4j;
 import org.jboss.examples.ticketmonster.model.Booking;
 import org.jboss.examples.ticketmonster.model.Performance;
 import org.jboss.examples.ticketmonster.model.Seat;
@@ -54,6 +55,9 @@ public class BookingService extends BaseEntityService<Booking> {
 
     @Inject
     SeatAllocationService seatAllocationService;
+
+    @Inject
+    FF4j ff;
 
     @Inject @Cancelled
     private Event<Booking> cancelledBookingEvent;
@@ -122,14 +126,34 @@ public class BookingService extends BaseEntityService<Booking> {
      */
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createBooking(BookingRequest bookingRequest) {
+        Response response = null;
+
+        if (ff.check("orders-internal")) {
+            response = createBookingInternal(bookingRequest);
+        }
+
+        if (ff.check("orders-service")) {
+            if (ff.check("orders-internal")) {
+                System.out.println("Calling Orders Service with SYNTHETIC TX");
+
+            }
+            else {
+                System.out.println("Real World orders service");
+            }
+        }
+
+        return response;
+    }
+
+    private Response createBookingInternal(BookingRequest bookingRequest) {
         try {
             // identify the ticket price categories in this request
             Set<Long> priceCategoryIds = bookingRequest.getUniquePriceCategoryIds();
-            
+
             // load the entities that make up this booking's relationships
             Performance performance = getEntityManager().find(Performance.class, bookingRequest.getPerformance());
 
-            // As we can have a mix of ticket types in a booking, we need to load all of them that are relevant, 
+            // As we can have a mix of ticket types in a booking, we need to load all of them that are relevant,
             // id
             Map<Long, TicketPrice> ticketPricesById = loadTicketPrices(priceCategoryIds);
 
@@ -143,7 +167,7 @@ public class BookingService extends BaseEntityService<Booking> {
             // Now, we iterate over each ticket that was requested, and organize them by section and category
             // we want to allocate ticket requests that belong to the same section contiguously
             Map<Section, Map<TicketCategory, TicketRequest>> ticketRequestsPerSection
-                    = new TreeMap<Section, java.util.Map<TicketCategory, TicketRequest>>(SectionComparator.instance());
+                    = new TreeMap<Section, Map<TicketCategory, TicketRequest>>(SectionComparator.instance());
             for (TicketRequest ticketRequest : bookingRequest.getTicketRequests()) {
                 final TicketPrice ticketPrice = ticketPricesById.get(ticketRequest.getTicketPrice());
                 if (!ticketRequestsPerSection.containsKey(ticketPrice.getSection())) {
@@ -158,7 +182,7 @@ public class BookingService extends BaseEntityService<Booking> {
             // Iterate over the sections, finding the candidate seats for allocation
             // The process will lock the record for a given
             // Use deterministic ordering to prevent deadlocks
-            Map<Section, AllocatedSeats> seatsPerSection = new TreeMap<Section, org.jboss.examples.ticketmonster.service.AllocatedSeats>(SectionComparator.instance());
+            Map<Section, AllocatedSeats> seatsPerSection = new TreeMap<Section, AllocatedSeats>(SectionComparator.instance());
             List<Section> failedSections = new ArrayList<Section>();
             for (Section section : ticketRequestsPerSection.keySet()) {
                 int totalTicketsRequestedPerSection = 0;
@@ -169,7 +193,7 @@ public class BookingService extends BaseEntityService<Booking> {
                     totalTicketsRequestedPerSection += ticketRequest.getQuantity();
                 }
                 // try to allocate seats
-                
+
                 AllocatedSeats allocatedSeats = seatAllocationService.allocateSeats(section, performance, totalTicketsRequestedPerSection, true);
                 if (allocatedSeats.getSeats().size() == totalTicketsRequestedPerSection) {
                     seatsPerSection.put(section, allocatedSeats);

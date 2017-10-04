@@ -14,40 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.examples.ticketmonster.rest;
+package org.jboss.examples.ticketmonster.util;
 
 import org.ff4j.FF4j;
-import org.ff4j.core.Feature;
+import org.ff4j.web.FF4jProvider;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import java.util.Map;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
 
 /**
  * Created by ceposta 
  * <a href="http://christianposta.com/blog>http://christianposta.com/blog</a>.
  */
-@Path("/ping")
-@Stateless
-public class PingService {
-    @Inject
-    FF4j ff;
+@ApplicationScoped
+public class FF4jFactory implements FF4jProvider{
 
-    @GET
-    public String ping(){
-        StringBuilder sb = new StringBuilder("pong: ");
+    private static FF4j rc = new FF4j("ff4j.xml");
 
-        Map<String, Feature> features = ff.getFeatures();
+    @Produces
+    public static FF4j ff4j(){
+        return rc;
+    }
 
-        for (Feature feature : features.values()) {
-            if(feature.isEnable()){
-                sb.append("[");
-                sb.append(feature.getUid());
-                sb.append("] ");
-            }
-        }
-        return sb.toString() + " " + ff.getVersion();
+    @Override
+    public FF4j getFF4j() {
+        return rc;
     }
 }

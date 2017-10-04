@@ -105,6 +105,7 @@
         <buildhelper.plugin.version>1.7</buildhelper.plugin.version>
         <fabric8.maven.plugin.version>3.5.25</fabric8.maven.plugin.version>
         <docker.image.name>ceposta/%a:%l</docker.image.name>
+        <ffj4.version>1.6.5</ffj4.version>
     </properties>
 
     <dependencyManagement>
@@ -182,6 +183,17 @@
             <groupId>org.jboss.spec.javax.servlet</groupId>
             <artifactId>jboss-servlet-api_3.1_spec</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ff4j</groupId>
+            <artifactId>ff4j-core</artifactId>
+            <version>${ffj4.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ff4j</groupId>
+            <artifactId>ff4j-web</artifactId>
+            <version>${ffj4.version}</version>
         </dependency>
 
         <!-- JSR-303 (Bean Validation) Implementation -->

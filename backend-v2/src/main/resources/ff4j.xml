@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<features xmlns="http://ff4j.org/schema"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://ff4j.org/schema http://ff4j.org/schema/ff4j-1.4.0.xsd">
+
+  <feature uid="orders-internal" enable="true"  description="Continue with legacy orders implementation" />
+  <feature uid="orders-service" enable="false"  description="Call new orders microservice" />
+
+</features>
