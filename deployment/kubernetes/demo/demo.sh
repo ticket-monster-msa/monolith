@@ -31,6 +31,17 @@ read -s
 
 desc "Now let's enable the traffic through the new UI"
 run "kubectl replace -f $(relative ../core/frontend/ticket-monster-ingress.yml)"
+read -s
+
+desc "Let's use Istio ingress control to make sure that all traffic goes to the UI that calls only the MONOLITH"
+read -s
+desc "first, let's see what the route rule looks like"
+run "cat $(relative ../istio/route-rules/route-tm-v1.yaml)"
+
+desc "let's apply the rule"
+run "istioctl create -f $(relative ../istio/route-rules/route-tm-v1.yaml)"
+
+
 
 
 
@@ -46,11 +57,21 @@ desc "Let's deploy a new version of the UI that connects directly to the backend
 read -s
 run "kubectl apply -f $(relative ../core/frontend/talk-to-backend/tm-ui-deployment.yml)"
 
-desc "Now let's scale down the v1 of the UI so all traffic goes to v2"
-run "kubectl scale deploy/tm-ui-v1 --replicas=0"
+desc "No traffic should be going through this new UI deployment that talks to the backend"
+desc "Let's set up a rule that allows us to dark launch this new version"
+read -s
+
+run "cat $(relative ../istio/route-rules/route-tm-v2-dark-launch.yaml)"
+run "istioctl create -f $(relative ../istio/route-rules/route-tm-v2-dark-launch.yaml)"
+desc "go check this dark deployment works as expected"
+read -s
+
+desc "Now let's let all traffic go to v2"
+run "istioctl create -f $(relative ../istio/route-rules/route-tm-v2.yaml)"
+
 
 desc "Now we have all traffic going through the split out UI and the backend"
-desc "Now let's deploy the orders service in a dark launch"
+desc "Now let's deploy the orders service again in a dark launch"
 read -s
 
 run "kubectl apply -f $(relative ../core/orders/orders-mysql-configmap.yml)"

@@ -1,0 +1,17 @@
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: tm-ui-v2-dark-launch
+spec:
+  destination:
+    name: tm-ui
+  precedence: 10
+  match:
+    request:
+      headers:
+        x-dark-launch:
+          exact: "v2"
+  route:
+  - labels:
+      version: v2
+

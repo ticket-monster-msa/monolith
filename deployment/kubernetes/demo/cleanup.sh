@@ -27,3 +27,6 @@ kubectl delete cm/orders-mysql-config
 
 # Ingress
 kubectl delete ingress/tm-gateway
+
+# Delete istio routes
+istioctl delete routerules $(istioctl get routerules | awk '{print $1}')
