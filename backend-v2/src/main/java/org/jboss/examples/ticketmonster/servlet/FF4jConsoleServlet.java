@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.examples.ticketmonster.util;
+package org.jboss.examples.ticketmonster.servlet;
 
 import org.ff4j.web.embedded.ConsoleServlet;
 
