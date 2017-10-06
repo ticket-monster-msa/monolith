@@ -230,6 +230,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- For service virtualization/mocking-->
+        <dependency>
+            <groupId>io.specto</groupId>
+            <artifactId>hoverfly-java</artifactId>
+            <version>0.8.0</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Optional, but highly recommended -->
         <!-- Arquillian allows you to test enterprise code such as EJBs and 
             Transactional(JTA) JPA from JUnit/TestNG -->
@@ -258,10 +266,20 @@
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jackson2-provider</artifactId>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jackson-annotations</artifactId>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jackson-core</artifactId>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
+            <artifactId>resteasy-client</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -378,11 +396,14 @@
                         <configuration>
                             <!-- Fork every test because it will launch a separate AS instance -->
                             <forkMode>always</forkMode>
+                            <!--<debugForkedProcess>true</debugForkedProcess>-->
                             <systemPropertyVariables>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                                 <!-- the maven dependency plugin will have already downloaded the server on /target -->
                                 <jboss.home>${project.basedir}/target/wildfly-run/wildfly-10.1.0.Final</jboss.home>
                                 <module.path>${project.basedir}/target/wildfly-run/wildfly-10.1.0.Final/modules</module.path>
+                                <!--<http.proxyHost>localhost</http.proxyHost>-->
+                                <!--<http.proxyPort>5991</http.proxyPort>-->
                             </systemPropertyVariables>
                             <redirectTestOutputToFile>false</redirectTestOutputToFile>
                         </configuration>

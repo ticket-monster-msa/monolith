@@ -1,39 +1,27 @@
 package org.jboss.examples.ticketmonster.rest;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import org.ff4j.FF4j;
+import org.jboss.examples.ticketmonster.model.*;
+import org.jboss.examples.ticketmonster.service.AllocatedSeats;
+import org.jboss.examples.ticketmonster.service.SeatAllocationService;
+import org.jboss.examples.ticketmonster.util.qualifier.Cancelled;
+import org.jboss.examples.ticketmonster.util.qualifier.Created;
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
-
-import org.ff4j.FF4j;
-import org.jboss.examples.ticketmonster.model.Booking;
-import org.jboss.examples.ticketmonster.model.Performance;
-import org.jboss.examples.ticketmonster.model.Seat;
-import org.jboss.examples.ticketmonster.model.Section;
-import org.jboss.examples.ticketmonster.model.Ticket;
-import org.jboss.examples.ticketmonster.model.TicketCategory;
-import org.jboss.examples.ticketmonster.model.TicketPrice;
-import org.jboss.examples.ticketmonster.service.AllocatedSeats;
-import org.jboss.examples.ticketmonster.service.SeatAllocationService;
-import org.jboss.examples.ticketmonster.util.qualifier.Cancelled;
-import org.jboss.examples.ticketmonster.util.qualifier.Created;
+import java.util.*;
 
 /**
  * <p>
@@ -64,6 +52,8 @@ public class BookingService extends BaseEntityService<Booking> {
 
     @Inject @Created
     private Event<Booking> newBookingEvent;
+
+    private String ordersServiceUri = "http://localhost:9090/rest/bookings";
     
     public BookingService() {
         super(Booking.class);
@@ -134,17 +124,70 @@ public class BookingService extends BaseEntityService<Booking> {
 
         if (ff.check("orders-service")) {
             if (ff.check("orders-internal")) {
-                System.out.println("Calling Orders Service with SYNTHETIC TX");
+                createSyntheticBookingOrdersService(bookingRequest);
 
             }
             else {
-                System.out.println("Real World orders service");
+                response = createBookingOrdersService(bookingRequest);
             }
         }
 
         return response;
     }
 
+    /**
+     * Makes a call to the Orders Service, but lets it know that this is a synthetic transaction
+     * that has already been recorded (ie, here internally) and is sent just for exercising the orders
+     * service; it should roll back or clean up and not store this tx as a real tx
+     *
+     * @param bookingRequest
+     */
+    private void createSyntheticBookingOrdersService(BookingRequest bookingRequest) {
+        System.out.println("Calling Orders Service with SYNTHETIC TX");
+
+        try {
+            System.out.println("Calling service: " + ordersServiceUri);
+            Response response = buildClient()
+                    .target(ordersServiceUri)
+                    .request().post(Entity.entity(bookingRequest, MediaType.APPLICATION_JSON_TYPE));
+            String sytheticResponse = response.readEntity(String.class);
+            System.out.println("Response from SYNTHETIC TX: " + sytheticResponse);
+
+        } catch (Exception e) {
+            System.out.println("Caught an exception here: "+ e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Client buildClient() {
+        String proxyHost = System.getProperty("http.proxyHost");
+        Integer proxyPort = Integer.parseInt(System.getProperty("http.proxyPort"));
+        if (proxyHost != null && !proxyHost.isEmpty() && proxyPort != null) {
+            System.out.println("Using proxy: " + proxyHost + ":" + proxyPort);
+            return new ResteasyClientBuilder()
+                    .defaultProxy(proxyHost, proxyPort).build();
+        }else {
+            return ClientBuilder.newClient();
+        }
+
+    }
+
+    /**
+     * This method delegates the booking creation to the Orders Service
+     * @param bookingRequest
+     * @return
+     */
+    private Response createBookingOrdersService(BookingRequest bookingRequest) {
+        System.out.println("Real World orders service");
+        return null;
+    }
+
+    /**
+     * This is the original implementation of creating a booking; relies on internal logic
+     *
+     * @param bookingRequest
+     * @return
+     */
     private Response createBookingInternal(BookingRequest bookingRequest) {
         try {
             // identify the ticket price categories in this request
@@ -270,4 +313,11 @@ public class BookingService extends BaseEntityService<Booking> {
         return ticketPricesById;
     }
 
+    public String getOrdersServiceUri() {
+        return ordersServiceUri;
+    }
+
+    public void setOrdersServiceUri(String ordersServiceUri) {
+        this.ordersServiceUri = ordersServiceUri;
+    }
 }
