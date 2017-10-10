@@ -2,6 +2,7 @@ package org.jboss.examples.ticketmonster.rest;
 
 import org.ff4j.FF4j;
 import org.jboss.examples.ticketmonster.model.*;
+import org.jboss.examples.ticketmonster.orders.OrdersRequestDTO;
 import org.jboss.examples.ticketmonster.service.AllocatedSeats;
 import org.jboss.examples.ticketmonster.service.SeatAllocationService;
 import org.jboss.examples.ticketmonster.util.qualifier.Cancelled;
@@ -119,6 +120,7 @@ public class BookingService extends BaseEntityService<Booking> {
         Response response = null;
 
         if (ff.check("orders-internal")) {
+            System.out.println("Creating internal booking");
             response = createBookingInternal(bookingRequest);
         }
 
@@ -144,12 +146,13 @@ public class BookingService extends BaseEntityService<Booking> {
      */
     private void createSyntheticBookingOrdersService(BookingRequest bookingRequest) {
         System.out.println("Calling Orders Service with SYNTHETIC TX");
+        OrdersRequestDTO ordersRequest = new OrdersRequestDTO(bookingRequest, true);
 
         try {
             System.out.println("Calling service: " + ordersServiceUri);
             Response response = buildClient()
                     .target(ordersServiceUri)
-                    .request().post(Entity.entity(bookingRequest, MediaType.APPLICATION_JSON_TYPE));
+                    .request().post(Entity.entity(ordersRequest, MediaType.APPLICATION_JSON_TYPE));
             String sytheticResponse = response.readEntity(String.class);
             System.out.println("Response from SYNTHETIC TX: " + sytheticResponse);
 
@@ -161,7 +164,13 @@ public class BookingService extends BaseEntityService<Booking> {
 
     private Client buildClient() {
         String proxyHost = System.getProperty("http.proxyHost");
-        Integer proxyPort = Integer.parseInt(System.getProperty("http.proxyPort"));
+        Integer proxyPort;
+        try {
+            proxyPort = Integer.parseInt(System.getProperty("http.proxyPort"));
+        } catch (NumberFormatException e) {
+            proxyPort = null;
+        }
+
         if (proxyHost != null && !proxyHost.isEmpty() && proxyPort != null) {
             System.out.println("Using proxy: " + proxyHost + ":" + proxyPort);
             return new ResteasyClientBuilder()

@@ -27,6 +27,7 @@ import org.jboss.examples.ticketmonster.rest.BookingRequest;
 import org.jboss.examples.ticketmonster.rest.BookingService;
 import org.jboss.examples.ticketmonster.rest.ShowService;
 import org.jboss.examples.ticketmonster.rest.TicketRequest;
+import org.jboss.examples.ticketmonster.test.utils.BookingUtils;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Before;
@@ -55,6 +56,7 @@ public class ExternalBookingOrdersServiceTest {
         File[] hoverflyFiles = Maven.resolver().resolve("io.specto:hoverfly-java:0.8.0")
                 .withTransitivity().asFile();
         return RESTDeployment.deployment()
+                .addClass(BookingUtils.class)
                 .addAsLibraries(hoverflyFiles)
                 .addAsResource("hoverfly/simulation.json");
     }
@@ -82,7 +84,7 @@ public class ExternalBookingOrdersServiceTest {
     public void testExternalOrdersServiceSyntheticTransaction() {
         ff.enable("orders-service");
         bookingService.setOrdersServiceUri("http://ticketmonster.io/rest/bookings");
-        BookingRequest br = createBookingRequest(1l, 0, new int[]{4, 1}, new int[]{1,1}, new int[]{3,1});
+        BookingRequest br = BookingUtils.createBookingRequest(showService,1l, 0, new int[]{4, 1}, new int[]{1,1}, new int[]{3,1});
         bookingService.createBooking(br);
         hoverflyRule.verify(
                 service(equalsTo("ticketmonster.io"))
@@ -99,26 +101,5 @@ public class ExternalBookingOrdersServiceTest {
         bookingService.createBooking(br);
     }*/
 
-    private BookingRequest createBookingRequest(Long showId, int performanceNo, int[]... sectionAndCategories) {
-        Show show = showService.getSingleInstance(showId);
 
-        Performance performance = new ArrayList<Performance>(show.getPerformances()).get(performanceNo);
-
-        BookingRequest bookingRequest = new BookingRequest(performance, "bob@acme.com");
-
-        List<TicketPrice> possibleTicketPrices = new ArrayList<TicketPrice>(show.getTicketPrices());
-        int i = 1;
-        for (int[] sectionAndCategory : sectionAndCategories) {
-            for (TicketPrice ticketPrice : possibleTicketPrices) {
-                int sectionId = sectionAndCategory[0];
-                int categoryId = sectionAndCategory[1];
-                if (ticketPrice.getSection().getId() == sectionId && ticketPrice.getTicketCategory().getId() == categoryId) {
-                    bookingRequest.addTicketRequest(new TicketRequest(ticketPrice, i));
-                    i++;
-                    break;
-                }
-            }
-        }
-        return bookingRequest;
-    }
 }

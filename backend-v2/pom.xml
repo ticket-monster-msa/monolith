@@ -106,11 +106,19 @@
         <fabric8.maven.plugin.version>3.5.25</fabric8.maven.plugin.version>
         <docker.image.name>ceposta/%a:%l</docker.image.name>
         <ffj4.version>1.6.5</ffj4.version>
+        <version.org.jboss.arquillian>1.1.12.Final</version.org.jboss.arquillian>
         <version.org.wildfly.arquillian.container>2.0.0.Final</version.org.wildfly.arquillian.container>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${version.org.jboss.arquillian}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.jboss.bom</groupId>
                 <artifactId>jboss-eap-javaee7-with-tools</artifactId>
@@ -118,6 +126,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -283,6 +292,30 @@
             <scope>provided</scope>
         </dependency>
 
+
+        <!-- Algeron/Pact Contract testing-->
+        <!--org.arquillian.algeron:arquillian-algeron-pact-consumer-core:1.0.0.Alpha5-->
+        <!-- https://mvnrepository.com/artifact/org.arquillian.algeron/arquillian-algeron-pact-consumer-core -->
+        <dependency>
+            <groupId>org.arquillian.algeron</groupId>
+            <artifactId>arquillian-algeron-pact-consumer-core</artifactId>
+            <version>2.0.0-rc.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>au.com.dius</groupId>
+            <artifactId>pact-jvm-consumer_2.11</artifactId>
+            <version>3.5.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--testCompile 'au.com.dius:pact-jvm-consumer_2.11:3.5.0-beta.2'-->
+        <!--<dependency>
+            <groupId>au.com.dius</groupId>
+            <artifactId>pact-jvm-consumer-junit_2.11</artifactId>
+            <version>3.5.0</version>
+            <scope>test</scope>
+        </dependency>-->
     </dependencies>
 
     <build>
@@ -395,7 +428,9 @@
                         <version>2.17</version>
                         <configuration>
                             <!-- Fork every test because it will launch a separate AS instance -->
-                            <forkMode>always</forkMode>
+                            <!--<forkMode>always</forkMode>-->
+                            <forkCount>1</forkCount>
+                            <reuseForks>1</reuseForks>
                             <!--<debugForkedProcess>true</debugForkedProcess>-->
                             <systemPropertyVariables>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
