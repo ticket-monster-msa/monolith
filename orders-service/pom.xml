@@ -84,6 +84,12 @@
       <artifactId>h2</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>au.com.dius</groupId>
+      <artifactId>pact-jvm-provider-junit_2.11</artifactId>
+      <version>3.5.0</version>
+    </dependency>
   </dependencies>
 
   <build>

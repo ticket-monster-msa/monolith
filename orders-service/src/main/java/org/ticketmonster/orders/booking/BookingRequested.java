@@ -30,8 +30,10 @@ public class BookingRequested {
     private List<TicketRequest> ticketRequests = new ArrayList<TicketRequest>();
     private long performance;
     private String email;
+    private boolean synthetic;
 
     public BookingRequested() {
+        this.synthetic = false;
     }
 
     public List<TicketRequest> getTicketRequests() {
@@ -62,5 +64,13 @@ public class BookingRequested {
         HashSet<Long> ids = new HashSet<>();
         this.ticketRequests.forEach((v) -> ids.add(v.getTicketPriceGuideId()));
         return ids;
+    }
+
+    public boolean isSynthetic() {
+        return synthetic;
+    }
+
+    public void setSynthetic(boolean synthetic) {
+        this.synthetic = synthetic;
     }
 }

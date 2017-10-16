@@ -1,0 +1,141 @@
+{
+    "provider": {
+        "name": "orders_service"
+    },
+    "consumer": {
+        "name": "test_synthetic_order"
+    },
+    "interactions": [
+        {
+            "description": "booking request",
+            "request": {
+                "method": "POST",
+                "path": "/rest/bookings",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "synthetic": true,
+                    "performance": 1,
+                    "ticketRequests": [
+                        {
+                            "quantity": 100,
+                            "ticketPrice": 1
+                        }
+                    ],
+                    "email": "foo@bar.com"
+                },
+                "matchingRules": {
+                    "header": {
+                        "Content-Type": {
+                            "matchers": [
+                                {
+                                    "match": "regex",
+                                    "regex": "application/json"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    },
+                    "body": {
+                        "$.performance": {
+                            "matchers": [
+                                {
+                                    "match": "integer"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.synthetic": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.email": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.ticketRequests": {
+                            "matchers": [
+                                {
+                                    "match": "type",
+                                    "min": 1
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.ticketRequests[*].ticketPrice": {
+                            "matchers": [
+                                {
+                                    "match": "integer"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.ticketRequests[*].quantity": {
+                            "matchers": [
+                                {
+                                    "match": "integer"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    },
+                    "path": {
+                        
+                    }
+                },
+                "generators": {
+                    "body": {
+                        "$.ticketRequests[*].quantity": {
+                            "type": "RandomInt",
+                            "min": 0,
+                            "max": 2147483647
+                        }
+                    }
+                }
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "Content-Type": "application/json; charset=UTF-8"
+                },
+                "body": {
+                    "synthetic": true
+                },
+                "matchingRules": {
+                    "body": {
+                        "$.synthetic": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "available shows"
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "pact-specification": {
+            "version": "3.0.0"
+        },
+        "pact-jvm": {
+            "version": ""
+        }
+    }
+}

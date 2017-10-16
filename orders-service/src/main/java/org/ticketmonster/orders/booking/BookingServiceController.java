@@ -142,8 +142,17 @@ public class BookingServiceController {
                 // Persist the booking, including cascaded relationships
                 booking.setPerformanceId(performance);
                 booking.setCancellationCode("abc");
-                entityManager.persist(booking);
-                return booking;
+
+                if (bookingRequest.isSynthetic()) {
+                    System.out.println("This is a synthetic transaction, ignoring");
+                    SyntheticBooking syntheticBooking = new SyntheticBooking(booking);
+                    return syntheticBooking;
+                }
+                else {
+                    entityManager.persist(booking);
+                    return booking;
+                }
+
             } else {
 
                 // cannot allocated all the sections so we just error out!?

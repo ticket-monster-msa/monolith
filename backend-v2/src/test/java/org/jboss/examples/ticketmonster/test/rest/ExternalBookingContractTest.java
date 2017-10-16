@@ -66,7 +66,7 @@ public class ExternalBookingContractTest {
                 .method("POST")
                 .body(bookingRequestBody())
                 .willRespondWith()
-                .body(bookingResponseBody())
+                .body(syntheticBookingResponseBody())
                 .status(200)
                 .toPact();
         return pact;
@@ -75,11 +75,11 @@ public class ExternalBookingContractTest {
     private DslPart bookingRequestBody(){
         PactDslJsonBody body = new PactDslJsonBody();
         body
-                .integerType("performance")
+                .integerType("performance", 1)
                 .booleanType("synthetic", true)
-                .stringType("email")
+                .stringType("email", "foo@bar.com")
                     .minArrayLike("ticketRequests", 1)
-                        .integerType("ticketPrice")
+                        .integerType("ticketPrice", 1)
                         .integerType("quantity")
                     .closeObject()
                 .closeArray();
@@ -88,12 +88,20 @@ public class ExternalBookingContractTest {
         return body;
     }
 
+
+    private DslPart syntheticBookingResponseBody() {
+        PactDslJsonBody body = new PactDslJsonBody();
+        body
+                .booleanType("synthetic", true);
+        return body;
+    }
+
     private DslPart bookingResponseBody() {
         PactDslJsonBody body = new PactDslJsonBody();
         body.id()
+                .booleanType("synthetic", true)
                 .minArrayLike("tickets", 1)
                     .id()
-                    .booleanType("synthetic", true)
                         .object("seat")
                             .integerType("rowNumber")
                             .integerType("number")
