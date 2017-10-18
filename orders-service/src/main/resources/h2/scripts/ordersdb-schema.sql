@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS appearance;
+DROP TABLE IF EXISTS performance;
+DROP TABLE IF EXISTS section;
+DROP TABLE IF EXISTS booking;
+DROP TABLE IF EXISTS section_allocation;
+DROP TABLE IF EXISTS ticket_category;
+DROP TABLE IF EXISTS ticket_price_guide;
+DROP TABLE IF EXISTS ticket;
+DROP TABLE IF EXISTS id_generator;
+
 CREATE TABLE `section` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) NOT NULL,
