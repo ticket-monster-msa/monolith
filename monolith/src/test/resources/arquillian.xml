@@ -26,7 +26,7 @@
    <container qualifier="jboss" default="true">
       <!-- If you want to use the JBOSS_HOME environment variable, just delete the jbossHome property -->
       <configuration>
-         <property name="jbossHome">/Users/ceposta/dev/eap/wildfly-10.0.0.Final</property>
+         <!--<property name="jbossHome">/Users/ceposta/dev/eap/wildfly-10.0.0.Final</property>-->
       </configuration>
    </container>
 

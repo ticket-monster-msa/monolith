@@ -7,3 +7,4 @@ target
 .settings
 deployments
 orders-service/ObjectStore/
+deployment/kubernetes/istio/istio-0.*
