@@ -1,51 +1,51 @@
 -- MediaItem 0
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/65660684/640px-Weir%2C_Bob_(2007)_2.jpg')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/2b2/jefro-1422546.jpg');
 -- MediaItem 1
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/65660684/640px-Carnival_Puppets.jpg')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://upload.wikimedia.org/wikipedia/commons/0/04/Carnival_Puppets.jpg');
 -- MediaItem 2
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/65660684/640px-Opera_House_with_Sydney.jpg')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://upload.wikimedia.org/wikipedia/commons/4/46/Opera_House_with_Sydney.jpg');
 -- MediaItem 3
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/65660684/640px-Roy_Thomson_Hall_Toronto.jpg')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Roy_Thomson_Hall_Toronto.jpg');
 -- MediaItem 4
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/65660684/640px-West-stand-bmo-field.jpg')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://upload.wikimedia.org/wikipedia/commons/b/bf/West-stand-bmo-field.jpg');
 -- MediaItem 5
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/65660684/640px-Brazil_national_football_team_training_at_Dobsonville_Stadium_2010-06-03_13.jpg')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://upload.wikimedia.org/wikipedia/commons/9/97/Brazil_national_football_team_training_at_Dobsonville_Stadium_2010-06-03_10.jpg');
 -- MediaItem 6
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/AllStateFootballChampionship.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Bmo_field_%288820851518%29.jpg');
 -- MediaItem 7
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/ARhythmia.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/6cb/clubin-it-1-1504531.jpg');
 -- MediaItem 8
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/BattleoftheBrassBands.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/c0e/dusk-music-1-1422760.jpg');
 -- MediaItem 9
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/CarnivalComestoTown.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/76f/venice-carneval-mask-1414335.jpg');
 -- MediaItem 10
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/ChrisLewisQuarterfinals.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://upload.wikimedia.org/wikipedia/commons/d/de/Tim_Henman_backhand_volley_Wimbledon_2004.jpg');
 -- MediaItem 11
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/CrewYou.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/c37/rock-1577380.jpg');
 -- MediaItem 12
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/ExtremeSnowboardingFinals.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/28c/snowboard-jump-series-1-1362399.jpg');
 -- MediaItem 13
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/FlamencoFinale.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/ebd/flamenco-1551386.jpg');
 -- MediaItem 14
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/JesseLewisUnplugged.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/ced/drumer-1418150.jpg');
 -- MediaItem 15
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/MadameButterfly.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/a93/butterfly-1390143.jpg');
 -- MediaItem 16
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/MimeMania.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/ad1/mime-artist-1434475.jpg');
 -- MediaItem 17
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/MorrisonCover.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/2a7/hands-1317177.jpg');
 -- MediaItem 18
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/TutuTchai.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/8d4/erika-musik-en-viu-1421987.jpg');
 -- MediaItem 19
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/SlapShot.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/1c1/clap-your-hands-say-yeah-1-1555963.jpg');
 -- MediaItem 20
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/Giantsofthegame.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://upload.wikimedia.org/wikipedia/commons/8/88/Game_3_of_the_2006_NBA_Finals.jpg');
 -- MediaItem 21
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://dl.dropbox.com/u/8625587/ticketmonster/Punch%26Judy.png')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://images.freeimages.com/images/large-previews/ad6/concert-1-1438833.jpg');
 -- MediaItem 22
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Paris_Opera_full_frontal_architecture%2C_May_2009.jpg/800px-Paris_Opera_full_frontal_architecture%2C_May_2009.jpg')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://upload.wikimedia.org/wikipedia/commons/d/dc/Paris_Opera_full_frontal_architecture%2C_May_2009.jpg');
 -- MediaItem 23
-insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Boston_Symphony_Hall_from_the_south.jpg/800px-Boston_Symphony_Hall_from_the_south.jpg')
+insert into MediaItem ( mediaType, url) values ( 'IMAGE', 'https://upload.wikimedia.org/wikipedia/commons/c/c0/Boston_Symphony_Hall_from_the_south.jpg');
 
 -- Venue 1
 insert into Venue ( name, city, country, street, description, mediaitem_id, capacity) values ( 'Roy Thomson Hall', 'Toronto', 'Canada', '60 Simcoe Street','Roy Thomson Hall is the home of the Toronto Symphony Orchestra and the Toronto Mendelssohn Choir.',4, 11000);
