@@ -31,6 +31,7 @@ spec:
           ports:
             - containerPort: 3306
               name: mysql
+# older version
 # ---
 # apiVersion: apps/v1
 # kind: Deployment

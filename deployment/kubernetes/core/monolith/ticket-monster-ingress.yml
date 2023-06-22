@@ -1,10 +1,23 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: tm-gateway
   annotations:
     kubernetes.io/ingress.class: "istio"
 spec:
-  backend:
-    serviceName: ticket-monster
-    servicePort: 8080
+  defaultBackend:
+    service:
+      name: ticket-monster
+      port:
+        number: 8080
+# older version
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: tm-gateway
+#   annotations:
+#     kubernetes.io/ingress.class: "istio"
+# spec:
+#   backend:
+#     serviceName: ticket-monster
+#     servicePort: 8080
