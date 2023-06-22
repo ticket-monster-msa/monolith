@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tm-ui-v1
@@ -21,15 +21,15 @@ spec:
         version: v1
     spec:
       containers:
-      - image: ceposta/tm-ui:monolith
-        imagePullPolicy: IfNotPresent
-        name: tm-ui
-        ports:
-        - containerPort: 80
-          protocol: TCP
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
+        - image: ceposta/tm-ui:monolith
+          imagePullPolicy: IfNotPresent
+          name: tm-ui
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler

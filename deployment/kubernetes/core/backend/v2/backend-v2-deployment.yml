@@ -1,5 +1,5 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
@@ -33,29 +33,29 @@ spec:
         group: org.jboss.examples.eap
     spec:
       containers:
-      - env:
-        - name: KUBERNETES_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        image: ceposta/backend-mysql:v2
-        imagePullPolicy: IfNotPresent
-        livenessProbe:
-          httpGet:
-            path: /rest/ping
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 30
-        name: ceposta-backend-v2
-        ports:
-        - containerPort: 8080
-          name: http
-          protocol: TCP
-        readinessProbe:
-          httpGet:
-            path: /rest/ping
-            port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 30
-        securityContext:
-          privileged: false
+        - env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          image: ceposta/backend-mysql:v2
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /rest/ping
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          name: ceposta-backend-v2
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /rest/ping
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          securityContext:
+            privileged: false
