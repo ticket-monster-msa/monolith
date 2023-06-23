@@ -20,12 +20,27 @@ ENV APP_NAME ticket-monster.war
 # Copy the application WAR file to the deployment directory
 COPY --from=builder /build/target/${APP_NAME} ${DEPLOYMENT_DIR}
 
+USER root
+
+RUN yum update -y && yum install -y wget
+# RUN apt-get update && apt-get install -y wget
+# Install Java Profiler Agent
+RUN wget https://www.yourkit.com/download/docker/YourKit-JavaProfiler-2023.5-docker.zip -P /tmp/ && \
+  unzip /tmp/YourKit-JavaProfiler-2023.5-docker.zip -d /usr/local && \
+  rm /tmp/YourKit-JavaProfiler-2023.5-docker.zip
+
+ENV JAVA_OPTS="$JAVA_OPTS -agentpath:/usr/local/YourKit-JavaProfiler-2023.5/bin/linux-x86-64/libyjpagent.so=port=10001,listen=all"
+
+USER jboss
+
 # Expose the default HTTP port
-EXPOSE 8080
+EXPOSE 8080 10001
 
 # Start WildFly in standalone mode
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
+# CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-agentpath:/usr/local/YourKit-JavaProfiler-2023.5/bin/linux-x86-64/libyjpagent.so=port=10001,listen=all"]
 
+ 
 # For debugging
 # ENTRYPOINT ["tail"]
 # CMD ["-f","/dev/null"]
