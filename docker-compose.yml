@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  database:
+    image: ceposta/backend-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=your_root_password
+      - MYSQL_DATABASE=your_database_name
+      - MYSQL_USER=your_username
+      - MYSQL_PASSWORD=your_password
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data:/var/lib/mysql
+  backend-v2:
+    build:
+      context: ./backend-v2
+      dockerfile: Dockerfile
+    ports:
+      - 5000:8080
+    depends_on:
+      - database
+  orders-service:
+    build:
+      context: ./orders-service
+      dockerfile: Dockerfile
+    ports:
+      - 5001:8080
+    depends_on:
+      - backend-v2
+  tm-ui-v2:
+    build:
+      context: ./tm-ui-v2
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - orders-service

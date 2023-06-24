@@ -15,7 +15,10 @@ FROM jboss/wildfly:23.0.2.Final
 
 # Set the environment variables
 ENV DEPLOYMENT_DIR /opt/jboss/wildfly/standalone/deployments/
-ENV APP_NAME ROOT.war
+ENV APP_NAME orders-service-1.0.0-SNAPSHOT.jar
+
+# orders-service-1.0.0-SNAPSHOT.jar
+# orders-service-1.0.0-SNAPSHOT-exec.jar
 
 # Copy the application WAR file to the deployment directory
 COPY --from=builder /build/target/${APP_NAME} ${DEPLOYMENT_DIR}
@@ -41,6 +44,6 @@ CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
 # CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-agentpath:/usr/local/YourKit-JavaProfiler-2023.5/bin/linux-x86-64/libyjpagent.so=port=10001,listen=all"]
 
  
-# For debugging
+# # For debugging
 # ENTRYPOINT ["tail"]
 # CMD ["-f","/dev/null"]
