@@ -1,24 +1,18 @@
 version: "3.8"
 services:
-  database:
-    image: ceposta/backend-mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=your_root_password
-      - MYSQL_DATABASE=your_database_name
-      - MYSQL_USER=your_username
-      - MYSQL_PASSWORD=your_password
-    ports:
-      - 3306:3306
-    volumes:
-      - ./data:/var/lib/mysql
-  backend-v2:
+  # prometheus:
+  #   build: ./prometheus
+
+  #   ports:
+  #     - 9090:9090
+  #   volumes:
+  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  backend:
     build:
       context: ./backend-v2
       dockerfile: Dockerfile
     ports:
       - 5000:8080
-    depends_on:
-      - database
   orders-service:
     build:
       context: ./orders-service
@@ -26,7 +20,7 @@ services:
     ports:
       - 5001:8080
     depends_on:
-      - backend-v2
+      - backend
   tm-ui-v2:
     build:
       context: ./tm-ui-v2
