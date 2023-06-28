@@ -93,7 +93,7 @@ average_cpu_usage=$(echo "scale=2; $total_cpu_usage / $num_samples" | bc)
 energy_consumption=$(echo "scale=2; $average_cpu_usage * $power_consumption * $duration / 3600" | bc)
 
 echo "Average CPU usage: $average_cpu_usage%"
-echo "Energy consumption during $duration seconds: $energy_consumption Wh"
+echo "Energy consumption through $duration iterations: $energy_consumption Wh"
 
 # Calculate the total time taken
 end_time=$(date +%s)
