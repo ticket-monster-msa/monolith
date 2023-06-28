@@ -97,7 +97,8 @@ power_r=15  # Additional power consumption (e.g., server power)
 num_cores=8
 
 # Calculate the energy consumption in watt-hours (Wh)
-# energy_consumption=$(echo "scale=2; $average_cpu_usage * $power_consumption * $total_time / 3600" | bc)
+# Energy consumption (Wh) = 
+# (Average CPU usage * Number of CPU cores * Power consumption * Total time) / 3600
 energy_consumption=$(echo "scale=2; $average_cpu_usage * $num_cores * $power_consumption * $duration / 3600" | bc)
 
 echo "Average CPU usage: $average_cpu_usage%"
