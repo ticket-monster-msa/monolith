@@ -46,32 +46,56 @@ done
 echo "All containers are running. Monitoring starts in 5 seconds..."
 sleep 5
 
-echo "Monitoring CPU usage of Docker containers for $duration seconds..."
+echo "Monitoring CPU usage of Docker containers for $duration iterations..."
+start_time=$(date +%s)
 
-
+# Array to store CPU usage values
 cpu_usages=()
 
-# Loop through the container names and track CPU usage
-for container in "${containers[@]}"; do
-  echo "Monitoring CPU usage for container: $container"
-  cpu_usage=$(docker stats --format "{{.CPUPerc}}" --no-stream "$container" | awk '{gsub("%",""); sum += $1} END {print sum}')
-  cpu_usages+=("$cpu_usage")
+# Function to collect CPU usage samples for all containers
+collect_cpu_samples() {
+  docker stats --format "table {{.Container}}\t{{.CPUPerc}}" --no-stream | tail -n +2
+}
+
+# Loop through while i is less than duration
+i=0
+while ((i < duration)); do
+  echo "Collecting CPU usage samples (Iteration $((i + 1)))..."
+
+  # Collect CPU usage samples
+  cpu_samples=$(collect_cpu_samples)
+
+  # Read CPU samples line by line and populate the array
+  j=0
+  while IFS= read -r line; do
+    cpu_usage=$(awk '{print $2}' <<< "$line" | cut -d'%' -f1)
+    cpu_usages+=("$cpu_usage")
+    
+    echo "[$(date "+%H:%M:%S")] Container ${containers[j]}: $cpu_usage%"
+    ((j++))
+  done <<< "$cpu_samples" 
+
+  ((i++))
+  sleep 1
 done
 
 # Calculate the average CPU usage
-num_containers=${#containers[@]}
 total_cpu_usage=0
+num_samples=$((${#containers[@]} * duration))
 
 for usage in "${cpu_usages[@]}"; do
   total_cpu_usage=$(echo "$total_cpu_usage + $usage" | bc)
 done
 
-
-average_cpu_usage=$(echo "scale=2; $total_cpu_usage / $num_containers" | bc)
+average_cpu_usage=$(echo "scale=2; $total_cpu_usage / $num_samples" | bc)
 
 # Calculate the energy consumption in watt-hours (Wh)
-power_consumption=100  # Power consumption of the containers in watts
 energy_consumption=$(echo "scale=2; $average_cpu_usage * $power_consumption * $duration / 3600" | bc)
 
 echo "Average CPU usage: $average_cpu_usage%"
 echo "Energy consumption during $duration seconds: $energy_consumption Wh"
+
+# Calculate the total time taken
+end_time=$(date +%s)
+total_time=$((end_time - start_time))
+echo "Total time taken: $total_time seconds"
