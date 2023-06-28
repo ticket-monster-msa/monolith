@@ -22,10 +22,7 @@ fi
 
 echo "Commencing monitoring script"
 
-# Based on MacBook Pro 2019 Thermal Design Power (TDP) - 45W.
-power_consumption=45  # Power consumption of the containers in watts
-# Represents power consumption beyond containers, Approximately 10 - 20 %
-power_r=15  # Additional power consumption (e.g., server power)
+
 
 echo "Waiting for containers..."
 start_time=$(date +%s)
@@ -76,7 +73,6 @@ while ((i < duration)); do
   done <<< "$cpu_samples" 
 
   ((i++))
-  sleep 1
 done
 
 # Calculate the average CPU usage
@@ -89,13 +85,22 @@ done
 
 average_cpu_usage=$(echo "scale=2; $total_cpu_usage / $num_samples" | bc)
 
+# Calculate the total time taken
+end_time=$(date +%s)
+total_time=$((end_time - start_time))
+
+# Based on MacBook Pro 2019 Thermal Design Power (TDP) - 45W.
+power_consumption=45  # Power consumption of the containers in watts
+# Represents power consumption beyond containers, Approximately 10 - 20 %
+power_r=15  # Additional power consumption (e.g., server power)
+# Number of CPU cores
+num_cores=8
+
 # Calculate the energy consumption in watt-hours (Wh)
-energy_consumption=$(echo "scale=2; $average_cpu_usage * $power_consumption * $duration / 3600" | bc)
+# energy_consumption=$(echo "scale=2; $average_cpu_usage * $power_consumption * $total_time / 3600" | bc)
+energy_consumption=$(echo "scale=2; $average_cpu_usage * $num_cores * $power_consumption * $duration / 3600" | bc)
 
 echo "Average CPU usage: $average_cpu_usage%"
 echo "Energy consumption through $duration iterations: $energy_consumption Wh"
 
-# Calculate the total time taken
-end_time=$(date +%s)
-total_time=$((end_time - start_time))
 echo "Total time taken: $total_time seconds"
