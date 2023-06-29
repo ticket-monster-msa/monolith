@@ -1,51 +1,27 @@
-# Ticket Monster Monolith to Microservices
+# 📈 Monolith vs. Microservices Power Consumption Comparison
 
-This is project is a monorepo of projects that illustrate migrating a monolith application to microservices.
+This project contains both a monolith and micro-services version of the Ticket Monster application (forked from [ticket-monster-msa](https://github.com/ticket-monster-msa/monolith)), and is used to compare the power consumption of the two architectures.
 
-The motivation for the patterns used in this repo are articulated in detail in [this blog post](http://blog.christianposta.com/microservices/low-risk-monolith-to-microservice-evolution/)
+## 🏗️ Project structure
 
-## Quick start
+The project is broken up into two parts: the monolith and the microservices. The monolith is located in the `monolith` folder, and the microservices are broken up between three folders:
 
-Whether using Kubernetes or OpenShift Origin, make sure you have [Istio installed](https://istio.io/docs/setup/kubernetes/quick-start.html) .
+- `tm-ui-v2` The UI for the microservices
+- `backend-v2` The backend for the microservices
+- `orders-service` The orders service for the microservices
 
-Check the [deployment](./deployment) folder. In here we have scripts for deploying to [Kubernetes](http://kubernetes.io) and [OpenShift Origin](https://www.openshift.org). In the `$platform/demo/` folder is step-by-step instructions for running the demo. 
+## 🥅 Goal
 
- 
-## Getting started with the projects
+The goal of this project is to compare the power consumption of the monolith and microservice architectures, using a bash script that utilises the [Docker Stats API](https://docs.docker.com/engine/api/v1.40/#operation/ContainerStats) to monitor the CPU usage of each running container, and subsequently to calculate the power consumption..
 
-There are a series of projects used to illustrate a migration to microservices from a Java EE monolith. 
+## ✅ Getting started
 
-### monolith
-The getting started experience begins with the [monolith](./monolith/README.md) project. In this project we deploy our monolith application and understand the domain, architecture, and structure of the application that will be the foundation for successive iterations.
- 
- 
-### tm-ui
- 
-The `tm-ui-*` folders contain different versions of the front-facing UI that we use as we migrate from a monolith to split out the UI to the set of microservices.
+Two run either the monolith or the microservices, you will need to have Docker installed on your system. Various bash scripts have been created to `start`, `monitor` and `shutdown` both services.
 
-### backend
+### 💻 Available commands
 
-The `backend-*` folders contain the monolith with the UI removed and successive iterations of evolution. With `backend-v1`, we have taken the monolith as it is and removed the UI. It contains a REST API that can be called from the UI. In `backend-v2` we've stated adding feature flags for controlling the introduction of a new microservice. See each respective sub project for more information.
- 
- 
-### orders-service
+- `./startup.sh  [--monolith | --microservice]` Starts either the monolith or microservices
 
-This 
+- `./monitor.sh [--monolith | --microservice] <samples>` Monitors the specified service for the specified number of samples. The default number of samples is 10. A sample is one query to the Docker Stats API, the results are displayed on the terminal screen.
 
-
-
-
-## Using Minikube (Kubernetes)
-
-Bootstrapping minikube:
-
-```
-$ minikube start --vm-driver=xhyve --memory=4096 --disk-size=30g --kubernetes-version=v1.7.5 
-```
-
-## Using Minishift (OpenShift Origin)
-
-Bootstrapping in minishift:
-
-```
-```
+- `./shutdown.sh` Shuts down any running services
