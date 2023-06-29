@@ -1,12 +1,5 @@
 version: "3.8"
 services:
-  # prometheus:
-  #   build: ./prometheus
-
-  #   ports:
-  #     - 9090:9090
-  #   volumes:
-  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
   backend:
     build:
       context: ./backend-v2
