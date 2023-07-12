@@ -1,0 +1,62 @@
+app: app-name # app name
+flow:
+  - name: monolith-benchmark # benchmark name
+    iter: 1 # number of iterations
+    sleep: 3 # sleep time in seconds between iterations
+    args:
+      # b:   bytes
+      # kb:  kilobyte
+      # mb:  megabyte
+      # gb:  gigabyte
+      # tb:  terabyte
+      # pb:  petabyte
+      # kib: kibibyte
+      # mib: mebibyte
+      # gib: gibibyte
+      # tib: tebibyte
+      # pib: pebibyte
+      maxsize: 1mb # max log file size (must be >= 1mb)
+      filter: structure # payload filter (`network`, `structure`, `none`)
+      redis:
+        ip: 0.0.0.0 # Redis server IP address
+        port: 6379 # Redis server port address
+      wgen:
+        workload: ./monolith/workload.yml # workload file path
+        apispec: ./monolith/apispec.yml # apispec file path
+        # ns:     nanosecond
+        # us, µs: microsecond
+        # ms:     millisecond
+        # s:      second
+        # m:      minute
+        # h:      hour
+        day: 10s # day length
+  - name: microservice-benchmark # benchmark name
+    iter: 1 # number of iterations
+    sleep: 3 # sleep time in seconds between iterations
+    args:
+      # b:   bytes
+      # kb:  kilobyte
+      # mb:  megabyte
+      # gb:  gigabyte
+      # tb:  terabyte
+      # pb:  petabyte
+      # kib: kibibyte
+      # mib: mebibyte
+      # gib: gibibyte
+      # tib: tebibyte
+      # pib: pebibyte
+      maxsize: 1mb # max log file size (must be >= 1mb)
+      filter: structure # payload filter (`network`, `structure`, `none`)
+      redis:
+        ip: 0.0.0.0 # Redis server IP address
+        port: 6379 # Redis server port address
+      wgen:
+        workload: ./microservice/workload.yml # workload file path
+        apispec: ./microservice/apispec.yml # apispec file path
+        # ns:     nanosecond
+        # us, µs: microsecond
+        # ms:     millisecond
+        # s:      second
+        # m:      minute
+        # h:      hour
+        day: 10s # day length

@@ -1,0 +1,10 @@
+workload:
+  - day:
+      # target API endpoint name
+      index:
+        # [attack rate * attack timer]
+        # attack rate (number of requests)
+        # attack timer (time unit for number of requests: seconds `s`, minutes `m`, hours `h`)
+        rate: 5/s
+      events:
+        rate: 5/s
