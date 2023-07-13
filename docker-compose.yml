@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  monolith:
+    build:
+      context: ./monolith
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+  backend:
+    build:
+      context: ./backend-v2
+      dockerfile: Dockerfile
+    ports:
+      - 5000:8080
+    # network_mode: host
+  orders-service:
+    build:
+      context: ./orders-service
+      dockerfile: Dockerfile
+    ports:
+      - 5001:8080
+    depends_on:
+      - backend
+    # network_mode: host
+  tm-ui-v2:
+    build:
+      context: ./tm-ui-v2
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - orders-service
+    # network_mode: host

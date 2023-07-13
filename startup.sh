@@ -2,7 +2,13 @@
 
 echo "Commencing startup"
 
-if [[ "$1" == "--monolith" ]]; then
+if [[ "$1" == "--all" ]]; then
+  # Execute monolithic setup using monolith-compose.yml
+  echo "Setting up both monolith and microservice systems..."
+  docker-compose up -d
+
+  echo "Setup complete"
+elif [[ "$1" == "--monolith" ]]; then
   # Execute monolithic setup using monolith-compose.yml
   echo "Running monolithic setup..."
   docker-compose -f monolith-compose.yml up -d

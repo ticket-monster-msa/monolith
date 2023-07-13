@@ -20,8 +20,16 @@ Two run either the monolith or the microservices, you will need to have Docker i
 
 ### 💻 Available commands
 
-- `./startup.sh  [--monolith | --microservice]` Starts either the monolith or microservices
+- `./startup.sh  [--monolith | --microservice | --all]` Starts either the monolith or microservices
 
 - `./monitor.sh [--monolith | --microservice] <samples>` Monitors the specified service for the specified number of samples. The default number of samples is 10. A sample is one query to the Docker Stats API, the results are displayed on the terminal screen.
 
 - `./shutdown.sh` Shuts down any running services
+
+### Useful commands for Dmon System
+
+Using the `v1dmon` system, the following commands are useful:
+
+- `go run dmon.go -i en0 -n bridge0 -f structure`
+- `flow -f workflows/workflow.yml -o output`
+- `./read_log.sh -f path_to_file.log` to see a cleaned up output of CPU usage by container

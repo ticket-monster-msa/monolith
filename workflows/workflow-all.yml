@@ -29,7 +29,7 @@ flow:
         # s:      second
         # m:      minute
         # h:      hour
-        day: 10s # day length
+        day: 30s # day length
   - name: microservice-benchmark # benchmark name
     iter: 1 # number of iterations
     sleep: 3 # sleep time in seconds between iterations
@@ -59,4 +59,4 @@ flow:
         # s:      second
         # m:      minute
         # h:      hour
-        day: 10s # day length
+        day: 30s # day length
