@@ -50,8 +50,8 @@ datetime=$(date +"%d-%m-%yT%H-%M-%S")
 output_folder="./output/$datetime"
 mkdir -p "$output_folder"
 
-echo "All containers are running. Baseline Monitoring starts in 5 seconds..."
-sleep 5
+echo "All containers are running. Baseline Monitoring starts in 15 seconds..."
+sleep 15
 
 echo "---------------------------------------------"
 echo "Commencing baseline monitoring for $duration seconds..."
@@ -61,7 +61,9 @@ echo "---------------------------------------------"
 
 echo "Baseline monitoring completed."
 
-sleep 5
+echo "Commencing monitoring in 15 seconds..."
+
+sleep 15
 
 echo "---------------------------------------------"
 echo "Commencing workgen & monitoring for $duration seconds..."
@@ -107,3 +109,14 @@ echo "---------------------------------------------"
 echo "Delta Package Energy_0 (mWh) = $delta_package_mWh"
 echo "Delta DRAM Energy_0 (mWh) = $delta_dram_mWh"
 echo "Total Energy Consumption (mWh) = $total_energy_consumption_mWh"
+
+
+# Save the test results to a CSV file
+output_csv="./output/test_results.csv"
+echo "Baseline Cumulative Package Energy_0 (mWh),$baseline_cumulative_package_mWh" > "$output_csv"
+echo "Baseline Cumulative DRAM Energy_0 (mWh),$baseline_cumulative_dram_mWh" >> "$output_csv"
+echo "Cumulative Package Energy_0 (mWh),$cumulative_package_mWh" >> "$output_csv"
+echo "Cumulative DRAM Energy_0 (mWh),$cumulative_dram_mWh" >> "$output_csv"
+echo "Delta Package Energy_0 (mWh),$subtraction" >> "$output_csv"
+echo "Delta DRAM Energy_0 (mWh),$delta_dram_mWh" >> "$output_csv"
+echo "Total Energy Consumption (mWh),$total_energy_consumption_mWh" >> "$output_csv"
