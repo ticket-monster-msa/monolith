@@ -2,8 +2,10 @@
 
 if [[ "$1" == "--monolith" ]]; then
   containers=("univaq-masters-thesis-monolith-1")
+  workflow_path="workflows/monolith"
 elif [[ "$1" == "--microservice" ]]; then
   containers=("univaq-masters-thesis-tm-ui-v2-1" "univaq-masters-thesis-orders-service-1" "univaq-masters-thesis-backend-1")
+  workflow_path="workflows/microservice"
 else
   # Invalid or no flag provided
    echo "Invalid flag or no flag provided. Usage: ./monitor.sh [--monolith | --microservice] <duration (optional, defaults to 10s)>]"
@@ -20,8 +22,9 @@ else
   duration=$default_duration
 fi
 
+echo "---------------------------------------------"
 echo "Commencing monitoring script"
-
+echo "---------------------------------------------"
 
 
 echo "Waiting for containers..."
@@ -40,68 +43,67 @@ for container in "${containers[@]}"; do
   done
 done
 
-echo "All containers are running. Monitoring starts in 5 seconds..."
+# Get the current date and time in the format YYYYMMDD_HHMMSS
+datetime=$(date +"%d-%m-%yT%H-%M-%S")
+
+# Create the output folder with the current date and time
+output_folder="./output/$datetime"
+mkdir -p "$output_folder"
+
+echo "All containers are running. Baseline Monitoring starts in 5 seconds..."
 sleep 5
 
-echo "Monitoring CPU usage of Docker containers for $duration iterations..."
-start_time=$(date +%s)
+echo "---------------------------------------------"
+echo "Commencing baseline monitoring for $duration seconds..."
+echo "---------------------------------------------"
 
-# Array to store CPU usage values
-cpu_usages=()
+/Applications/Intel\ Power\ Gadget/PowerLog -duration "$duration" -resolution 1000 -file "$output_folder/baseline.csv"
 
-# Function to collect CPU usage samples for all containers
-collect_cpu_samples() {
-  docker stats --format "table {{.Container}}\t{{.CPUPerc}}" --no-stream | tail -n +2
-}
+echo "Baseline monitoring completed."
 
-# Loop through while i is less than duration
-i=0
-while ((i < duration)); do
-  echo "Collecting CPU usage samples (Iteration $((i + 1)))..."
+sleep 5
 
-  # Collect CPU usage samples
-  cpu_samples=$(collect_cpu_samples)
+echo "---------------------------------------------"
+echo "Commencing workgen & monitoring for $duration seconds..."
+echo "---------------------------------------------"
 
-  # Read CPU samples line by line and populate the array
-  j=0
-  while IFS= read -r line; do
-    cpu_usage=$(awk '{print $2}' <<< "$line" | cut -d'%' -f1)
-    cpu_usages+=("$cpu_usage")
-    
-    echo "[$(date "+%H:%M:%S")] Container ${containers[j]}: $cpu_usage%"
-    ((j++))
-  done <<< "$cpu_samples" 
+wgen -w "$workflow_path"/workload.yml -a "$workflow_path"/apispec.yml -d "$duration"s
+/Applications/Intel\ Power\ Gadget/PowerLog -duration "$duration" -resolution 1000 -file "$output_folder/monitor.csv"
 
-  ((i++))
-done
+echo "---------------------------------------------"
+echo "Monitoring complete"
+echo "---------------------------------------------"
 
-# Calculate the average CPU usage
-total_cpu_usage=0
-num_samples=$((${#containers[@]} * duration))
+echo "---------------------------------------------"
+echo "Calculating output"
+echo "---------------------------------------------"
 
-for usage in "${cpu_usages[@]}"; do
-  total_cpu_usage=$(echo "$total_cpu_usage + $usage" | bc)
-done
+# Read and extract values from the baseline.csv file
+baseline_cumulative_package_mWh=$(awk -F'= ' '/Cumulative Package Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/baseline.csv")
+baseline_cumulative_dram_mWh=$(awk -F'= ' '/Cumulative DRAM Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/baseline.csv")
 
-average_cpu_usage=$(echo "scale=2; $total_cpu_usage / $num_samples" | bc)
+cumulative_package_mWh=$(awk -F'= ' '/Cumulative Package Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/monitor.csv")
+cumulative_dram_mWh=$(awk -F'= ' '/Cumulative DRAM Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/monitor.csv")
 
-# Calculate the total time taken
-end_time=$(date +%s)
-total_time=$((end_time - start_time))
+# Display the extracted values
+echo "Baseline Cumulative Package Energy_0 (mWh) = $baseline_cumulative_package_mWh"
+echo "Baseline Cumulative DRAM Energy_0 (mWh) = $baseline_cumulative_dram_mWh"
 
-# Based on MacBook Pro 2019 Thermal Design Power (TDP) - 45W.
-power_consumption=45  # Power consumption of the containers in watts
-# Represents power consumption beyond containers, Approximately 10 - 20 %
-power_r=15  # Additional power consumption (e.g., server power)
-# Number of CPU cores
-num_cores=8
+echo "Cumulative Package Energy_0 (mWh) = $cumulative_package_mWh"
+echo "Cumulative DRAM Energy_0 (mWh) = $cumulative_dram_mWh"
 
-# Calculate the energy consumption in watt-hours (Wh)
-# Energy consumption (Wh) = 
-# (Average CPU usage * Number of CPU cores * Power consumption * Total time) / 3600
-energy_consumption=$(echo "scale=2; $average_cpu_usage * $num_cores * $power_consumption * $duration / 3600" | bc)
 
-echo "Average CPU usage: $average_cpu_usage%"
-echo "Energy consumption through $duration iterations: $energy_consumption Wh"
+delta_package_mWh=$( echo "$cumulative_package_mWh" - "$baseline_cumulative_package_mWh" | bc)
+delta_dram_mWh=$( echo "$cumulative_dram_mWh" - "$baseline_cumulative_dram_mWh" | bc)
 
-echo "Total time taken: $total_time seconds"
+total_energy_consumption_mWh=$( echo "$delta_package_mWh" + "$delta_dram_mWh" | bc)
+
+
+echo "---------------------------------------------"
+echo "Test results"
+echo "---------------------------------------------"
+
+# Display the calculated values
+echo "Delta Package Energy_0 (mWh) = $delta_package_mWh"
+echo "Delta DRAM Energy_0 (mWh) = $delta_dram_mWh"
+echo "Total Energy Consumption (mWh) = $total_energy_consumption_mWh"
