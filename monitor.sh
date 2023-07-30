@@ -8,9 +8,12 @@ elif [[ "$1" == "--microservice" ]]; then
   workflow_path="workflows/microservice"
 else
   # Invalid or no flag provided
-   echo "Invalid flag or no flag provided. Usage: ./monitor.sh [--monolith | --microservice] <duration (optional, defaults to 10s)>]"
+  echo "Invalid flag or no flag provided. Usage: ./monitor.sh [--monolith | --microservice] <duration (optional, defaults to 10s)> [--iterations <number of iterations (optional, defaults to 1)>]"
   exit 1
 fi
+
+# Default sleep time between monitoring
+sleep_time=3
 
 # Default monitoring duration in seconds
 default_duration=10
@@ -20,6 +23,16 @@ if [[ -n "$2" && "$2" =~ ^[0-9]+$ ]]; then
   duration=$((10#$2))
 else
   duration=$default_duration
+fi
+
+# Default number of iterations
+default_iterations=1
+
+# Accept the iterations parameter as an integer
+if [[ -n "$3" && "$3" =~ ^[0-9]+$ ]]; then
+  iterations=$((10#$3))
+else
+  iterations=$default_iterations
 fi
 
 echo "---------------------------------------------"
@@ -43,80 +56,129 @@ for container in "${containers[@]}"; do
   done
 done
 
-# Get the current date and time in the format YYYYMMDD_HHMMSS
-datetime=$(date +"%d-%m-%yT%H-%M-%S")
+echo "All containers are running. "
 
-# Create the output folder with the current date and time
-output_folder="./output/$datetime"
-mkdir -p "$output_folder"
+# Initialize variables to hold cumulative values for average calculation
+total_baseline_package_mWh=0
+total_baseline_dram_mWh=0
+total_package_mWh=0
+total_dram_mWh=0
 
-echo "All containers are running. Baseline Monitoring starts in 15 seconds..."
-sleep 15
+# Loop over the number of iterations
+for (( i = 1; i <= iterations; i++ )); do
+  prefix="["$i"/"$((iterations))"]"
+
+  echo "---------------------------------------------"
+  echo "$prefix Commencing Iteration $i in $sleep_time seconds"
+  echo "---------------------------------------------"
+  sleep "$sleep_time"
+
+
+  # Get the current date and time in the format YYYYMMDD_HHMMSS
+  datetime=$(date +"%d-%m-%yT%H-%M-%S")
+
+  # Create the output folder with the current date and time
+  output_folder="./output/$datetime"
+  mkdir -p "$output_folder"
+
+  echo "---------------------------------------------"
+  echo "$prefix Commencing baseline monitoring for $duration seconds..."
+  echo "---------------------------------------------"
+
+  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$duration" -resolution 1000 -file "$output_folder/baseline.csv"
+
+  echo "$prefix Baseline monitoring completed."
+
+  echo "$prefix Commencing monitoring in $sleep_time seconds..."
+
+  sleep "$sleep_time"
+
+  echo "---------------------------------------------"
+  echo "$prefix Commencing workgen & monitoring for $duration seconds..."
+  echo "---------------------------------------------"
+
+  wgen -w "$workflow_path"/workload.yml -a "$workflow_path"/apispec.yml -d "$duration"s
+  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$duration" -resolution 1000 -file "$output_folder/monitor.csv"
+
+  echo "---------------------------------------------"
+  echo "$prefix Monitoring complete"
+  echo "---------------------------------------------"
+
+  echo "---------------------------------------------"
+  echo "$prefix Calculating output"
+  echo "---------------------------------------------"
+
+  # Read and extract values from the baseline.csv file
+  baseline_cumulative_package_mWh=$(awk -F'= ' '/Cumulative Package Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/baseline.csv")
+  baseline_cumulative_dram_mWh=$(awk -F'= ' '/Cumulative DRAM Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/baseline.csv")
+
+  cumulative_package_mWh=$(awk -F'= ' '/Cumulative Package Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/monitor.csv")
+  cumulative_dram_mWh=$(awk -F'= ' '/Cumulative DRAM Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/monitor.csv")
+
+  # Display the extracted values
+  echo "$prefix Baseline Cumulative Package Energy_0 (mWh) = $baseline_cumulative_package_mWh"
+  echo "$prefix Baseline Cumulative DRAM Energy_0 (mWh) = $baseline_cumulative_dram_mWh"
+
+  echo "$prefix Cumulative Package Energy_0 (mWh) = $cumulative_package_mWh"
+  echo "$prefix Cumulative DRAM Energy_0 (mWh) = $cumulative_dram_mWh"
+
+
+  delta_package_mWh=$( echo "$cumulative_package_mWh" - "$baseline_cumulative_package_mWh" | bc)
+  delta_dram_mWh=$( echo "$cumulative_dram_mWh" - "$baseline_cumulative_dram_mWh" | bc)
+
+  total_energy_consumption_mWh=$( echo "$delta_package_mWh" + "$delta_dram_mWh" | bc)
+
+
+  echo "---------------------------------------------"
+  echo "$prefix Test results"
+  echo "---------------------------------------------"
+
+  # Display the calculated values
+  echo "$prefix Delta Package Energy_0 (mWh) = $delta_package_mWh"
+  echo "$prefix Delta DRAM Energy_0 (mWh) = $delta_dram_mWh"
+  echo "$prefix Total Energy Consumption (mWh) = $total_energy_consumption_mWh"
+
+
+  # Save the test results to a CSV file
+  output_csv="$output_folder/test_results.csv"
+  echo "Iteration $i" >> "$output_csv"
+  echo "Baseline Cumulative Package Energy_0 (mWh),$baseline_cumulative_package_mWh" >> "$output_csv"
+  echo "Baseline Cumulative DRAM Energy_0 (mWh),$baseline_cumulative_dram_mWh" >> "$output_csv"
+  echo "Cumulative Package Energy_0 (mWh),$cumulative_package_mWh" >> "$output_csv"
+  echo "Cumulative DRAM Energy_0 (mWh),$cumulative_dram_mWh" >> "$output_csv"
+  echo "Delta Package Energy_0 (mWh),$delta_package_mWh" >> "$output_csv"
+  echo "Delta DRAM Energy_0 (mWh),$delta_dram_mWh" >> "$output_csv"
+  echo "Total Energy Consumption (mWh),$total_energy_consumption_mWh" >> "$output_csv"
+
+  # Update cumulative values for average calculation
+  total_baseline_package_mWh=$( echo "$total_baseline_package_mWh" + "$baseline_cumulative_package_mWh" | bc)
+  total_baseline_dram_mWh=$( echo "$total_baseline_dram_mWh" + "$baseline_cumulative_dram_mWh" | bc)
+  total_package_mWh=$( echo "$total_package_mWh" + "$cumulative_package_mWh" | bc)
+  total_dram_mWh=$( echo "$total_dram_mWh" + "$cumulative_dram_mWh" | bc)
+done 
 
 echo "---------------------------------------------"
-echo "Commencing baseline monitoring for $duration seconds..."
+echo "Calculating overall test results across $iterations iterations"
 echo "---------------------------------------------"
 
-/Applications/Intel\ Power\ Gadget/PowerLog -duration "$duration" -resolution 1000 -file "$output_folder/baseline.csv"
 
-echo "Baseline monitoring completed."
-
-echo "Commencing monitoring in 15 seconds..."
-
-sleep 15
-
-echo "---------------------------------------------"
-echo "Commencing workgen & monitoring for $duration seconds..."
-echo "---------------------------------------------"
-
-wgen -w "$workflow_path"/workload.yml -a "$workflow_path"/apispec.yml -d "$duration"s
-/Applications/Intel\ Power\ Gadget/PowerLog -duration "$duration" -resolution 1000 -file "$output_folder/monitor.csv"
-
-echo "---------------------------------------------"
-echo "Monitoring complete"
-echo "---------------------------------------------"
-
-echo "---------------------------------------------"
-echo "Calculating output"
-echo "---------------------------------------------"
-
-# Read and extract values from the baseline.csv file
-baseline_cumulative_package_mWh=$(awk -F'= ' '/Cumulative Package Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/baseline.csv")
-baseline_cumulative_dram_mWh=$(awk -F'= ' '/Cumulative DRAM Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/baseline.csv")
-
-cumulative_package_mWh=$(awk -F'= ' '/Cumulative Package Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/monitor.csv")
-cumulative_dram_mWh=$(awk -F'= ' '/Cumulative DRAM Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/monitor.csv")
-
-# Display the extracted values
-echo "Baseline Cumulative Package Energy_0 (mWh) = $baseline_cumulative_package_mWh"
-echo "Baseline Cumulative DRAM Energy_0 (mWh) = $baseline_cumulative_dram_mWh"
-
-echo "Cumulative Package Energy_0 (mWh) = $cumulative_package_mWh"
-echo "Cumulative DRAM Energy_0 (mWh) = $cumulative_dram_mWh"
-
-
-delta_package_mWh=$( echo "$cumulative_package_mWh" - "$baseline_cumulative_package_mWh" | bc)
-delta_dram_mWh=$( echo "$cumulative_dram_mWh" - "$baseline_cumulative_dram_mWh" | bc)
-
-total_energy_consumption_mWh=$( echo "$delta_package_mWh" + "$delta_dram_mWh" | bc)
+# Calculate average values
+average_baseline_package_mWh=$( echo "$total_baseline_package_mWh" / "$iterations" | bc)
+average_baseline_dram_mWh=$( echo "$total_baseline_dram_mWh" / "$iterations" | bc)
+average_package_mWh=$( echo "$total_package_mWh" / "$iterations" | bc)
+average_dram_mWh=$( echo "$total_dram_mWh" / "$iterations" | bc)
+average_total_energy_consumption_mWh=$( echo "$average_package_mWh" + "$average_dram_mWh" | bc)
 
 
 echo "---------------------------------------------"
-echo "Test results"
+echo "Average Test results across $iterations iterations"
 echo "---------------------------------------------"
 
-# Display the calculated values
-echo "Delta Package Energy_0 (mWh) = $delta_package_mWh"
-echo "Delta DRAM Energy_0 (mWh) = $delta_dram_mWh"
-echo "Total Energy Consumption (mWh) = $total_energy_consumption_mWh"
-
-
-# Save the test results to a CSV file
-output_csv="./output/test_results.csv"
-echo "Baseline Cumulative Package Energy_0 (mWh),$baseline_cumulative_package_mWh" > "$output_csv"
-echo "Baseline Cumulative DRAM Energy_0 (mWh),$baseline_cumulative_dram_mWh" >> "$output_csv"
-echo "Cumulative Package Energy_0 (mWh),$cumulative_package_mWh" >> "$output_csv"
-echo "Cumulative DRAM Energy_0 (mWh),$cumulative_dram_mWh" >> "$output_csv"
-echo "Delta Package Energy_0 (mWh),$subtraction" >> "$output_csv"
-echo "Delta DRAM Energy_0 (mWh),$delta_dram_mWh" >> "$output_csv"
-echo "Total Energy Consumption (mWh),$total_energy_consumption_mWh" >> "$output_csv"
+# Display the calculated average values
+echo "Average Baseline Cumulative Package Energy_0 (mWh) = $average_baseline_package_mWh"
+echo "Average Baseline Cumulative DRAM Energy_0 (mWh) = $average_baseline_dram_mWh"
+echo "Average Cumulative Package Energy_0 (mWh) = $average_package_mWh"
+echo "Average Cumulative DRAM Energy_0 (mWh) = $average_dram_mWh"
+echo "Average Delta Package Energy_0 (mWh) = $( echo "$average_package_mWh" - "$average_baseline_package_mWh" | bc)"
+echo "Average Delta DRAM Energy_0 (mWh) = $( echo "$average_dram_mWh" - "$average_baseline_dram_mWh" | bc)"
+echo "Average Total Energy Consumption (mWh) = $average_total_energy_consumption_mWh"

@@ -5,17 +5,17 @@ echo "Commencing startup"
 if [[ "$1" == "--all" ]]; then
   # Execute monolithic setup using monolith-compose.yml
   echo "Setting up both monolith and microservice systems..."
-  docker-compose up -d
+  docker-compose up -d --remove-orphans
 
   echo "Setup complete"
 elif [[ "$1" == "--monolith" ]]; then
   # Execute monolithic setup using monolith-compose.yml
   echo "Running monolithic setup..."
-  docker-compose -f monolith-compose.yml up -d
+  docker-compose -f monolith-compose.yml up -d --remove-orphans
 elif [[ "$1" == "--microservice" ]]; then
   # Execute microservice setup using microservice-compose.yml
   echo "Running microservice setup..."
-  docker-compose -f microservice-compose.yml up -d
+  docker-compose -f microservice-compose.yml up -d --remove-orphans
 else
   # Invalid or no flag provided
    echo "Invalid flag or no flag provided. Usage: ./startup.sh [--monolith | --microservice] [--monitor <duration>]"

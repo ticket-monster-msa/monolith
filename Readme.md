@@ -22,7 +22,7 @@ Two run either the monolith or the microservices, you will need to have Docker i
 
 - `./startup.sh  [--monolith | --microservice | --all]` Starts either the monolith or microservices
 
-- `./monitor.sh [--monolith | --microservice] <samples>` Monitors the specified service for the specified number of samples. The default number of samples is 10. A sample is one query to the Docker Stats API, the results are displayed on the terminal screen.
+- `./monitor.sh [--monolith | --microservice] <duration (optional, defaults to 10s)> [--iterations <number of iterations (optional, defaults to 1)>]` Monitors the specified service for the specified number of iterations, and a specified duration (in seconds). The results are saved in the `output` folder
 
 - `./shutdown.sh` Shuts down any running services
 
