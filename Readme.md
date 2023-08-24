@@ -33,3 +33,11 @@ Using the `v1dmon` system, the following commands are useful:
 - `go run dmon.go -i en0 -n bridge0 -f structure`
 - `flow -f workflows/workflow.yml -o output`
 - `./read_log.sh -f path_to_file.log` to see a cleaned up output of CPU usage by container
+
+### Selenium Commands
+
+Recently added selenium script can be run through instructed to navigate and perfrom actions on the website based on a yaml script. Can be run using the following command:
+
+`python3 web_crawler.py microservice-config.yaml`
+
+> Make sure you have the dependencies installed first `pip install -r dependencies.txt`
