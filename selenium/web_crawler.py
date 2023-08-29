@@ -6,6 +6,8 @@ from selenium.webdriver.support.ui import Select
 import time
 
 def execute_actions(driver, actions):
+    total_execution_time = 0
+
     for action in actions:
         try:
             action_type = action['action']
@@ -34,6 +36,8 @@ def execute_actions(driver, actions):
             print("Error executing action: ", action)
             print(f"Error details: {e}")
 
+    return total_execution_time
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Execute actions based on YAML configuration.")
@@ -54,6 +58,12 @@ if __name__ == "__main__":
     driver.get(config['website_url'])
     time.sleep(1)
 
-    execute_actions(driver, config['actions'])
+    start_time = time.time()
+    total_execution_time = execute_actions(driver, config['actions'])
+    end_time = time.time()
 
-    time.sleep(10)
+    total_time = end_time - start_time + total_execution_time
+
+    print(f"Total time taken: {total_time:.2f} seconds")
+
+    time.sleep(5)
