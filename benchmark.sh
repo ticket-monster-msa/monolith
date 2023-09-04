@@ -2,8 +2,6 @@ echo "---------------------------------------------"
 echo "Commencing Monolith Experiemnt"
 echo "---------------------------------------------"
 
-# ./monitor.sh --microservice 3 --iterations 3
-
 # Get the current date and time in the format YYYYMMDD_HHMMSS
 datetime=$(date +"%d-%m-%yT%H-%M-%S")
 

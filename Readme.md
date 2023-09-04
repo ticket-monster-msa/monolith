@@ -20,6 +20,8 @@ Two run either the monolith or the microservices, you will need to have Docker i
 
 ### 💻 Available commands
 
+- `./benchmark.sh --duration <duration> --iterations <iterations>` Runs the entire experiment for the specified duration (in seconds) and number of iterations. The results are saved in the `output` folder.
+
 - `./startup.sh  [--monolith | --microservice | --all]` Starts either the monolith or microservices
 
 - `./monitor.sh [--monolith | --microservice] <duration (optional, defaults to 10s)> [--iterations <number of iterations (optional, defaults to 1)>]` Monitors the specified service for the specified number of iterations, and a specified duration (in seconds). The results are saved in the `output` folder
