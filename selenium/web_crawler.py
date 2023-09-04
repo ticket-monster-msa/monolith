@@ -53,7 +53,7 @@ if __name__ == "__main__":
     chrome_options.add_argument(f"--window-size={config['window_size']}")
 
     driver = webdriver.Chrome(options=chrome_options)
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(15)
 
     driver.get(config['website_url'])
     time.sleep(1)
