@@ -24,8 +24,6 @@ echo "---------------------------------------------"
 echo "Commencing Monolith Experiemnt"
 echo "---------------------------------------------"
 
-
-exit 1;
 ./startup.sh --monolith
 
 sleep 5
