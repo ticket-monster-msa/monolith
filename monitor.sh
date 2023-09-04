@@ -74,12 +74,8 @@ done
 
 echo "All containers are running. "
 
-# Get the current date and time in the format YYYYMMDD_HHMMSS
-datetime=$(date +"%d-%m-%yT%H-%M-%S")
-
-# Create the output folder with the current date and time
-output_folder="./output/$name-$datetime"
-mkdir -p "$output_folder"
+output_folder="$6/$name"
+mkdir -p "$output_folder/$name"
 
 echo "---------------------------------------------"
 echo "Checking for Python dependencies"
