@@ -1,55 +1,83 @@
-# Experiement Setup
+#!/bin/bash
 
+# Function to perform a single experiment
+perform_experiment() {
+  duration="$1"
+  iterations="$2"
 
-# Get the current date and time in the format YYYYMMDD_HHMMSS
-datetime=$(date +"%d-%m-%yT%H-%M-%S")
+  datetime=$(date +"%d-%m-%yT%H-%M-%S")
+  output_folder="./output/$datetime"
+  mkdir -p "$output_folder"
 
-# Create the output folder with the current date and time
-output_folder="./output/$datetime"
-mkdir -p "$output_folder"
+  echo "---------------------------------------------"
+  echo "Commencing Experiment and outputting to $output_folder"
+  echo "---------------------------------------------"
 
-echo "---------------------------------------------"
-echo "Commencing Experiment and outputting to $output_folder"
-echo "---------------------------------------------"
+  echo "Timestamp: $datetime"
+  echo "Duration per API Test: $duration"
+  echo "Number of Iterations: $iterations"
 
-echo "Timestamp: $datetime"
-echo "Duration per API Test: $2"
-echo "Number of Iterations: $4"
+  echo "Ticket Monster Experiment: $datetime" >> "$output_folder/test_results.csv"
+  echo "Duration per API Test: $duration" >> "$output_folder/test_results.csv"
+  echo "Number of Iterations: $iterations" >> "$output_folder/test_results.csv"
 
-echo "Ticket Monster Experimenet: $datetime" >> "$output_folder/test_results.csv"
-echo "Duration per API Test: $2" >> "$output_folder/test_results.csv"
-echo "Number of Iterations: $4" >> "$output_folder/test_results.csv"
+  echo "---------------------------------------------"
+  echo "Commencing Monolith Experiment"
+  echo "---------------------------------------------"
 
-echo "---------------------------------------------"
-echo "Commencing Monolith Experiemnt"
-echo "---------------------------------------------"
+  ./startup.sh --monolith
 
-./startup.sh --monolith
+  sleep 5
 
-sleep 5
+  ./monitor.sh --monolith "$duration" --iterations "$iterations" --output "$output_folder"
 
-./monitor.sh --monolith "$2" --iterations "$4" --output "$output_folder"
+  ./shutdown.sh
 
-./shutdown.sh
+  echo "---------------------------------------------"
+  echo "Monolith Experiment Complete"
+  echo "---------------------------------------------"
 
-echo "---------------------------------------------"
-echo "Monolith Experiemnt Complete"
-echo "---------------------------------------------"
+  sleep 3
 
-sleep 3
+  echo "---------------------------------------------"
+  echo "Commencing Microservice Experiment"
+  echo "---------------------------------------------"
 
-echo "---------------------------------------------"
-echo "Commencing Microservice Experiemnt"
-echo "---------------------------------------------"
+  ./startup.sh --microservice
 
-./startup.sh --microservice
+  sleep 5
 
-sleep 5
+  ./monitor.sh --microservice "$duration" --iterations "$iterations" --output "$output_folder"
 
-./monitor.sh --microservice $1 --iterations $3 --output "$output_folder"
+  ./shutdown.sh
 
-./shutdown.sh
+  echo "---------------------------------------------"
+  echo "Microservice Experiment Complete"
+  echo "---------------------------------------------"
+}
 
-echo "---------------------------------------------"
-echo "Microservice Experiemnt Complete"
-echo "---------------------------------------------"
+# Read the YAML configuration file using Python and loop through experiments
+json_data=$(python -c '
+import yaml
+import json
+
+data = yaml.safe_load(open("./workflows/experiments.yaml", "r"))
+
+# Convert the data to JSON for easy parsing in Bash
+print(json.dumps(data["experiments"]))
+')
+
+# Use jq (a JSON processor) to convert the JSON data to a Bash array
+experiments=($(echo "$json_data" | jq -r '.[] | "\(.duration)"'))
+echo "Experiments: ${experiments[@]}"
+
+# exit 1;
+# Loop through the Bash array and perform experiments
+for experiment in "${experiments[@]}"; do
+  duration=$(echo "$experiment" | awk '{print $1}')
+  iterations=10
+  
+  echo "Performing experiment with Duration: $duration, Iterations: $iterations"
+  perform_experiment "$duration" "$iterations"
+  
+done

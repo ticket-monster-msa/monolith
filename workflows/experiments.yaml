@@ -1,0 +1,13 @@
+experiments:
+  - duration: 10
+    iterations: 2
+  - duration: 10
+    iterations: 4
+  - duration: 5
+    iterations: 4
+  - duration: 5
+    iterations: 2
+  - duration: 60
+    iterations: 4
+  - duration: 60
+    iterations: 4
