@@ -2,7 +2,7 @@
 # How frequently Intel Power Gadget should sample (in milliseconds)
 sampling_frequency=1000
 # Default sleep time between monitoring
-sleep_time=3
+sleep_time=300
 # Default monitoring duration in seconds
 default_duration=10
 # Default number of iterations
@@ -108,7 +108,7 @@ for (( i = 1; i <= iterations; i++ )); do
   prefix="["$i"/"$((iterations))"]"
 
   echo "---------------------------------------------"
-  echo "$prefix Commencing Iteration $i in $sleep_time seconds"
+  echo "$prefix Commencing Iteration $i in $sleep_time seconds..."
   echo "---------------------------------------------"
   sleep "$sleep_time"
 
@@ -148,8 +148,11 @@ for (( i = 1; i <= iterations; i++ )); do
   echo "$prefix Frontend Baseline monitoring completed."
 
   echo "---------------------------------------------"
-  echo "$prefix Commencing frontend monitoring"
+  echo "$prefix Commencing frontend monitoring in $sleep_time seconds..."
   echo "---------------------------------------------"
+
+  sleep "$sleep_time"
+
 
   python3 ./selenium/web_crawler.py "$workflow_path"/frontend.yml
   /Applications/Intel\ Power\ Gadget/PowerLog -duration "$total_time_rounded" -resolution 1000 -file "$output_folder/$name/$i-frontend-monitor.csv"
@@ -228,7 +231,6 @@ for (( i = 1; i <= iterations; i++ )); do
   frontend_total_baseline_dram_mWh=$( echo "$frontend_total_baseline_dram_mWh" + "$frontend_baseline_cumulative_dram_mWh" | bc)
   frontend_total_package_mWh=$( echo "$frontend_total_package_mWh" + "$frontend_cumulative_package_mWh" | bc)
   frontend_total_dram_mWh=$( echo "$frontend_total_dram_mWh" + "$frontend_cumulative_dram_mWh" | bc)
-
 
 done 
 
