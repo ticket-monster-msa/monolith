@@ -3,70 +3,83 @@
 # Output file
 output_file="extracted_values.csv"
 
-# Function to extract the Cumulative Package Energy_0 (mWh) value
-extract_value() {
+# Create the header in the output file
+echo "#,DateTime,Architecture,File,Total Elapsed Time (sec),Cumulative Package Energy_0 (mWh),Cumulative IA Energy_0 (mWh),Cumulative DRAM Energy_0 (mWh)" > "$output_file"
+
+# Function to extract float values from a file
+extract_values() {
     local folder="$1"
-    local file="$2"
+    local subfolder="$2"
+    local file="$3"
     local filename=$(basename "$file") # Get the filename without path
     
-    local type=$(echo "$file" | cut -d '/' -f 2)    
-    local number=$(echo "$filename" | grep -oE '^[0-9]+') # Extract the leading number
-    local input_string=$(awk -F, '/Cumulative Package Energy_0 \(mWh\)/{print $NF}' "$file")
-    local value=$(echo "$input_string" | cut -d '=' -f 2 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    # Initialize variables for values
+    local elapsed_time=""
+    local package_energy=""
+    local ia_energy=""
+    local dram_energy=""
+    
+    # echo "Extracting values from: $folder/$subfolder/$filename" # Debugging line
 
-    # if [-n value]
-    if [ -n "$value" ]; then
-       local details_file="${folder}/test_results.csv"
-        local duration=""
-        local iterations=""
-
-        # Extract duration and iterations from the test_results.csv file
-        if [ -f "$details_file" ]; then
-            duration=$(awk -F': ' '/Duration per API Test/{print $2}' "$details_file")
-            iterations=$(awk -F': ' '/Number of Iterations/{print $2}' "$details_file")
+    # Ensure consistent line endings with dos2unix
+    dos2unix -q "$file"
+    
+    # Loop through lines in the file
+    while IFS= read -r line; do
+        # Check for lines containing specific values
+        if [[ $line =~ "Total Elapsed Time (sec) = " ]]; then
+            elapsed_time=$(echo "$line" | awk -F ' = ' '{print $2}' | tr -d '"')
+        elif [[ $line =~ "Cumulative Package Energy_0 (mWh) = " ]]; then
+            package_energy=$(echo "$line" | awk -F ' = ' '{print $2}' | tr -d '"')
+        elif [[ $line =~ "Cumulative IA Energy_0 (mWh) = " ]]; then
+            ia_energy=$(echo "$line" | awk -F ' = ' '{print $2}' | tr -d '"')
+        elif [[ $line =~ "Cumulative DRAM Energy_0 (mWh) = " ]]; then
+            dram_energy=$(echo "$line" | awk -F ' = ' '{print $2}' | tr -d '"')
         fi
-        echo "${number},${type},${filename},${duration},${iterations},${value%?}" >> "$output_file"
-        # echo "${number},${type},${filename},${duration},${iterations},${value%?}" 
-    fi
+    done < "$file"
+    
+    # Debugging lines to print extracted values
+    echo "Elapsed Time: $elapsed_time"
+    echo "Package Energy: $package_energy"
+    echo "IA Energy: $ia_energy"
+    echo "DRAM Energy: $dram_energy"
 
+    # Split the subfolder based on the / character into two variables
+    IFS='/' read -r subfolder1 subfolder2 <<< "$subfolder"
+
+    number=$(echo "$filename" | cut -d'-' -f1)
+    name_with_extension=$(echo "$filename" | cut -d'-' -f2-)
+    name_without_extension=$(echo "$name_with_extension" | cut -d'.' -f1)
+
+    # Append the extracted values to the output file, removing any unwanted characters
+    echo "$number,$subfolder1,$subfolder2,$name_without_extension,$elapsed_time,$package_energy,$ia_energy,$dram_energy" >> "$output_file"
 }
 
-# Function to extract experiment details from the test_results.csv file
-extract_experiment_details() {
-    local folder="$1"
-    local details_file="${folder}/test_results.csv"
-    if [ -f "$details_file" ]; then
-        # Extract experiment details from the test_results.csv file
-        experiment_name=$(awk -F ': ' '/Ticket Monster Experiment/{print $2}' "$details_file")
-        duration_per_api_test=$(awk -F ': ' '/Duration per API Test/{print $2}' "$details_file")
-        num_iterations=$(awk -F ': ' '/Number of Iterations/{print $2}' "$details_file")
-        # echo "Outer Folder: $folder, Experiment: $experiment_name, Duration per API Test: $duration_per_api_test, Number of Iterations: $num_iterations"
-        # echo "Outer Folder: $folder, Experiment: $experiment_name, Duration per API Test: $duration_per_api_test, Number of Iterations: $num_iterations" >> "$output_file"
-    fi
-}
-
-# Loop through the outer folders (e.g., "11-09-23T13-22-18", "11-09-23T13-47-46", etc.)
+# Loop through the outer folders (e.g., "19-09-23T19-32-10", "20-09-23T02-30-52")
 for outer_folder in */; do
     if [ -d "$outer_folder" ]; then
-        # Extract the outer folder name
-        outer_folder_name=$(basename "$outer_folder")
-        
-        # Determine the type ("mono" or "micro") based on the inner folder name
-        if [[ "$outer_folder" == *"/micro/"* ]]; then
-            type="micro"
-        elif [[ "$outer_folder" == *"/mono/"* ]]; then
-            type="mono"
+        # echo "Checking $outer_folder" # Debugging line
+
+        # Determine the type ("mono" or "micro") based on the outer folder name
+        if [[ "$outer_folder" == *"micro"* ]]; then
+            folder_name="micro"
+        elif [[ "$outer_folder" == *"mono"* ]]; then
+            folder_name="mono"
         else
-            type="unknown"
+            folder_name="unknown"
         fi
-        
-        # Call the function to extract experiment details and add them to the header
-        extract_experiment_details "$outer_folder"
-        
-        # Loop through the CSV files in the 'micro' or 'mono' directory for this outer folder
-        for csv_file in "${outer_folder}"*/*.csv; do
-            if [ -f "$csv_file" ]; then
-                extract_value "$outer_folder_name" "$csv_file" "$type"
+
+        # Loop through the subfolders ("micro" or "mono") inside the outer folder
+        for subfolder in "${outer_folder}"*; do
+            if [ -d "$subfolder" ]; then
+                echo "Checking $subfolder" # Debugging line
+
+                # Loop through the CSV files in the subfolder
+                for csv_file in "$subfolder"/*.csv; do
+                    if [ -f "$csv_file" ]; then
+                        extract_values "$folder_name" "$subfolder" "$csv_file"
+                    fi
+                done
             fi
         done
     fi

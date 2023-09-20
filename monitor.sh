@@ -105,7 +105,8 @@ echo "---------------------------------------------"
 
 # Loop over the number of iterations
 for (( i = 1; i <= iterations; i++ )); do
-  prefix="["$i"/"$((iterations))"]"
+  prefix="["$name"-"$i"/"$((iterations))"]"
+  ./startup.sh "$1"
 
   echo "---------------------------------------------"
   echo "$prefix Commencing Iteration $i in $sleep_time seconds..."
@@ -162,154 +163,9 @@ for (( i = 1; i <= iterations; i++ )); do
   echo "$prefix Monitoring complete"
   echo "---------------------------------------------"
 
-  echo "---------------------------------------------"
-  echo "$prefix Calculating output"
-  echo "---------------------------------------------"
-
-  # Read and extract values from the baseline.csv file
-  api_baseline_cumulative_package_mWh=$(awk -F'= ' '/Cumulative Package Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/$name/$i-api-baseline.csv")
-  api_baseline_cumulative_dram_mWh=$(awk -F'= ' '/Cumulative DRAM Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/$name/$i-api-baseline.csv")
-  
-  api_cumulative_package_mWh=$(awk -F'= ' '/Cumulative Package Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/$name/$i-api-monitor.csv")
-  api_cumulative_dram_mWh=$(awk -F'= ' '/Cumulative DRAM Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/$name/$i-api-monitor.csv")
-
-  frontend_baseline_cumulative_package_mWh=$(awk -F'= ' '/Cumulative Package Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/$name/$i-frontend-baseline.csv")
-  frontend_baseline_cumulative_dram_mWh=$(awk -F'= ' '/Cumulative DRAM Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/$name/$i-frontend-baseline.csv")
-
-  frontend_cumulative_package_mWh=$(awk -F'= ' '/Cumulative Package Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/$name/$i-frontend-monitor.csv")
-  frontend_cumulative_dram_mWh=$(awk -F'= ' '/Cumulative DRAM Energy_0 \(mWh\)/ {gsub("\"", "", $2); print $2}' "$output_folder/$name/$i-frontend-monitor.csv")
-
-  # Display the extracted values
-  echo "$prefix Baseline API Cumulative Package Energy_0 (mWh) = $api_baseline_cumulative_package_mWh"
-  echo "$prefix Baseline API Cumulative DRAM Energy_0 (mWh) = $api_baseline_cumulative_dram_mWh"
-  
-  echo "$prefix Baseline Frontend Cumulative Package Energy_0 (mWh) = $frontend_baseline_cumulative_package_mWh"
-  echo "$prefix Baseline Frontend Cumulative DRAM Energy_0 (mWh) = $frontend_baseline_cumulative_dram_mWh"
-
-  echo "$prefix Cumulative API Package Energy_0 (mWh) = $api_cumulative_package_mWh"
-  echo "$prefix Cumulative API DRAM Energy_0 (mWh) = $api_cumulative_dram_mWh"
-  
-  echo "$prefix Cumulative Frontend Package Energy_0 (mWh) = $frontend_cumulative_package_mWh"
-  echo "$prefix Cumulative Frontend DRAM Energy_0 (mWh) = $frontend_cumulative_dram_mWh"
-
-  api_delta_package_mWh=$( echo "$api_cumulative_package_mWh" - "$api_baseline_cumulative_package_mWh" | bc)
-  api_delta_dram_mWh=$( echo "$api_cumulative_dram_mWh" - "$api_baseline_cumulative_dram_mWh" | bc)
-  
-  frontend_delta_package_mWh=$( echo "$frontend_cumulative_package_mWh" - "$frontend_baseline_cumulative_package_mWh" | bc)
-  frontend_delta_dram_mWh=$( echo "$frontend_cumulative_dram_mWh" - "$frontend_baseline_cumulative_dram_mWh" | bc)
-
-  api_total_energy_consumption_mWh=$( echo "$api_delta_package_mWh" + "$api_delta_dram_mWh" | bc)
-  frontend_total_energy_consumption_mWh=$( echo "$frontend_delta_package_mWh" + "$frontend_delta_dram_mWh" | bc)
-
-
-  echo "---------------------------------------------"
-  echo "$prefix Test results"
-  echo "---------------------------------------------"
-
-  echo "$prefix API Total Energy Consumption (mWh), $api_total_energy_consumption_mWh" >> "$output_csv"
-  echo "$prefix Frontend Total Energy Consumption (mWh), $frontend_total_energy_consumption_mWh" >> "$output_csv"
-  echo "$prefix Overall Total Energy Consumption (mWh), $api_total_energy_consumption_mWh" >> "$output_csv"
-  
-  # Display the calculated values
-  echo "$prefix API Delta Package Energy_0 (mWh) = $api_delta_package_mWh"
-  echo "$prefix API Delta DRAM Energy_0 (mWh) = $api_delta_dram_mWh"
-  echo "$prefix API Total Energy Consumption (mWh) = $api_total_energy_consumption_mWh"
-  
-  echo "$prefix Frontend Delta Package Energy_0 (mWh) = $frontend_delta_package_mWh"
-  echo "$prefix Frontend Delta DRAM Energy_0 (mWh) = $frontend_delta_dram_mWh"
-  echo "$prefix Frontend Total Energy Consumption (mWh) = $frontend_total_energy_consumption_mWh"
-
-  echo "$prefix Overall Total Energy Consumption (mWh) = $( echo "$api_total_energy_consumption_mWh" + "$frontend_total_energy_consumption_mWh" | bc)"
-
-  # Update cumulative values for average calculation
-  api_total_baseline_package_mWh=$( echo "$api_total_baseline_package_mWh" + "$api_baseline_cumulative_package_mWh" | bc)
-  api_total_baseline_dram_mWh=$( echo "$api_total_baseline_dram_mWh" + "$api_baseline_cumulative_dram_mWh" | bc)
-  api_total_package_mWh=$( echo "$api_total_package_mWh" + "$api_cumulative_package_mWh" | bc)
-  api_total_dram_mWh=$( echo "$api_total_dram_mWh" + "$api_cumulative_dram_mWh" | bc)
-  
-  frontend_total_baseline_package_mWh=$( echo "$frontend_total_baseline_package_mWh" + "$frontend_baseline_cumulative_package_mWh" | bc)
-  frontend_total_baseline_dram_mWh=$( echo "$frontend_total_baseline_dram_mWh" + "$frontend_baseline_cumulative_dram_mWh" | bc)
-  frontend_total_package_mWh=$( echo "$frontend_total_package_mWh" + "$frontend_cumulative_package_mWh" | bc)
-  frontend_total_dram_mWh=$( echo "$frontend_total_dram_mWh" + "$frontend_cumulative_dram_mWh" | bc)
-
+  ./shutdown.sh
 done 
 
 echo "---------------------------------------------"
-echo "Calculating overall test results across $iterations iterations"
+echo "Completed all $iterations iterations"
 echo "---------------------------------------------"
-
-
-# Calculate average values
-api_average_baseline_package_mWh=$( echo "$api_total_baseline_package_mWh" / "$iterations" | bc)
-api_average_baseline_dram_mWh=$( echo "$api_total_baseline_dram_mWh" / "$iterations" | bc)
-api_average_package_mWh=$( echo "$api_total_package_mWh" / "$iterations" | bc)
-api_average_dram_mWh=$( echo "$api_total_dram_mWh" / "$iterations" | bc)
-api_average_total_energy_consumption_mWh=$( echo "$api_average_package_mWh" + "$api_average_dram_mWh" | bc)
-
-frontend_average_baseline_package_mWh=$( echo "$frontend_total_baseline_package_mWh" / "$iterations" | bc)
-frontend_average_baseline_dram_mWh=$( echo "$frontend_total_baseline_dram_mWh" / "$iterations" | bc)
-frontend_average_package_mWh=$( echo "$frontend_total_package_mWh" / "$iterations" | bc)
-frontend_average_dram_mWh=$( echo "$frontend_total_dram_mWh" / "$iterations" | bc)
-frontend_average_total_energy_consumption_mWh=$( echo "$frontend_average_package_mWh" + "$frontend_average_dram_mWh" | bc)
-
-total_average_baseline_package_mWh=$( echo "$api_average_baseline_package_mWh" + "$frontend_average_baseline_package_mWh" | bc)
-total_average_baseline_dram_mWh=$( echo "$api_average_baseline_dram_mWh" + "$frontend_average_baseline_dram_mWh" | bc)
-total_average_package_mWh=$( echo "$api_average_package_mWh" + "$frontend_average_package_mWh" | bc)
-total_average_dram_mWh=$( echo "$api_average_dram_mWh" + "$frontend_average_dram_mWh" | bc)
-total_average_total_energy_consumption_mWh=$( echo "$api_average_total_energy_consumption_mWh" + "$frontend_average_total_energy_consumption_mWh" | bc)
-
-echo "---------------------------------------------"
-echo "Average Test results across $iterations iterations"
-echo "---------------------------------------------"
-
-# Output the calculated average values to a CSV file
-
-if [[ "$1" == "--monolith" ]]; then  
-  echo "Monolith Results" >> "$output_csv"
-else
-  echo -e "\n" >> $output_csv
-  echo "Microservice Results" >> "$output_csv"
-fi
-
-echo -e "\n" >> $output_csv
-echo "API Averages" >> "$output_csv"
-echo "Average Baseline Cumulative Package Energy_0 (mWh), $api_average_baseline_package_mWh" >> "$output_csv"
-echo "Average Baseline Cumulative DRAM Energy_0 (mWh), $api_average_baseline_dram_mWh" >> "$output_csv"
-echo "Average Cumulative Package Energy_0 (mWh), $api_average_package_mWh" >> "$output_csv"
-echo "Average Cumulative DRAM Energy_0 (mWh), $api_average_dram_mWh" >> "$output_csv"
-echo "Average Delta Package Energy_0 (mWh), $( echo "$api_average_package_mWh" - "$api_average_baseline_package_mWh" | bc)" >> "$output_csv"
-echo "Average Delta DRAM Energy_0 (mWh), $( echo "$api_average_dram_mWh" - "$api_average_baseline_dram_mWh" | bc)" >> "$output_csv"
-echo "Average Total Energy Consumption (mWh), $api_average_total_energy_consumption_mWh" >> "$output_csv"
-
-echo -e "\n" >> $output_csv
-echo "Frontend Averages" >> "$output_csv"
-echo "Average Baseline Cumulative Package Energy_0 (mWh), $frontend_average_baseline_package_mWh" >> "$output_csv"
-echo "Average Baseline Cumulative DRAM Energy_0 (mWh), $frontend_average_baseline_dram_mWh" >> "$output_csv"
-echo "Average Cumulative Package Energy_0 (mWh), $frontend_average_package_mWh" >> "$output_csv"
-echo "Average Cumulative DRAM Energy_0 (mWh), $frontend_average_dram_mWh" >> "$output_csv"
-echo "Average Delta Package Energy_0 (mWh), $( echo "$frontend_average_package_mWh" - "$frontend_average_baseline_package_mWh" | bc)" >> "$output_csv"
-echo "Average Delta DRAM Energy_0 (mWh), $( echo "$frontend_average_dram_mWh" - "$frontend_average_baseline_dram_mWh" | bc)" >> "$output_csv"
-echo "Average Total Energy Consumption (mWh), $frontend_average_total_energy_consumption_mWh" >> "$output_csv"
-
-echo -e "\n" >> $output_csv
-echo "Overall Averages" >> "$output_csv"
-echo "Average Baseline Cumulative Package Energy_0 (mWh), $total_average_baseline_package_mWh" >> "$output_csv"
-echo "Average Baseline Cumulative DRAM Energy_0 (mWh), $total_average_baseline_dram_mWh" >> "$output_csv"
-echo "Average Cumulative Package Energy_0 (mWh), $total_average_package_mWh" >> "$output_csv"
-echo "Average Cumulative DRAM Energy_0 (mWh), $total_average_dram_mWh" >> "$output_csv"
-echo "Average Delta Package Energy_0 (mWh), $( echo "$total_average_package_mWh" - "$total_average_baseline_package_mWh" | bc)" >> "$output_csv"
-echo "Average Delta DRAM Energy_0 (mWh), $( echo "$total_average_dram_mWh" - "$total_average_baseline_dram_mWh" | bc)" >> "$output_csv"
-echo "Average Total Energy Consumption (mWh), $total_average_total_energy_consumption_mWh" >> "$output_csv"
-
-# Display the calculated average values
-
-echo "Average Baseline Cumulative Package Energy_0 (mWh) = $total_average_baseline_package_mWh"
-echo "Average Baseline Cumulative DRAM Energy_0 (mWh) = $total_average_baseline_dram_mWh"
-echo "Average Cumulative Package Energy_0 (mWh) = $total_average_package_mWh"
-echo "Average Cumulative DRAM Energy_0 (mWh) = $total_average_dram_mWh"
-echo "Average Delta Package Energy_0 (mWh) = $( echo "$total_average_package_mWh" - "$total_average_baseline_package_mWh" | bc)"
-echo "Average Delta DRAM Energy_0 (mWh) = $( echo "$total_average_dram_mWh" - "$total_average_baseline_dram_mWh" | bc)"
-
-echo "API Average Energy Consumption (mWh), $api_average_total_energy_consumption_mWh"
-echo "Frontend Average Energy Consumption (mWh), $frontend_average_total_energy_consumption_mWh"
-echo "Total Average Energy Consumption (mWh), $total_average_total_energy_consumption_mWh"

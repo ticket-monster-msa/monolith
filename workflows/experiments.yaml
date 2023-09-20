@@ -1,7 +1,5 @@
 experiments:
   - duration: 5
     iterations: 10
-  - duration: 10
-    iterations: 10
-  - duration: 60
+  - duration: 5
     iterations: 10
