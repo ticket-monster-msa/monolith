@@ -1,0 +1,21 @@
+"System Time","RDTSC","Elapsed Time (sec)","CPU Utilization(%)","CPU Frequency_0(MHz)","CPU Min Frequency_0(MHz)","CPU Max Frequency_0(MHz)","CPU Requsted Frequency_0(MHz)","Processor Power_0(Watt)","Cumulative Processor Energy_0(Joules)","Cumulative Processor Energy_0(mWh)","IA Power_0(Watt)","Cumulative IA Energy_0(Joules)","Cumulative IA Energy_0(mWh)","Package Temperature_0(C)","Package Hot_0","CPU Min Temperature_0(C)","CPU Max Temperature_0(C)","DRAM Power_0(Watt)","Cumulative DRAM Energy_0(Joules)","Cumulative DRAM Energy_0(mWh)","Package Power Limit_0(Watt)","GT Frequency(MHz)","GT Requsted Frequency(MHz)"
+"03:03:49:507","29793698793188","   1.010","   1.887"," 1855"," 1200"," 2700"," 2060","   1.400","   1.414","   0.393","   0.390","   0.394","   0.109"," 35","0"," 33"," 40","   0.567","   0.573","   0.159","  45.000","    0","    0"
+"03:03:50:519","29796636024803","   2.022","   2.718"," 1954"," 1200"," 3500"," 2098","   1.667","   3.101","   0.861","   0.702","   1.104","   0.307"," 36","0"," 33"," 49","   0.547","   1.127","   0.313","  45.000","    0","    0"
+"03:03:51:521","29799546357241","   3.024","   1.255"," 1522"," 1200"," 2400"," 1537","   1.142","   4.245","   1.179","   0.188","   1.293","   0.359"," 35","0"," 32"," 36","   0.525","   1.653","   0.459","  45.000","    0","    0"
+"03:03:52:523","29802456671844","   4.026","   0.835"," 1387"," 1200"," 2400"," 1395","   1.084","   5.332","   1.481","   0.128","   1.421","   0.395"," 35","0"," 32"," 36","   0.517","   2.171","   0.603","  45.000","    0","    0"
+"03:03:53:525","29805366934387","   5.028","   3.060"," 2521"," 1200"," 3500"," 2917","   2.120","   7.457","   2.071","   1.147","   2.570","   0.714"," 35","0"," 32"," 45","   0.558","   2.730","   0.758","  45.000","    0","    0"
+
+"Total Elapsed Time (sec) = 5.028216"
+"Measured RDTSC Frequency (GHz) = 2.904"
+
+"Cumulative Package Energy_0 (Joules) = 7.456726"
+"Cumulative Package Energy_0 (mWh) = 2.071313"
+"Average Package Power_0 (Watt) = 1.482976"
+
+"Cumulative IA Energy_0 (Joules) = 2.569885"
+"Cumulative IA Energy_0 (mWh) = 0.713857"
+"Average Package IA_0 (Watt) = 0.511093"
+
+"Cumulative DRAM Energy_0 (Joules) = 2.729919"
+"Cumulative DRAM Energy_0 (mWh) = 0.758311"
+"Average Package DRAM_0 (Watt) = 0.542920"

@@ -1,0 +1,22 @@
+"System Time","RDTSC","Elapsed Time (sec)","CPU Utilization(%)","CPU Frequency_0(MHz)","CPU Min Frequency_0(MHz)","CPU Max Frequency_0(MHz)","CPU Requsted Frequency_0(MHz)","Processor Power_0(Watt)","Cumulative Processor Energy_0(Joules)","Cumulative Processor Energy_0(mWh)","IA Power_0(Watt)","Cumulative IA Energy_0(Joules)","Cumulative IA Energy_0(mWh)","Package Temperature_0(C)","Package Hot_0","CPU Min Temperature_0(C)","CPU Max Temperature_0(C)","DRAM Power_0(Watt)","Cumulative DRAM Energy_0(Joules)","Cumulative DRAM Energy_0(mWh)","Package Power Limit_0(Watt)","GT Frequency(MHz)","GT Requsted Frequency(MHz)"
+"02:16:13:435","16740332619862","   1.011","  10.253"," 2616"," 1200"," 3900"," 3077","  20.507","  20.684","   5.746","   8.470","   8.542","   2.373"," 76","0"," 63"," 83","   1.130","   1.139","   0.317","  45.000"," 1150"," 1200"
+"02:16:14:449","16742664333922","   2.025","   5.718"," 1597"," 1200"," 3100"," 1608","  14.812","  35.674","   9.910","   3.277","  11.859","   3.294"," 71","0"," 62"," 67","   0.980","   2.131","   0.592","  45.000","    0","    0"
+"02:16:15:455","16744979028474","   3.032","   5.465"," 1672"," 1200"," 3600"," 1744","  15.295","  51.040","  14.178","   3.625","  15.501","   4.306"," 76","0"," 62"," 74","   1.005","   3.141","   0.873","  45.000"," 1150"," 1200"
+"02:16:16:460","16747288687244","   4.036","   5.054"," 1574"," 1200"," 3600"," 1582","  14.629","  65.705","  18.251","   3.067","  18.576","   5.160"," 72","0"," 62"," 66","   0.965","   4.109","   1.141","  45.000"," 1150"," 1200"
+"02:16:17:469","16749610459904","   5.046","   4.975"," 1659"," 1200"," 3600"," 1671","  15.163","  80.985","  22.496","   3.269","  21.870","   6.075"," 77","0"," 62"," 68","   0.969","   5.085","   1.413","  45.000","    0","    0"
+"02:16:18:478","16751930761440","   6.054","   5.161"," 1542"," 1200"," 3100"," 1546","  14.445","  95.532","  26.537","   3.009","  24.901","   6.917"," 76","0"," 62"," 66","   0.962","   6.054","   1.682","  45.000","    0","    0"
+
+"Total Elapsed Time (sec) = 6.054235"
+"Measured RDTSC Frequency (GHz) = 2.300"
+
+"Cumulative Package Energy_0 (Joules) = 95.532349"
+"Cumulative Package Energy_0 (mWh) = 26.536764"
+"Average Package Power_0 (Watt) = 15.779427"
+
+"Cumulative IA Energy_0 (Joules) = 24.900513"
+"Cumulative IA Energy_0 (mWh) = 6.916809"
+"Average Package IA_0 (Watt) = 4.112909"
+
+"Cumulative DRAM Energy_0 (Joules) = 6.053955"
+"Cumulative DRAM Energy_0 (mWh) = 1.681654"
+"Average Package DRAM_0 (Watt) = 0.999954"
