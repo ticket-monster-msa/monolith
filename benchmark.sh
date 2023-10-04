@@ -29,7 +29,7 @@ perform_experiment() {
 
   sleep 5
 
-  ./monitor.sh --monolith "$duration" --iterations "$iterations" --output "$output_folder"
+#  ./monitor.sh --monolith "$duration" --iterations "$iterations" --output "$output_folder"
 
   ./shutdown.sh
 
