@@ -228,18 +228,40 @@ actions:
 
   - action: click-target
     target: 'span[data-tm-role="delete"]'
+    wait: 1
 
   - action: confirm-alert
     wait: 1
 
   - action: click-target
     target: 'span[data-tm-role="delete"]'
+    wait: 1
 
   - action: confirm-alert
     wait: 1
 
   - action: click-target
     target: 'span[data-tm-role="delete"]'
+    wait: 1
 
   - action: confirm-alert
     wait: 1
+
+  - action: navigate
+    target: Monitor
+    wait: 3
+
+  - action: click-target
+    target: "#start-bot"
+    wait: 2
+
+  - action: click-target
+    target: "#stop-bot"
+    wait: 30
+
+  - action: click-target
+    target: "#reset"
+
+  - action: navigate
+    target: About
+    wait: 3

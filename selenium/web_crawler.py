@@ -32,8 +32,6 @@ def execute_actions(driver, actions):
 
             elif action_type == 'click-target':
                 driver.find_element(By.CSS_SELECTOR, target).click()
-                alert = Alert(driver)
-                alert.accept()
 
             elif action_type == 'confirm-alert':
                 alert = Alert(driver)
