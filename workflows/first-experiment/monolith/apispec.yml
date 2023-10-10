@@ -1,0 +1,31 @@
+# app name
+name: monolith
+# base URL
+baseUrl: http://localhost:8080/ticket-monster
+# API endpoints list
+api:
+  # endpoint name
+  events:
+    relativeUrl: /rest/events
+    method: GET
+  event:
+    relativeUrl: /rest/events/5
+    method: GET
+  venues:
+    relativeUrl: /rest/venues
+    method: GET
+  venue:
+    relativeUrl: /rest/venues/5
+    method: GET
+  sections:
+    relativeUrl: /rest/sections
+    method: GET
+  section:
+    relativeUrl: /rest/sections/5
+    method: GET
+  performances:
+    relativeUrl: /rest/performances
+    method: GET
+  performance:
+    relativeUrl: /rest/performances/1
+    method: GET

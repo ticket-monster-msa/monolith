@@ -1,0 +1,3 @@
+experiments:
+  - duration: 60
+    iterations: 30

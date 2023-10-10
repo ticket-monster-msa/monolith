@@ -3,6 +3,7 @@ import yaml
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.alert import Alert
 import time
 
 def execute_actions(driver, actions):
@@ -28,6 +29,15 @@ def execute_actions(driver, actions):
 
             elif action_type == 'click':
                 driver.find_element(By.XPATH, value=f"//input[@value='{target}']").click()
+
+            elif action_type == 'click-target':
+                driver.find_element(By.CSS_SELECTOR, target).click()
+                alert = Alert(driver)
+                alert.accept()
+
+            elif action_type == 'confirm-alert':
+                alert = Alert(driver)
+                alert.accept()
 
             elif action_type == 'input':
                 input_element = driver.find_element(By.XPATH, value=f"//input[@placeholder='{target}']")
