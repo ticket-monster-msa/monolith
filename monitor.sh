@@ -2,7 +2,7 @@
 # How frequently Intel Power Gadget should sample (in milliseconds)
 sampling_frequency=1000
 # Default sleep time between monitoring
-sleep_time=5
+sleep_time=300
 # Default number of iterations
 default_iterations=1
 # Iterations for workload generator
