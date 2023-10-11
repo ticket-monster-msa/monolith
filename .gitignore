@@ -10,3 +10,4 @@ orders-service/ObjectStore/
 deployment/kubernetes/istio/istio-0.*
 v1dmon/*
 output/*
+.DS_STORE

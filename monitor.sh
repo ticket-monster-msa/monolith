@@ -2,28 +2,13 @@
 # How frequently Intel Power Gadget should sample (in milliseconds)
 sampling_frequency=1000
 # Default sleep time between monitoring
-sleep_time=300
-# Default monitoring duration in seconds
-default_duration=10
+sleep_time=5
 # Default number of iterations
 default_iterations=1
+# Iterations for workload generator
+workload_iterations=50
 
-# Initialize variables to hold cumulative values for average calculation
-api_total_baseline_package_mWh=0
-api_total_baseline_dram_mWh=0
-api_total_package_mWh=0
-api_total_dram_mWh=0
-
-frontend_total_baseline_package_mWh=0
-frontend_total_baseline_dram_mWh=0
-frontend_total_package_mWh=0
-frontend_total_dram_mWh=0
-
-total_baseline_package_mWh=0
-total_baseline_dram_mWh=0
-total_package_mWh=0
-total_dram_mWh=0
-
+# Checking parameters (whether its a monolith or microservice test)
 if [[ "$1" == "--monolith" ]]; then
   containers=("univaq-masters-thesis-monolith-1")
   workflow_path="workflows/monolith"
@@ -38,23 +23,13 @@ else
   exit 1
 fi
 
-# Accept the duration parameter as an integer
-if [[ -n "$2" && "$2" =~ ^[0-9]+$ ]]; then
-  duration=$((10#$2))
-else
-  duration=$default_duration
-fi
 
 # Accept the iterations parameter as an integer
-if [[ -n "$4" && "$4" =~ ^[0-9]+$ ]]; then
-  iterations=$((10#$4))
+if [[ -n "$3" && "$3" =~ ^[0-9]+$ ]]; then
+  iterations=$((10#$3))
 else
   iterations=$default_iterations
 fi
-
-echo "---------------------------------------------"
-echo "Commencing monitoring script"
-echo "---------------------------------------------"
 
 echo "Waiting for containers..."
 start_time=$(date +%s)
@@ -74,39 +49,82 @@ done
 
 echo "All containers are running. "
 
-output_folder="$6"
-mkdir -p "$output_folder/$name"
+sleep 10
 
 echo "---------------------------------------------"
-echo "Checking for Python dependencies"
+echo "Commencing monitoring script"
 echo "---------------------------------------------"
 
-pip install -r ./selenium/dependencies.txt
+output_folder="$5"
+# mkdir -p "$output_folder/$name"
 
 echo "---------------------------------------------"
 echo "Testing web crawler to check duration of test"
 echo "---------------------------------------------"
 
-output=$(python3 ./selenium/web_crawler.py "$workflow_path"/frontend.yml)
+output=$(python ./selenium/web_crawler.py "$workflow_path"/frontend.yml)
 
 # Extract time taken from Python Script output
 total_time_taken=$(echo "$output" | awk '/Total time taken:/ {print $4}')
 # Convert the extracted value to a floating-point number using bc
-total_time_float=$(echo "$total_time_taken" | bc -l)
+frontend_total_time=$(echo "$total_time_taken" | bc -l)
 # Round the floating-point value up to the nearest integer using bc
-total_time_rounded=$(echo "scale=0; ($total_time_float + 0.5)/1" | bc)
+# frontend_total_time=$(echo "scale=0; ($total_time_float + 0.5)/1" | bc)
+
+
+echo "---------------------------------------------"
+echo "Web Crawker test complete in $frontend_total_time seconds"
+echo "---------------------------------------------"
+
+echo "---------------------------------------------"
+echo "Testing workload generator, check duration of test"
+echo "---------------------------------------------"
+
+# Run the command and capture the output
+output=$(newman run "$workflow_path/workload.json" -n "$workload_iterations" 2>&1)
+echo "$output"
+# Extract and display the "total run duration"
+duration_line=$(echo "$output" | grep -o "total run duration: [0-9.]*s")
+if [ -z "$duration_line" ]; then
+    echo "Total run duration not found in the output."
+    exit 1  # Exit the script with an error status
+fi
+backend_total_time=$(echo "$duration_line" | awk '{print $4}' | sed 's/s//')
+
+
+echo "---------------------------------------------"
+echo "Workgen test complete in $backend_total_time"
+echo "---------------------------------------------"
 
 output_csv="$output_folder/test_results.csv"
 
-
-echo "---------------------------------------------"
-echo "Web Crawker test complete in $total_time_taken seconds (rounded to $total_time_rounded seconds)"
-echo "---------------------------------------------"
+./shutdown.sh
+sleep 5
 
 # Loop over the number of iterations
 for (( i = 1; i <= iterations; i++ )); do
   prefix="["$name"-"$i"/"$((iterations))"]"
   ./startup.sh "$1"
+
+  sleep 5
+
+  echo "Waiting for containers..."
+  start_time=$(date +%s)
+  timeout=10
+
+  for container in "${containers[@]}"; do
+    while ! docker container inspect "$container" >/dev/null 2>&1; do
+      current_time=$(date +%s)
+      elapsed_time=$((current_time - start_time))
+      if (( elapsed_time > timeout )); then
+        echo "Timeout: Containers did not start within $timeout seconds."
+        exit 1
+      fi
+      sleep 1
+    done
+  done
+
+  echo "All containers are running. "
 
   echo "---------------------------------------------"
   echo "$prefix Commencing Iteration $i in $sleep_time seconds..."
@@ -115,10 +133,10 @@ for (( i = 1; i <= iterations; i++ )); do
 
 
   echo "---------------------------------------------"
-  echo "$prefix Commencing API baseline monitoring for $duration seconds..."
+  echo "$prefix Commencing API baseline monitoring for $backend_total_time seconds..."
   echo "---------------------------------------------"
 
-  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$duration" -resolution 1000 -file "$output_folder/$name/$i-api-baseline.csv"
+  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$backend_total_time" -resolution 1000 -file "$output_folder/$name/$i-api-baseline.csv"
 
   echo "$prefix Baseline monitoring completed."
 
@@ -127,11 +145,12 @@ for (( i = 1; i <= iterations; i++ )); do
   sleep "$sleep_time"
 
   echo "---------------------------------------------"
-  echo "$prefix Commencing workgen & monitoring for $duration seconds..."
+  echo "$prefix Commencing workgen & monitoring for $backend_total_time seconds..."
   echo "---------------------------------------------"
-
-  wgen -w "$workflow_path"/workload.yml -a "$workflow_path"/apispec.yml -d "$duration"s
-  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$duration" -resolution 1000 -file "$output_folder/$name/$i-api-monitor.csv"
+  
+  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$backend_total_time" -resolution 1000 -file "$output_folder/$name/$i-api-monitor.csv"
+  output=$(newman run "$workflow_path/workload.json" -n "$workload_iterations" 2>&1)
+  echo "$output"
 
   echo "---------------------------------------------"
   echo "$prefix API Monitoring complete"
@@ -141,10 +160,10 @@ for (( i = 1; i <= iterations; i++ )); do
   sleep "$sleep_time"
 
   echo "---------------------------------------------"
-  echo "$prefix Commencing Frontend baseline monitoring for $total_time_rounded seconds..."
+  echo "$prefix Commencing Frontend baseline monitoring for $frontend_total_time seconds..."
   echo "---------------------------------------------"
 
-  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$total_time_rounded" -resolution 1000 -file "$output_folder/$name/$i-frontend-baseline.csv"
+  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$frontend_total_time" -resolution 1000 -file "$output_folder/$name/$i-frontend-baseline.csv"
 
   echo "$prefix Frontend Baseline monitoring completed."
 
@@ -155,8 +174,8 @@ for (( i = 1; i <= iterations; i++ )); do
   sleep "$sleep_time"
 
 
-  python3 ./selenium/web_crawler.py "$workflow_path"/frontend.yml
-  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$total_time_rounded" -resolution 1000 -file "$output_folder/$name/$i-frontend-monitor.csv"
+  python ./selenium/web_crawler.py "$workflow_path"/frontend.yml
+  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$frontend_total_time" -resolution 1000 -file "$output_folder/$name/$i-frontend-monitor.csv"
 
 
   echo "---------------------------------------------"
