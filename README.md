@@ -43,3 +43,69 @@ Recently added selenium script can be run through instructed to navigate and per
 `python3 web_crawler.py microservice-config.yaml`
 
 > Make sure you have the dependencies installed first `pip install -r dependencies.txt`
+
+### State Diagram
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    state if_more_iterations <<choice>>
+
+    check_prerequisite: Check Prereqsuities
+    install_dependencies: Install Dependencies
+    commence_monolith: Commence Monolith
+    commence_microservice: Commence Microservices
+    test_frontend_time: Test Frontend Time
+    test_backend_time: Test Backend Time
+
+    start_containers: Start Containers
+    shutdown_containers: Shutdown Containers
+    monitor_start_containers: Start Containers
+    monitor_shutdown_containers: Shutdown Containers
+
+    baseline_monitor_api: Baseline Monitor API
+    monitor_api: Monitor API
+    baseline_monitor_frontend: Baseline Monitor Frontend
+    monitor_frontend: Monitor Frontend
+    more_iterations: More Iterations?
+
+    sleep1: Sleep
+    sleep2: Sleep
+    sleep3: Sleep
+    sleep4: Sleep
+
+
+    [*] --> check_prerequisite
+    check_prerequisite --> install_dependencies
+    install_dependencies --> commence_monolith
+    install_dependencies --> commence_microservice
+    commence_monolith --> MonitorSetup
+    commence_microservice --> MonitorSetup
+
+    state MonitorSetup {
+        [*] --> start_containers
+        start_containers --> test_frontend_time
+        test_frontend_time --> test_backend_time
+        test_backend_time --> shutdown_containers
+        shutdown_containers --> [*]
+    }
+
+    MonitorSetup --> Monitor
+
+    state Monitor {
+        [*] --> monitor_start_containers
+        monitor_start_containers --> sleep1
+        sleep1 --> baseline_monitor_api
+        baseline_monitor_api --> sleep2
+        sleep2 --> monitor_api
+        monitor_api --> sleep3
+        sleep3 --> baseline_monitor_frontend
+        baseline_monitor_frontend --> sleep4
+        sleep4 --> monitor_frontend
+        monitor_frontend --> monitor_shutdown_containers
+        monitor_shutdown_containers --> more_iterations
+        more_iterations --> if_more_iterations
+        if_more_iterations --> monitor_start_containers: yes
+        if_more_iterations --> [*]: no
+    }
+```
