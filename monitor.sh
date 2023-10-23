@@ -1,34 +1,79 @@
 #!/bin/bash
-# How frequently Intel Power Gadget should sample (in milliseconds)
-sampling_frequency=1000
-# Default sleep time between monitoring
-sleep_time=300
-# Default number of iterations
-default_iterations=1
-# Iterations for workload generator
-workload_iterations=50
+# # How frequently Intel Power Gadget should sample (in milliseconds)
+# sampling_frequency=1000
+# # Default sleep time between monitoring
+# sleep_time=5
+# # Default number of iterations
+# default_iterations=1
+# # Iterations for workload generator
+# workload_iterations=200
 
-# Checking parameters (whether its a monolith or microservice test)
-if [[ "$1" == "--monolith" ]]; then
-  containers=("univaq-masters-thesis-monolith-1")
-  workflow_path="workflows/monolith"
-  name="mono"
-elif [[ "$1" == "--microservice" ]]; then
-  containers=("univaq-masters-thesis-tm-ui-v2-1" "univaq-masters-thesis-orders-service-1" "univaq-masters-thesis-backend-1")
-  workflow_path="workflows/microservice"
-  name="micro"
-else
-  # Invalid or no flag provided
-  echo "Invalid flag or no flag provided. Usage: ./monitor.sh [--monolith | --microservice] <duration (optional, defaults to 10s)> [--iterations <number of iterations (optional, defaults to 1)>]"
+# Initialize variables
+architecture=""
+iterations=""
+workload_iterations=""
+sleep_time=""
+output_folder=""
+sampling_frequency=""
+num_instances=5
+
+# Process command line arguments
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --monolith|--microservice)
+      architecture="$1"
+      ;;
+    --iterations=*)
+      iterations="${1#*=}"
+      ;;
+    --workload_iterations=*)
+      workload_iterations="${1#*=}"
+      ;;
+    --sleep_time=*)
+      sleep_time="${1#*=}"
+      ;;
+    --output=*)
+      output_folder="${1#*=}"
+      ;;
+    --sampling_frequency=*)
+      sampling_frequency="${1#*=}"
+      ;;
+    --num_instances=*)
+      num_instances="${1#*=}"
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+# Check for missing required options
+if [[ -z "$architecture" || -z "$iterations" || -z "$workload_iterations" || -z "$sleep_time" || -z "$output_folder" || -z "$sampling_frequency" ]]; then
+  echo "All of the following options are required: --architecture (--monolith || --microservice), --iterations, --workload_iterations, --sleep_time, --output, --sampling_frequency" >&2
   exit 1
 fi
 
+# Use the extracted values in your script
+echo "Architecture: $architecture"
+echo "Iterations: $iterations"
+echo "Workload Iterations: $workload_iterations"
+echo "Sleep Time: $sleep_time"
+echo "Output Folder: $output_folder"
+echo "Sampling Frequency: $sampling_frequency"
 
-# Accept the iterations parameter as an integer
-if [[ -n "$3" && "$3" =~ ^[0-9]+$ ]]; then
-  iterations=$((10#$3))
-else
-  iterations=$default_iterations
+output_csv="$output_folder/test_results.csv"
+
+# Checking parameters (whether its a monolith or microservice test)
+if [[ "$architecture" == "--monolith" ]]; then
+  containers=("univaq-masters-thesis-monolith-1")
+  workflow_path="workflows/monolith"
+  name="mono"
+elif [[ "$architecture" == "--microservice" ]]; then
+  containers=("univaq-masters-thesis-tm-ui-v2-1" "univaq-masters-thesis-orders-service-1" "univaq-masters-thesis-backend-1")
+  workflow_path="workflows/microservice"
+  name="micro"
 fi
 
 echo "Waiting for containers..."
@@ -55,56 +100,74 @@ echo "---------------------------------------------"
 echo "Commencing monitoring script"
 echo "---------------------------------------------"
 
-output_folder="$5"
-# mkdir -p "$output_folder/$name"
+
 
 echo "---------------------------------------------"
 echo "Testing web crawler to check duration of test"
 echo "---------------------------------------------"
 
-output=$(python ./selenium/web_crawler.py "$workflow_path"/frontend.yml)
+# Record the start time
+start_time=$(date +%s.%N)
 
-# Extract time taken from Python Script output
-total_time_taken=$(echo "$output" | awk '/Total time taken:/ {print $4}')
-# Convert the extracted value to a floating-point number using bc
-frontend_total_time=$(echo "$total_time_taken" | bc -l)
-# Round the floating-point value up to the nearest integer using bc
-# frontend_total_time=$(echo "scale=0; ($total_time_float + 0.5)/1" | bc)
+# Run the web crawler instances in parallel (example with num_instances=5)
+for i in $(seq "$num_instances"); do
+    python ./selenium/web_crawler.py "$workflow_path"/frontend.yml &
+done
+
+# Wait for all background processes to finish
+wait
+
+# Calculate the total execution time
+end_time=$(date +%s.%N)
+frontend_total_time=$(bc <<< "$end_time - $start_time")
 
 
 echo "---------------------------------------------"
 echo "Web Crawker test complete in $frontend_total_time seconds"
 echo "---------------------------------------------"
 
+echo "Frontend Test Duration: $frontend_total_time" >> "$output_folder/test_results.csv"
+
 echo "---------------------------------------------"
 echo "Testing workload generator, check duration of test"
 echo "---------------------------------------------"
 
-# Run the command and capture the output
-output=$(newman run "$workflow_path/workload.json" -n "$workload_iterations" 2>&1)
-echo "$output"
-# Extract and display the "total run duration"
-duration_line=$(echo "$output" | grep -o "total run duration: [0-9.]*s")
-if [ -z "$duration_line" ]; then
-    echo "Total run duration not found in the output."
-    exit 1  # Exit the script with an error status
-fi
-backend_total_time=$(echo "$duration_line" | awk '{print $4}' | sed 's/s//')
+# Record the start time
+start_time=$(date +%s.%N)
+
+# Run the backend monitoring instances in parallel (example with num_instances=5)
+for i in $(seq "$num_instances"); do
+    # Run the command and capture the output
+    output=$(newman run "$workflow_path/workload.json" -n "$workload_iterations" 2>&1)
+    echo "$output" > "$output_folder/$name/$i-backend-monitor.log" &
+
+    # Optionally, you can include logic to analyze the output, e.g., extract the "total run duration" line
+
+done
+
+# Wait for all background processes to finish
+wait
+
+# Calculate the total execution time
+end_time=$(date +%s.%N)
+backend_total_time=$(bc <<< "$end_time - $start_time")
 
 
 echo "---------------------------------------------"
 echo "Workgen test complete in $backend_total_time"
 echo "---------------------------------------------"
 
-output_csv="$output_folder/test_results.csv"
+echo "Frontend Test Duration: $frontend_total_time" >> "$output_folder/test_results.csv"
+
 
 ./shutdown.sh
+
 sleep 5
 
 # Loop over the number of iterations
 for (( i = 1; i <= iterations; i++ )); do
   prefix="["$name"-"$i"/"$((iterations))"]"
-  ./startup.sh "$1"
+  ./startup.sh "$architecture"
 
   sleep 5
 
@@ -148,9 +211,17 @@ for (( i = 1; i <= iterations; i++ )); do
   echo "$prefix Commencing workgen & monitoring for $backend_total_time seconds..."
   echo "---------------------------------------------"
   
+  # Function to run newman command
+  run_newman() {
+      output=$(newman run "$workflow_path/workload.json" -n "$workload_iterations" 2>&1)
+  }
+
+
   /Applications/Intel\ Power\ Gadget/PowerLog -duration "$backend_total_time" -resolution 1000 -file "$output_folder/$name/$i-api-monitor.csv"
-  output=$(newman run "$workflow_path/workload.json" -n "$workload_iterations" 2>&1)
-  echo "$output"
+  # Run multiple instances of newman in parallel
+  for i in $(seq "$num_instances"); do
+      run_newman &
+  done
 
   echo "---------------------------------------------"
   echo "$prefix API Monitoring complete"
@@ -173,10 +244,19 @@ for (( i = 1; i <= iterations; i++ )); do
 
   sleep "$sleep_time"
 
+  # Define a function to run the web crawler
+  run_web_crawler() {
+      python ./selenium/web_crawler.py "$workflow_path"/frontend.yml
+  }
 
-  python ./selenium/web_crawler.py "$workflow_path"/frontend.yml
+  # Run multiple instances in parallel
+  for i in $(seq "$num_instances"); do
+      run_web_crawler &
+  done
+
   /Applications/Intel\ Power\ Gadget/PowerLog -duration "$frontend_total_time" -resolution 1000 -file "$output_folder/$name/$i-frontend-monitor.csv"
 
+  wait 5
 
   echo "---------------------------------------------"
   echo "$prefix Monitoring complete"

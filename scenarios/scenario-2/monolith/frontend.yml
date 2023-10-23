@@ -1,0 +1,256 @@
+website_url: "http://localhost:8080/ticket-monster"
+window_size: "1920x1080"
+
+actions:
+  - action: navigate
+    target: Events
+
+  - action: navigate
+    target: Concert
+
+  - action: navigate
+    target: Rock concert of the decade
+
+  - action: select_dropdown
+    target: "Toronto : Roy Thomson Hall"
+    wait: 1
+
+  - action: click
+    target: Order tickets
+    wait: 1
+
+  - action: select_dropdown
+    target: A - Premier platinum reserve
+
+  - action: input
+    target: Number of tickets
+    value: 100
+
+  - action: click
+    target: Add tickets
+
+  - action: select_dropdown
+    target: B - Premier gold reserve
+
+  - action: input
+    target: Number of tickets
+    value: 100
+
+  - action: click
+    target: Add tickets
+
+  - action: select_dropdown
+    target: C - Premier silver reserve
+
+  - action: input
+    target: Number of tickets
+    value: 100
+
+  - action: click
+    target: Add tickets
+
+  - action: select_dropdown
+    target: D - General
+
+  - action: input
+    target: Number of tickets
+    value: 100
+
+  - action: click
+    target: Add tickets
+
+  - action: input
+    target: Email
+    value: "selenium_bot@email.com"
+
+  - action: click
+    target: Checkout
+    wait: 2
+
+  - action: navigate
+    target: About
+    wait: 3
+
+  - action: navigate
+    target: Events
+
+  - action: navigate
+    target: Theatre
+
+  - action: navigate
+    target: Shane's Sock Puppets
+
+  - action: select_dropdown
+    target: "Sydney : Sydney Opera House"
+    wait: 1
+
+  - action: click
+    target: Order tickets
+    wait: 1
+
+  - action: select_dropdown
+    target: S2 - Front centre
+
+  - action: input
+    target: Number of tickets
+    value: 30
+
+  - action: click
+    target: Add tickets
+
+  - action: select_dropdown
+    target: S1 - Front left
+
+  - action: input
+    target: Number of tickets
+    value: 30
+
+  - action: click
+    target: Add tickets
+
+  - action: select_dropdown
+    target: S4 - Rear left
+
+  - action: input
+    target: Number of tickets
+    value: 30
+
+  - action: click
+    target: Add tickets
+
+  - action: select_dropdown
+    target: S5 - Rear centre
+
+  - action: input
+    target: Number of tickets
+    value: 30
+
+  - action: click
+    target: Add tickets
+
+  - action: select_dropdown
+    target: S6 - Rear right
+
+  - action: input
+    target: Number of tickets
+    value: 30
+
+  - action: click
+    target: Add tickets
+
+  - action: select_dropdown
+    target: S7 - Balcony
+
+  - action: input
+    target: Number of tickets
+    value: 30
+
+  - action: click
+    target: Add tickets
+
+  - action: input
+    target: Email
+    value: "selenium_bot@email.com"
+
+  - action: click
+    target: Checkout
+    wait: 2
+
+  - action: navigate
+    target: Events
+    wait: 3
+
+  - action: navigate
+    target: Sporting
+
+  - action: navigate
+    target: Brazil vs. Italy
+
+  - action: select_dropdown
+    target: "Toronto : BMO Field"
+    wait: 1
+
+  - action: click
+    target: Order tickets
+    wait: 1
+
+  - action: select_dropdown
+    target: A - Premier platinum reserve
+
+  - action: input
+    target: Number of tickets
+    value: 100
+
+  - action: click
+    target: Add tickets
+
+  - action: select_dropdown
+    target: B - Premier gold reserve
+
+  - action: input
+    target: Number of tickets
+    value: 100
+
+  - action: click
+    target: Add tickets
+
+  - action: select_dropdown
+    target: C - Premier silver reserve
+
+  - action: input
+    target: Number of tickets
+    value: 100
+
+  - action: click
+    target: Add tickets
+
+  - action: select_dropdown
+    target: D - General
+
+  - action: input
+    target: Number of tickets
+    value: 100
+
+  - action: click
+    target: Add tickets
+
+  - action: input
+    target: Email
+    value: "selenium_bot@email.com"
+
+  - action: click
+    target: Checkout
+    wait: 2
+
+  - action: navigate
+    target: Bookings
+    wait: 3
+
+  - action: click-target
+    target: 'span[data-tm-role="delete"]'
+    wait: 1
+
+  - action: confirm-alert
+    wait: 1
+
+  - action: click-target
+    target: 'span[data-tm-role="delete"]'
+    wait: 1
+
+  - action: confirm-alert
+    wait: 1
+
+  - action: click-target
+    target: 'span[data-tm-role="delete"]'
+    wait: 1
+
+  - action: confirm-alert
+    wait: 1
+
+  - action: navigate
+    target: Monitor
+    wait: 3
+
+  - action: navigate
+    target: About
+    wait: 3

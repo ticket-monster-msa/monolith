@@ -7,6 +7,35 @@ echo "---------------------------------------------"
 echo "Checking prerequisites for experiment"
 echo "---------------------------------------------"
 
+# Initialize variables to store paths
+mono_frontend=""
+mono_backend=""
+micro_frontend=""
+micro_backend=""
+
+# Process command line arguments
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --mono_frontend=*)
+      mono_frontend="${1#*=}"
+      ;;
+    --mono_backend=*)
+      mono_backend="${1#*=}"
+      ;;
+    --micro_frontend=*)
+      micro_frontend="${1#*=}"
+      ;;
+    --micro_backend=*)
+      micro_backend="${1#*=}"
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
 
 # Array of commands/applications to check
 commands_to_check=(
@@ -36,21 +65,15 @@ fi
 echo "- Docker is running."
 
 
-# Check if the specified files exist
-files_to_check=(
-    "workflows/microservice/frontend.yml"
-    "workflows/microservice/workload.json"
-    "workflows/monolith/frontend.yml"
-    "workflows/monolith/workload.json"
-    "workflows/experiment.yml"
-)
+# Array of paths to check
+paths_to_check=("$mono_frontend" "$mono_backend" "$micro_frontend" "$micro_backend")
 
-for file in "${files_to_check[@]}"; do
-    if [ ! -f "$file" ]; then
-        echo "File $file does not exist."
+for path in "${paths_to_check[@]}"; do
+    if [ ! -f "$path" ]; then
+        echo "File $path does not exist."
         exit 1
     fi
-    echo "- File $file exists."
+    echo "- File $path exists."
 done
 
 echo "---------------------------------------------"
