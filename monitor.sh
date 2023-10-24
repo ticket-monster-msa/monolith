@@ -1,12 +1,4 @@
 #!/bin/bash
-# # How frequently Intel Power Gadget should sample (in milliseconds)
-# sampling_frequency=1000
-# # Default sleep time between monitoring
-# sleep_time=5
-# # Default number of iterations
-# default_iterations=1
-# # Iterations for workload generator
-# workload_iterations=200
 
 # Initialize variables
 architecture=""
@@ -51,7 +43,7 @@ done
 
 # Check for missing required options
 if [[ -z "$architecture" || -z "$iterations" || -z "$workload_iterations" || -z "$sleep_time" || -z "$output_folder" || -z "$sampling_frequency" ]]; then
-  echo "All of the following options are required: --architecture (--monolith || --microservice), --iterations, --workload_iterations, --sleep_time, --output, --sampling_frequency" >&2
+  echo "All of the following options are required: --architecture (--monolith || --microservice), --iterations (number), --workload_iterations (number), --sleep_time (number in seconds), --output (relative directory path), --sampling_frequency (number, default is 1000)" >&2
   exit 1
 fi
 
@@ -110,7 +102,7 @@ echo "---------------------------------------------"
 start_time=$(date +%s.%N)
 
 # Run the web crawler instances in parallel (example with num_instances=5)
-for i in $(seq "$num_instances"); do
+for index in $(seq "$num_instances"); do
     python ./selenium/web_crawler.py "$workflow_path"/frontend.yml &
 done
 
@@ -126,7 +118,7 @@ echo "---------------------------------------------"
 echo "Web Crawker test complete in $frontend_total_time seconds"
 echo "---------------------------------------------"
 
-echo "Frontend Test Duration: $frontend_total_time" >> "$output_folder/test_results.csv"
+echo "$name Frontend Test Duration: $frontend_total_time" >> "$output_folder/test_results.csv"
 
 echo "---------------------------------------------"
 echo "Testing workload generator, check duration of test"
@@ -135,14 +127,19 @@ echo "---------------------------------------------"
 # Record the start time
 start_time=$(date +%s.%N)
 
-# Run the backend monitoring instances in parallel (example with num_instances=5)
-for i in $(seq "$num_instances"); do
-    # Run the command and capture the output
+# Run the command and capture the output
+
+# output=$(newman run "$workflow_path/workload.json" -n "$workload_iterations" 2>&1)
+# echo "$output"
+
+# Function to run newman command
+run_newman() {
     output=$(newman run "$workflow_path/workload.json" -n "$workload_iterations" 2>&1)
-    echo "$output" > "$output_folder/$name/$i-backend-monitor.log" &
+}
 
-    # Optionally, you can include logic to analyze the output, e.g., extract the "total run duration" line
-
+# Run multiple instances of newman in parallel
+for index in $(seq "$num_instances"); do
+    run_newman &
 done
 
 # Wait for all background processes to finish
@@ -157,7 +154,7 @@ echo "---------------------------------------------"
 echo "Workgen test complete in $backend_total_time"
 echo "---------------------------------------------"
 
-echo "Frontend Test Duration: $frontend_total_time" >> "$output_folder/test_results.csv"
+echo "$name Backend Test Duration: $backend_total_time" >> "$output_folder/test_results.csv"
 
 
 ./shutdown.sh
@@ -219,9 +216,12 @@ for (( i = 1; i <= iterations; i++ )); do
 
   /Applications/Intel\ Power\ Gadget/PowerLog -duration "$backend_total_time" -resolution 1000 -file "$output_folder/$name/$i-api-monitor.csv"
   # Run multiple instances of newman in parallel
-  for i in $(seq "$num_instances"); do
+  for index in $(seq "$num_instances"); do
       run_newman &
   done
+
+  wait
+
 
   echo "---------------------------------------------"
   echo "$prefix API Monitoring complete"
@@ -250,13 +250,13 @@ for (( i = 1; i <= iterations; i++ )); do
   }
 
   # Run multiple instances in parallel
-  for i in $(seq "$num_instances"); do
+  for index in $(seq "$num_instances"); do
       run_web_crawler &
   done
 
   /Applications/Intel\ Power\ Gadget/PowerLog -duration "$frontend_total_time" -resolution 1000 -file "$output_folder/$name/$i-frontend-monitor.csv"
 
-  wait 5
+  wait
 
   echo "---------------------------------------------"
   echo "$prefix Monitoring complete"

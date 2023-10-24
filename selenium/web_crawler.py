@@ -3,10 +3,13 @@ import yaml
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.alert import Alert
+from selenium.common.exceptions import TimeoutException  # Import TimeoutException
 import time
 
-def execute_actions(driver, actions):
+def execute_actions(driver, actions, action_timeout=10):
     total_execution_time = 0
 
     for action in actions:
@@ -16,30 +19,44 @@ def execute_actions(driver, actions):
             value = action.get('value')
             wait_time = action.get('wait', 0)  # Default wait time is 0 seconds
             print("\nExecuting action: ", action)
+
             if wait_time > 0:
                 time.sleep(wait_time)
 
-            if action_type == 'navigate':
-                driver.find_element(By.LINK_TEXT, value=target).click()
+            try:
+                if action_type == 'navigate':
+                    WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.LINK_TEXT, target))
+                    ).click()
 
-            elif action_type == 'select_dropdown':
-                dropdown_element = driver.find_element(By.XPATH, value="//select")
-                dropdown = Select(dropdown_element)
-                dropdown.select_by_visible_text(target)
+                elif action_type == 'select_dropdown':
+                    dropdown_element = WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.XPATH, "//select"))
+                    )
+                    dropdown = Select(dropdown_element)
+                    dropdown.select_by_visible_text(target)
 
-            elif action_type == 'click':
-                driver.find_element(By.XPATH, value=f"//input[@value='{target}']").click()
+                elif action_type == 'click':
+                    WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.XPATH, f"//input[@value='{target}']"))
+                    ).click()
 
-            elif action_type == 'click-target':
-                driver.find_element(By.CSS_SELECTOR, target).click()
+                elif action_type == 'click-target':
+                    WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.CSS_SELECTOR, target))
+                    ).click()
 
-            elif action_type == 'confirm-alert':
-                alert = Alert(driver)
-                alert.accept()
+                elif action_type == 'confirm-alert':
+                    WebDriverWait(driver, action_timeout).until(EC.alert_is_present()).accept()
 
-            elif action_type == 'input':
-                input_element = driver.find_element(By.XPATH, value=f"//input[@placeholder='{target}']")
-                input_element.send_keys(value)
+                elif action_type == 'input':
+                    input_element = WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.XPATH, f"//input[@placeholder='{target}']"))
+                    )
+                    input_element.send_keys(value)
+
+            except TimeoutException as te:
+                print(f"Timeout executing action: {action}, {te}")
         except Exception as e:
             print("Error executing action: ", action)
             print(f"Error details: {e}")
