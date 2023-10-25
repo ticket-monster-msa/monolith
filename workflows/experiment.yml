@@ -4,7 +4,7 @@ experiments:
     sleep_time: 300
     output_folder: ./output
     sampling_frequency: 1000
-    num_instances: 10
+    num_instances: 5
     monolith_frontend_workflow: ./workflows/monolith/frontend.yml
     monolith_backend_workflow: ./workflows/monolith/workload.json
     microservice_frontend_workflow: ./workflows/microservice/frontend.yml
