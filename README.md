@@ -109,3 +109,118 @@ stateDiagram-v2
         if_more_iterations --> [*]: no
     }
 ```
+
+# UML Sequence Diagrams
+
+## Scenario 1
+
+```mermaid
+sequenceDiagram
+    title Scenario 1 - Light User Load Monolith
+
+    User->Monolithic Application: Browse Tickets
+    Monolithic Application->Database: Fetch Data
+    Database-->Monolithic Application: Data
+    Monolithic Application-->User: Data
+```
+
+```mermaid
+sequenceDiagram
+    title Scenario 1 - Light User Load Microservice
+    User->Frontend: Browse Tickets
+    Frontend->Orders Service: Request Tickets
+    Orders Service->Backend: Get Ticket Data
+    Backend->Database: Fetch Data
+    Database-->Backend: Data
+    Backend-->Orders Service: Data
+    Orders Service-->Frontend: Data
+    Frontend-->User: Data
+```
+
+## Scenario 2
+
+```mermaid
+sequenceDiagram
+    title Scenario 2 - Heavy User Load Monolith
+
+    User->Monolithic Application: Purchase Tickets
+    Monolithic Application->Database: Process Purchase
+    Database-->Monolithic Application: Data
+    User->Monolithic Application: Update Information
+    Monolithic Application->Database: Update Information
+    Database-->Monolithic Application: Updated Information
+    Monolithic Application-->User: Response
+```
+
+```mermaid
+sequenceDiagram
+    title Scenario 2 - Heavy User Load Microservice
+
+    User->Frontend: Purchase Tickets
+    Frontend->Orders Service: Create Order
+    Orders Service->Backend: Process Purchase
+    Backend->Database: Update Order
+    Database-->Backend: Order Data
+    Backend-->Orders Service: Order Data
+    Orders Service-->Frontend: Order Confirmation
+    Frontend->Frontend: Update Information
+    Frontend->Orders Service: Update User Information
+    Orders Service->Backend: Update User Info
+    Backend->Database: Update User Record
+    Database-->Backend: User Data
+    Backend-->Orders Service: User Data
+    Orders Service-->Frontend: Updated User Info
+    Frontend-->User: Response
+```
+
+## Scenario 3
+
+```mermaid
+sequenceDiagram
+    title Scenario 3 - Heavy Admin Load Monolith
+    Admin->Monolithic Application: Create Info
+    Monolithic Application->Database: Create Record
+    Database-->Monolithic Application: Record Created
+    Admin->Monolithic Application: Read Info
+    Monolithic Application->Database: Read Record
+    Database-->Monolithic Application: Record Data
+    Admin->Monolithic Application: Update Info
+    Monolithic Application->Database: Update Record
+    Database-->Monolithic Application: Record Updated
+    Admin->Monolithic Application: Delete Info
+    Monolithic Application->Database: Delete Record
+    Database-->Monolithic Application: Record Deleted
+```
+
+```mermaid
+sequenceDiagram
+    title Scenario 3 - Heavy Admin Load Microservice
+    Admin->Frontend: Create Info
+    Frontend->Orders Service: Create Record
+    Orders Service->Backend: Create Record
+    Backend->Database: Store Record
+    Database-->Backend: Record Created
+    Backend-->Orders Service: Record Created
+    Orders Service-->Frontend: Record Created
+    Admin->Frontend: Read Info
+    Frontend->Orders Service: Read Record
+    Orders Service->Backend: Retrieve Record
+    Backend->Database: Fetch Data
+    Database-->Backend: Record Data
+    Backend-->Orders Service: Record Data
+    Orders Service-->Frontend: Record Data
+    Admin->Frontend: Update Info
+    Frontend->Orders Service: Update Record
+    Orders Service->Backend: Update Record
+    Backend->Database: Modify Record
+    Database-->Backend: Record Updated
+    Backend-->Orders Service: Record Updated
+    Orders Service-->Frontend: Record Updated
+    Admin->Frontend: Delete Info
+    Frontend->Orders Service: Delete Record
+    Orders Service->Backend: Delete Record
+    Backend->Database: Remove Record
+    Database-->Backend: Record Deleted
+    Backend-->Orders Service: Record Deleted
+    Orders Service-->Frontend: Record Deleted
+```

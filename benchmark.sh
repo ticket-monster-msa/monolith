@@ -70,14 +70,14 @@ perform_experiment() {
 
   sleep 5
 
-  ./monitor.sh \
-    --monolith \
-    --iterations="$iterations" \
-    --workload_iterations="$workload_iterations" \
-    --sleep_time="$sleep_time" \
-    --output="$output_folder" \
-    --sampling_frequency="$sampling_frequency" \
-    --num_instances="$num_instances"
+ ./monitor.sh \
+  --monolith \
+  --iterations="$iterations" \
+  --workload_iterations="$workload_iterations" \
+  --sleep_time="$sleep_time" \
+  --output="$output_folder" \
+  --sampling_frequency="$sampling_frequency" \
+  --num_instances="$num_instances"
 
   ./shutdown.sh
 
