@@ -224,3 +224,83 @@ sequenceDiagram
     Backend-->Orders Service: Record Deleted
     Orders Service-->Frontend: Record Deleted
 ```
+
+## Detailed Sequence Diagram - Scenario 1
+
+```mermaid
+sequenceDiagram
+    title Scenario 1 - Light User Load Monolith
+
+    participant U as User
+    participant Api as API
+    participant App as Monolithic Application
+    participant DB as Database
+    %% participant Sel as Selenium
+
+    U->>App: Browse Tickets
+    App->>DB: Fetch Data
+    DB-->>App: Data
+    App-->>U: Data
+
+    U->>App: Navigate to 'Events'
+    App->>DB: Retrieve 'Events' data
+    DB-->>App: 'Events' data
+    App-->>U: Display 'Events' page
+
+    U->>App: Navigate to 'Concert'
+    App->>DB: Retrieve 'Concert' data
+    DB-->>App: 'Concert' data
+    App-->>U: Display 'Concert' page
+
+    U->>App: Navigate to 'Rock concert of the decade'
+    App->>DB: Retrieve 'Rock concert of the decade' data
+    DB-->>App: 'Rock concert of the decade' data
+    App-->>U: Display 'Rock concert of the decade' page
+
+    U->>App: Provide order details (e.g., email, dropdown, quantity)
+    App->>DB: Save order details
+    DB-->>App: Confirmation of order details
+    App-->>U: Order details processed
+
+    U->>App: Click 'Add tickets'
+    App->>DB: Add tickets to the order
+    DB-->>App: Ticket added
+    App-->>U: Tickets added to the order
+
+    U->>App: Click 'Checkout'
+    App->>DB: Process checkout
+    DB-->>App: Checkout completed
+    App-->>U: Checkout success
+
+    % API Testing Part
+
+    U->>Api: Get Events
+    Api->>DB: Retrieve Events
+    DB-->>Api: Events data
+    Api-->>U: Events retrieved
+
+    U->>Api: Get Event by ID
+    Api->>DB: Retrieve Event by ID
+    DB-->>Api: Event data
+    Api-->>U: Event by ID retrieved
+
+    U->>Api: Get Venues
+    Api->>DB: Retrieve Venues
+    DB-->>Api: Venues data
+    Api-->>U: Venues retrieved
+
+    U->>Api: Get Categories
+    Api->>DB: Retrieve Categories
+    DB-->>Api: Categories data
+    Api-->>U: Categories retrieved
+
+    U->>Api: Get Sections
+    Api->>DB: Retrieve Sections
+    DB-->>Api: Sections data
+    Api-->>U: Sections retrieved
+
+    U->>Api: Get Performances
+    Api->>DB: Retrieve Performances
+    DB-->>Api: Performances data
+    Api-->>U: Performances retrieved
+```
