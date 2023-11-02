@@ -304,3 +304,116 @@ sequenceDiagram
     DB-->>Api: Performances data
     Api-->>U: Performances retrieved
 ```
+
+```mermaid
+sequenceDiagram
+    title Scenario 1 - Microservices Architecture
+
+    participant U as User
+    participant Frontend as Frontend Service
+    participant Backend as Backend Service
+    participant Database as Database
+    participant Orders as Orders Service
+    participant API as API Service
+
+    U->>Frontend: Browse Tickets
+    Frontend->>Backend: Request Ticket Information
+    Backend->>Database: Fetch Data
+    Database-->>Backend: Data
+    Backend-->>Frontend: Ticket Information
+    Frontend-->>U: Display Ticket Information
+
+
+    U->>Frontend: Navigate to 'Events'
+    Frontend->>Backend: Request Events Data
+    Backend->>Database: Fetch Events Data
+    Database-->>Backend: Events Data
+    Backend-->>Frontend: Events Data
+    Frontend-->>U: Display 'Events' page
+
+    U->>Frontend: Navigate to 'Concert'
+    Frontend->>Backend: Request Concert Data
+    Backend->>Database: Fetch Concert Data
+    Database-->>Backend: Concert Data
+    Backend-->>Frontend: Concert Data
+    Frontend-->>U: Display 'Concert' page
+
+    U->>Frontend: Navigate to 'Rock concert of the decade'
+    Frontend->>Backend: Request Rock Concert Data
+    Backend->>Database: Fetch Rock Concert Data
+    Database-->>Backend: Rock Concert Data
+    Backend-->>Frontend: Rock Concert Data
+    Frontend-->>U: Display 'Rock concert of the decade' page
+
+    U->>Frontend: Provide order details (e.g., email, dropdown, quantity)
+    Frontend->>Backend: Submit Order Details
+    Backend->>Orders: Create Order
+    Orders->>Database: Save Order Details
+    Database-->>Orders: Order Details
+    Orders-->>Backend: Order Created
+    Backend-->>Frontend: Order Confirmation
+    Frontend-->>U: Order Confirmation
+
+    U->>Frontend: Click 'Add tickets'
+    Frontend->>Backend: Request Add Tickets
+    Backend->>Orders: Add Tickets to Order
+    Orders->>Database: Update Order
+    Database-->>Orders: Updated Order
+    Orders-->>Backend: Tickets Added
+    Backend-->>Frontend: Tickets Added
+    Frontend-->>U: Tickets Added
+
+    U->>Frontend: Click 'Checkout'
+    Frontend->>Backend: Request Checkout
+    Backend->>Orders: Process Checkout
+    Orders->>Database: Update Order Status
+    Database-->>Orders: Updated Order Status
+    Orders-->>Backend: Checkout Completed
+    Backend-->>Frontend: Checkout Success
+    Frontend-->>U: Checkout Success
+
+    % API Testing Part
+
+    U->>API: Get Events
+    API->>Backend: Request Events
+    Backend->>Database: Fetch Events Data
+    Database-->>Backend: Events Data
+    Backend-->>API: Events Data
+    API-->>U: Events Retrieved
+
+    U->>API: Get Event by ID
+    API->>Backend: Request Event by ID
+    Backend->>Database: Fetch Event Data by ID
+    Database-->>Backend: Event Data
+    Backend-->>API: Event Data
+    API-->>U: Event by ID Retrieved
+
+    U->>API: Get Venues
+    API->>Backend: Request Venues
+    Backend->>Database: Fetch Venues Data
+    Database-->>Backend: Venues Data
+    Backend-->>API: Venues Data
+    API-->>U: Venues Retrieved
+
+    U->>API: Get Categories
+    API->>Backend: Request Categories
+    Backend->>Database: Fetch Categories Data
+    Database-->>Backend: Categories Data
+    Backend-->>API: Categories Data
+    API-->>U: Categories Retrieved
+
+    U->>API: Get Sections
+    API->>Backend: Request Sections
+    Backend->>Database: Fetch Sections Data
+    Database-->>Backend: Sections Data
+    Backend-->>API: Sections Data
+    API-->>U: Sections Retrieved
+
+    U->>API: Get Performances
+    API->>Backend: Request Performances
+    Backend->>Database: Fetch Performances Data
+    Database-->>Backend: Performances Data
+    Backend-->>API: Performances Data
+    API-->>U: Performances Retrieved
+
+```
