@@ -1,0 +1,10 @@
+Ticket Monster Experiment: 02-11-23T18-53-06
+Number of Iterations: 30
+StartTimestamp: 02-11-23T18-53-06
+Workload Iterations: 50
+Sleep Time: 300
+Sampling Frequency: 1000
+Number of Instances: 5
+mono Frontend Test Duration: 48.0
+mono Backend Test Duration: 15.0
+Monolith Experiment: 03-11-23T06-26-52
