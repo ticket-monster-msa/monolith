@@ -17,6 +17,7 @@ def execute_actions(driver, actions, action_timeout=10):
             action_type = action['action']
             target = action.get('target')
             value = action.get('value')
+            values = action.get('values')
             wait_time = action.get('wait', 0)  # Default wait time is 0 seconds
             print("\nExecuting action: ", action)
 
@@ -36,6 +37,14 @@ def execute_actions(driver, actions, action_timeout=10):
                     dropdown = Select(dropdown_element)
                     dropdown.select_by_visible_text(target)
 
+                elif action_type == 'select_dropdown_by_xpath':
+                    dropdown_element = WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.XPATH, target))
+                    )
+                    dropdown = Select(dropdown_element)
+                    dropdown.select_by_visible_text(value)
+
+
                 elif action_type == 'click':
                     WebDriverWait(driver, action_timeout).until(
                         EC.presence_of_element_located((By.XPATH, f"//input[@value='{target}']"))
@@ -44,6 +53,11 @@ def execute_actions(driver, actions, action_timeout=10):
                 elif action_type == 'click-target':
                     WebDriverWait(driver, action_timeout).until(
                         EC.presence_of_element_located((By.CSS_SELECTOR, target))
+                    ).click()
+
+                elif action_type == 'click-target-xpath':
+                    WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.XPATH, target))
                     ).click()
 
                 elif action_type == 'confirm-alert':
