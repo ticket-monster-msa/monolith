@@ -417,3 +417,35 @@ sequenceDiagram
     API-->>U: Performances Retrieved
 
 ```
+
+## Some more sequence diagrams
+
+```mermaid
+sequenceDiagram
+  participant User
+  participant Monolith
+  participant Database
+
+  User->>Monolith: Purchase Ticket
+  Monolith->>Database: Process Purchase
+  Database-->>Monolith: Purchase Confirmation
+  Monolith-->>User: Display Purchase Confirmation
+```
+
+```mermaid
+sequenceDiagram
+  participant User
+  participant Frontend
+  participant Backend
+  participant OrdersService
+  participant Database
+
+  User->>Frontend: Purchase Ticket
+  Frontend->>Backend: Send Ticket Purchase Request
+  Backend->>OrdersService: Process Order
+  OrdersService->>Database: Save Order Information
+  Database-->>OrdersService: Order Confirmation
+  OrdersService-->>Backend: Purchase Confirmation
+  Backend-->>Frontend: Purchase Confirmation
+  Frontend-->>User: Display Purchase Confirmation
+```

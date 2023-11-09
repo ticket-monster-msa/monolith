@@ -1,5 +1,5 @@
 experiments:
-  - iterations: 2
+  - iterations: 30
     workload_iterations: 50
     sleep_time: 10
     output_folder: ./output
