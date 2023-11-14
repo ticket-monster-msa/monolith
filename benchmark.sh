@@ -66,55 +66,55 @@ perform_experiment() {
   echo "Commencing Monolith Experiment"
   echo "---------------------------------------------"
 
-  ./startup.sh --monolith
+#   ./startup.sh --monolith
 
-  sleep 5
+#   sleep 5
 
- ./monitor.sh \
-  --monolith \
-  --iterations="$iterations" \
-  --workload_iterations="$workload_iterations" \
-  --sleep_time="$sleep_time" \
-  --output="$output_folder" \
-  --sampling_frequency="$sampling_frequency" \
-  --num_instances="$num_instances"
+#  ./monitor.sh \
+#   --monolith \
+#   --iterations="$iterations" \
+#   --workload_iterations="$workload_iterations" \
+#   --sleep_time="$sleep_time" \
+#   --output="$output_folder" \
+#   --sampling_frequency="$sampling_frequency" \
+#   --num_instances="$num_instances"
 
-  ./shutdown.sh
+#   ./shutdown.sh
 
-  datetime=$(date +"%d-%m-%yT%H-%M-%S")
-  echo "Monolith Experiment: $datetime" >> "$output_folder/test_results.csv"
+#   datetime=$(date +"%d-%m-%yT%H-%M-%S")
+#   echo "Monolith Experiment: $datetime" >> "$output_folder/test_results.csv"
 
   echo "---------------------------------------------"
   echo "Monolith Experiment Complete"
   echo "---------------------------------------------"
 
-  # sleep 3
+  sleep 3
 
-  # echo "---------------------------------------------"
-  # echo "Commencing Microservice Experiment"
-  # echo "---------------------------------------------"
+  echo "---------------------------------------------"
+  echo "Commencing Microservice Experiment"
+  echo "---------------------------------------------"
 
-  # ./startup.sh --microservice
+  ./startup.sh --microservice
 
-  # sleep 5
+  sleep 5
 
-  # ./monitor.sh \
-  #   --microservice \
-  #   --iterations="$iterations" \
-  #   --workload_iterations="$workload_iterations" \
-  #   --sleep_time="$sleep_time" \
-  #   --output="$output_folder" \
-  #   --sampling_frequency="$sampling_frequency" \
-  #   --num_instances="$num_instances"
+  ./monitor.sh \
+    --microservice \
+    --iterations="$iterations" \
+    --workload_iterations="$workload_iterations" \
+    --sleep_time="$sleep_time" \
+    --output="$output_folder" \
+    --sampling_frequency="$sampling_frequency" \
+    --num_instances="$num_instances"
 
-  # ./shutdown.sh
+  ./shutdown.sh
 
-  # echo "---------------------------------------------"
-  # echo "Microservice Experiment Complete"
-  # echo "---------------------------------------------"
+  echo "---------------------------------------------"
+  echo "Microservice Experiment Complete"
+  echo "---------------------------------------------"
   
-  # datetime=$(date +"%d-%m-%yT%H-%M-%S")
-  # echo "Microservice Experiment: $datetime" >> "$output_folder/test_results.csv"
+  datetime=$(date +"%d-%m-%yT%H-%M-%S")
+  echo "Microservice Experiment: $datetime" >> "$output_folder/test_results.csv"
 
   pmset sleepnow
 }

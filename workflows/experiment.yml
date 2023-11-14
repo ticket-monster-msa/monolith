@@ -1,7 +1,7 @@
 experiments:
   - iterations: 30
     workload_iterations: 50
-    sleep_time: 10
+    sleep_time: 300
     output_folder: ./output
     sampling_frequency: 1000
     num_instances: 5
