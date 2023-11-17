@@ -1,11 +1,11 @@
 experiments:
-  - iterations: 30
+  - iterations: 2
     workload_iterations: 50
-    sleep_time: 300
+    sleep_time: 10
     output_folder: ./output
     sampling_frequency: 1000
     num_instances: 5
-    monolith_frontend_workflow: ./workflows/monolith/frontend.yml
-    monolith_backend_workflow: ./workflows/monolith/workload.json
-    microservice_frontend_workflow: ./workflows/microservice/frontend.yml
-    microservice_backend_workflow: ./workflows/microservice/workload.json
+    monolith_frontend_workflow: ./workflows/scenario-1/monolith/frontend.yml
+    monolith_backend_workflow: ./workflows/scenario-1/monolith/workload.json
+    microservice_frontend_workflow: ./workflows/scenario-1/microservice/frontend.yml
+    microservice_backend_workflow: ./workflows/scenario-1/microservice/workload.json

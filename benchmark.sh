@@ -55,6 +55,7 @@ perform_experiment() {
   echo "Number of Iterations: $iterations"
 
   echo "Ticket Monster Experiment: $datetime" >> "$output_folder/test_results.csv"
+  echo "Workflow Path: $monolith_frontend_workflow" >> "$output_folder/test_results.csv"
   echo "Number of Iterations: $iterations" >> "$output_folder/test_results.csv"
   echo "StartTimestamp: $datetime" >> "$output_folder/test_results.csv"
   echo "Workload Iterations: $workload_iterations" >> "$output_folder/test_results.csv" 
@@ -66,23 +67,27 @@ perform_experiment() {
   echo "Commencing Monolith Experiment"
   echo "---------------------------------------------"
 
-#   ./startup.sh --monolith
+  ./startup.sh --monolith
 
-#   sleep 5
+  sleep 5
 
-#  ./monitor.sh \
-#   --monolith \
-#   --iterations="$iterations" \
-#   --workload_iterations="$workload_iterations" \
-#   --sleep_time="$sleep_time" \
-#   --output="$output_folder" \
-#   --sampling_frequency="$sampling_frequency" \
-#   --num_instances="$num_instances"
+ ./monitor.sh \
+  --monolith \
+  --iterations="$iterations" \
+  --workload_iterations="$workload_iterations" \
+  --sleep_time="$sleep_time" \
+  --output="$output_folder" \
+  --sampling_frequency="$sampling_frequency" \
+  --num_instances="$num_instances" \
+  --frontend_workflow="$monolith_frontend_workflow" \
+  --backend_workflow="$monolith_backend_workflow" \
 
-#   ./shutdown.sh
+  ./shutdown.sh
 
-#   datetime=$(date +"%d-%m-%yT%H-%M-%S")
-#   echo "Monolith Experiment: $datetime" >> "$output_folder/test_results.csv"
+  exit;
+
+  datetime=$(date +"%d-%m-%yT%H-%M-%S")
+  echo "Monolith Experiment: $datetime" >> "$output_folder/test_results.csv"
 
   echo "---------------------------------------------"
   echo "Monolith Experiment Complete"
@@ -105,7 +110,9 @@ perform_experiment() {
     --sleep_time="$sleep_time" \
     --output="$output_folder" \
     --sampling_frequency="$sampling_frequency" \
-    --num_instances="$num_instances"
+    --num_instances="$num_instances" \
+    --frontend_workflow="$microservice_frontend_workflow" \
+    --backend_workflow="$microservice_backend_workflow" \
 
   ./shutdown.sh
 

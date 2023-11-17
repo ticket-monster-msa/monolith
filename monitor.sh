@@ -8,6 +8,8 @@ sleep_time=""
 output_folder=""
 sampling_frequency=""
 num_instances=5
+frontend_workflow=""
+backend_workflow=""
 
 # Process command line arguments
 while [[ $# -gt 0 ]]; do
@@ -33,6 +35,12 @@ while [[ $# -gt 0 ]]; do
     --num_instances=*)
       num_instances="${1#*=}"
       ;;
+    --frontend_workflow=*)
+      frontend_workflow="${1#*=}"
+      ;;
+    --backend_workflow=*)
+      backend_workflow="${1#*=}"
+      ;;
     *)
       echo "Unknown option: $1" >&2
       exit 1
@@ -42,8 +50,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Check for missing required options
-if [[ -z "$architecture" || -z "$iterations" || -z "$workload_iterations" || -z "$sleep_time" || -z "$output_folder" || -z "$sampling_frequency" ]]; then
-  echo "All of the following options are required: --architecture (--monolith || --microservice), --iterations (number), --workload_iterations (number), --sleep_time (number in seconds), --output (relative directory path), --sampling_frequency (number, default is 1000)" >&2
+if [[ -z "$architecture" || -z "$iterations" || -z "$workload_iterations" || -z "$sleep_time" || -z "$output_folder" || -z "$sampling_frequency" || -z "$frontend_workflow" || -z "$backend_workflow" ]]; then
+  echo "All of the following options are required: --architecture (--monolith || --microservice), --iterations (number), --workload_iterations (number), --sleep_time (number in seconds), --output (relative directory path), --sampling_frequency (number, default is 1000), --frontend_workflow (relative directory path), --backend_workflow (relative directory path)" >&2
   exit 1
 fi
 
@@ -54,17 +62,18 @@ echo "Workload Iterations: $workload_iterations"
 echo "Sleep Time: $sleep_time"
 echo "Output Folder: $output_folder"
 echo "Sampling Frequency: $sampling_frequency"
+echo "Number of Instances: $num_instances"
+echo "Frontend Workflow: $frontend_workflow"
+echo "Backend Workflow: $backend_workflow"
 
 output_csv="$output_folder/test_results.csv"
 
 # Checking parameters (whether its a monolith or microservice test)
 if [[ "$architecture" == "--monolith" ]]; then
   containers=("univaq-masters-thesis-monolith-1")
-  workflow_path="workflows/monolith"
   name="mono"
 elif [[ "$architecture" == "--microservice" ]]; then
   containers=("univaq-masters-thesis-tm-ui-v2-1" "univaq-masters-thesis-orders-service-1" "univaq-masters-thesis-backend-1")
-  workflow_path="workflows/microservice"
   name="micro"
 fi
 
@@ -103,7 +112,7 @@ start_time=$(date +%s.%N)
 
 # Run the web crawler instances in parallel (example with num_instances=5)
 for index in $(seq "$num_instances"); do
-    python ./selenium/web_crawler.py "$workflow_path"/frontend.yml &
+    python ./selenium/web_crawler.py "$frontend_workflow" &
 done
 
 # Wait for all background processes to finish
@@ -127,14 +136,9 @@ echo "---------------------------------------------"
 # Record the start time
 start_time=$(date +%s.%N)
 
-# Run the command and capture the output
-
-# output=$(newman run "$workflow_path/workload.json" -n "$workload_iterations" 2>&1)
-# echo "$output"
-
 # Function to run newman command
 run_newman() {
-    output=$(newman run "$workflow_path/workload.json" -n "$workload_iterations" 2>&1)
+    output=$(newman run "$backend_workflow" -n "$workload_iterations" 2>&1)
 }
 
 # Run multiple instances of newman in parallel
@@ -210,7 +214,7 @@ for (( i = 1; i <= iterations; i++ )); do
   
   # Function to run newman command
   run_newman() {
-      output=$(newman run "$workflow_path/workload.json" -n "$workload_iterations" 2>&1)
+      output=$(newman run "$backend_workflow" -n "$workload_iterations" 2>&1)
   }
 
 
@@ -246,7 +250,7 @@ for (( i = 1; i <= iterations; i++ )); do
 
   # Define a function to run the web crawler
   run_web_crawler() {
-      python ./selenium/web_crawler.py "$workflow_path"/frontend.yml
+      python ./selenium/web_crawler.py "$frontend_workflow"
   }
 
   # Run multiple instances in parallel
