@@ -84,8 +84,6 @@ perform_experiment() {
 
   ./shutdown.sh
 
-  exit;
-
   datetime=$(date +"%d-%m-%yT%H-%M-%S")
   echo "Monolith Experiment: $datetime" >> "$output_folder/test_results.csv"
 
