@@ -95,7 +95,7 @@ done
 
 echo "All containers are running. "
 
-sleep 10
+sleep 30
 
 echo "---------------------------------------------"
 echo "Commencing monitoring script"
