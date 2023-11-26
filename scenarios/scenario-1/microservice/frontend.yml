@@ -4,27 +4,28 @@ window_size: "1920x1080"
 actions:
   - action: navigate
     target: Events
+    wait: 5
 
   - action: navigate
-    target: Concert
+    target: Book tickets
+    wait: 2
 
-  - action: navigate
-    target: Rock concert of the decade
-
-  - action: select_dropdown
-    target: "Toronto : Roy Thomson Hall"
-    wait: 1
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="venueSelector"]'
+    wait: 2
 
   - action: click
     target: Order tickets
     wait: 1
 
-  - action: select_dropdown
-    target: A - Premier platinum reserve
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="sectionSelect"]'
+    wait: 4
 
   - action: input
     target: Number of tickets
-    value: 50
+    value: 25
+    wait: 1
 
   - action: click
     target: Add tickets

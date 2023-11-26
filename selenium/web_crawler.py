@@ -37,6 +37,33 @@ def execute_actions(driver, actions, action_timeout=10):
                         EC.presence_of_element_located((By.LINK_TEXT, target))
                     ).click()
                     action_successful = True
+
+                elif action_type == 'click':
+                    WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.XPATH, f"//input[@value='{target}']"))
+                    ).click()
+                    action_successful = True
+                
+                elif action_type == 'click_by_xpath':
+                    WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.XPATH, target))
+                    ).click()
+                    action_successful = True
+                    
+                
+                elif action_type == 'input':
+                    input_element = WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.XPATH, f"//input[@placeholder='{target}']"))
+                    )
+                    input_element.send_keys(value)
+                    action_successful = True
+
+                elif action_type == 'input_rand':
+                    input_element = WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.XPATH, f"//input[@placeholder='{target}']"))
+                    )
+                    input_element.send_keys(value + str(random.randint(1,1000)))
+                    action_successful = True
             
 
                 elif action_type == 'select_random_dropdown_option_by_xpath':
@@ -68,19 +95,6 @@ def execute_actions(driver, actions, action_timeout=10):
                         action_successful = True
                     else:
                         print("No non-default options available.")
-
-                elif action_type == 'click':
-                    WebDriverWait(driver, action_timeout).until(
-                        EC.presence_of_element_located((By.XPATH, f"//input[@value='{target}']"))
-                    ).click()
-                    action_successful = True
-          
-                elif action_type == 'input':
-                    input_element = WebDriverWait(driver, action_timeout).until(
-                        EC.presence_of_element_located((By.XPATH, f"//input[@placeholder='{target}']"))
-                    )
-                    input_element.send_keys(value)
-                    action_successful = True
 
             except TimeoutException as te:
                 print(f"Timeout executing action: {action}")

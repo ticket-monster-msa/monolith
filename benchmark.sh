@@ -25,7 +25,36 @@ output="./output"
 # Enable "exit on error" behavior
 set -e
 
+# Function to prompt user for confirmation
+confirm_experiment() {
+  read -p "This experiment runs with the following configurations:
+    - Number of Iterations: $iterations
+    - Workload Iterations: $workload_iterations
+    - Sleep Time: $sleep_time
+    - Output Folder: $output
+    - Sampling Frequency: $sampling_frequency
+    - Number of Instances: $num_instances
+    - Monolith Frontend workflow: $monolith_frontend_workflow
+    - Monolith Backend workflow: $monolith_backend_workflow
+    - Microservice Frontend workflow: $microservice_frontend_workflow
+    - Microservice Backend workflow: $microservice_backend_workflow
 
+Continue with the experiment? (y/n): " choice
+
+  case "$choice" in
+    y|Y )
+      echo "Starting the experiment..."
+      ;;
+    n|N )
+      echo "Experiment canceled by user. Exiting."
+      exit 1
+      ;;
+    * )
+      echo "Invalid choice. Please enter 'y' or 'n'."
+      confirm_experiment
+      ;;
+  esac
+}
 
 # Function to perform a single experiment
 perform_experiment() {
@@ -167,19 +196,11 @@ for ((i = 0; i < ${#experiments[@]}; i += 5)); do
   monolith_backend_workflow="${experiments[i+7]}"
   microservice_frontend_workflow="${experiments[i+8]}"
   microservice_backend_workflow="${experiments[i+9]}"
-
-
-  echo "Performing experiment with Iterations: $iterations"
-  echo "Workload Iterations: $workload_iterations"
-  echo "Sleep Time: $sleep_time"
-  echo "Output Folder: $output"
-  echo "Sampling Frequency: $sampling_frequency"
-  echo "Number of Instances: $num_instances"
-  echo "Monolith Frontend workflow: $monolith_frontend_workflow"
-  echo "Monolith Backend workflow: $monolith_backend_workflow"
-  echo "Microservice Frontend workflow: $microservice_frontend_workflow"
-  echo "Microservice Backend workflow: $microservice_backend_workflow"
-  # Call your perform_experiment function with these variables
+  
+  # Call the confirm_experiment function
+  confirm_experiment
+  
+  # Call the perform_experiment function with these variables
   perform_experiment
 
   break;

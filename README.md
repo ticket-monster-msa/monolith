@@ -449,3 +449,9 @@ sequenceDiagram
   Backend-->>Frontend: Purchase Confirmation
   Frontend-->>User: Display Purchase Confirmation
 ```
+
+## New Architecture
+
+```mermaid
+
+```
