@@ -5,10 +5,12 @@ actions:
   - action: navigate
     target: Events
     wait: 5
+    checkpoint: true
 
   - action: navigate
     target: Book tickets
     wait: 2
+    checkpoint: true
 
   - action: select_random_dropdown_option_by_xpath
     target: '//*[@id="venueSelector"]'
@@ -17,6 +19,7 @@ actions:
   - action: click
     target: Order tickets
     wait: 1
+    checkpoint: true
 
   - action: select_random_dropdown_option_by_xpath
     target: '//*[@id="sectionSelect"]'

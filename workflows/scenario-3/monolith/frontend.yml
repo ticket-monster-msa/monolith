@@ -5,6 +5,7 @@ actions:
   - action: navigate
     target: Administration
     wait: 5
+    checkpoint: true
 
   - action: click_by_xpath
     target: /html/body/div[1]/div[3]/div/div[1]/nav/div/a[12]
@@ -18,6 +19,7 @@ actions:
     target: "Enter the Venue Name"
     value: "Venue "
     wait: 1
+    checkpoint: true
 
   - action: select_random_dropdown_option_by_xpath
     target: '//*[@id="mediaItem"]'
@@ -52,10 +54,12 @@ actions:
   - action: click_by_xpath
     target: /html/body/div[1]/div[3]/div/div[1]/nav/div/a[10]
     wait: 1
+    checkpoint: true
 
   - action: click_by_xpath
     target: //*[@id="Create"]
     wait: 1
+    checkpoint: true
 
   - action: input_rand
     target: "Enter the TicketCategory Description"
@@ -66,10 +70,12 @@ actions:
 
   - action: click_by_xpath
     target: /html/body/div[1]/div[3]/div/div[1]/nav/div/a[2]
+    checkpoint: true
 
   - action: click_by_xpath
     target: //*[@id="Create"]
     wait: 1
+    checkpoint: true
 
   - action: input_rand
     target: "Enter the Event Name"
@@ -87,4 +93,29 @@ actions:
 
   - action: click_by_xpath
     target: //*[@id="saveEvent"]
+    wait: 1
+
+  - action: click_by_xpath
+    target: /html/body/div[1]/div[3]/div/div[1]/nav/div/a[8]
+    checkpoint: true
+
+  - action: click_by_xpath
+    target: //*[@id="Create"]
+    wait: 1
+    checkpoint: true
+
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="event"]'
+
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="performances"]'
+
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="venue"]'
+
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="ticketPrices"]'
+
+  - action: click_by_xpath
+    target: //*[@id="saveShow"]
     wait: 1

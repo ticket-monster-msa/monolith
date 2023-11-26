@@ -5,13 +5,16 @@ actions:
   - action: navigate
     target: Events
     wait: 5
+    checkpoint: true
 
   - action: navigate
     target: Book tickets
     wait: 2
+    checkpoint: true
 
   - action: select_random_dropdown_option_by_xpath
     target: '//*[@id="venueSelector"]'
+    checkpoint: true
 
   - action: select_random_dropdown_option_by_xpath
     target: '//*[@id="dayPicker"]'
@@ -23,6 +26,7 @@ actions:
   - action: select_random_dropdown_option_by_xpath
     target: '//*[@id="sectionSelect"]'
     wait: 4
+    checkpoint: true
 
   - action: input
     target: Number of tickets
@@ -42,6 +46,7 @@ actions:
   - action: navigate
     target: Events
     wait: 5
+    checkpoint: true
 
   - action: navigate
     target: Sporting
@@ -51,6 +56,7 @@ actions:
 
   - action: select_random_dropdown_option_by_xpath
     target: '//*[@id="venueSelector"]'
+    checkpoint: true
 
   - action: click
     target: Order tickets
@@ -78,6 +84,7 @@ actions:
   - action: navigate
     target: Events
     wait: 1
+    checkpoint: true
 
   - action: navigate
     target: Theatre
@@ -87,6 +94,7 @@ actions:
 
   - action: select_random_dropdown_option_by_xpath
     target: '//*[@id="venueSelector"]'
+    checkpoint: true
 
   - action: select_random_dropdown_option_by_xpath
     target: '//*[@id="dayPicker"]'

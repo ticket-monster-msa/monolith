@@ -15,6 +15,7 @@ max_retries = 3
 
 def execute_actions(driver, actions, action_timeout=10):
     total_execution_time = 0
+    checkpoints = []  # List to store checkpoints
 
     for action in actions:
         retries = 0
@@ -26,7 +27,7 @@ def execute_actions(driver, actions, action_timeout=10):
                 target = action.get('target')
                 value = action.get('value')
                 wait_time = action.get('wait', 0)  # Default wait time is 0 seconds
-                print("\n [", retries, "]Executing action: ", action)
+                print("\n[", retries, "]Executing action: ", action)
 
                 if wait_time > 0:
                     time.sleep(wait_time)
@@ -96,20 +97,32 @@ def execute_actions(driver, actions, action_timeout=10):
                     else:
                         print("No non-default options available.")
 
-            except TimeoutException as te:
-                print(f"Timeout executing action: {action}")
-                print("Retrying...")
-                driver.refresh()
-                retries += 1
-            except ElementClickInterceptedException as eci:
-                print(f"Error executing action: {action}, {eci}")
-                print("Element is not clickable, retrying...")
-                driver.refresh()
-                retries += 1
+            # except TimeoutException as te:
+            #     print(f"Timeout executing action: {action}")
+            #     print("Retrying...")
+            #     driver.refresh()
+            #     retries += 1
+            # except ElementClickInterceptedException as eci:
+            #     print(f"Error executing action: {action}, {eci}")
+            #     print("Element is not clickable, retrying...")
+            #     driver.refresh()
+            #     retries += 1
             except Exception as e:
                 print("Error executing action: ", action)
-                print(f"Error details: {e}")
-                break  # Break if any other unexpected error occurs
+
+                # If the action fails, go back to the most recent checkpoint
+                if checkpoints:
+                    print("Reverting to the most recent checkpoint...")
+                    driver.refresh()
+                    last_checkpoint = checkpoints.pop()
+                    driver.get(last_checkpoint)
+                    retries += 1
+                else:
+                    print("No checkpoints available. Exiting script.")
+                    break  # If there are no checkpoints, exit the script
+
+        if action.get('checkpoint'):
+            checkpoints.append(driver.current_url)  # Save the current URL as a checkpoint
 
         if not action_successful:
             print(f"Action failed after {max_retries} retries. Exiting script.")

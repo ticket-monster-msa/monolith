@@ -3,113 +3,119 @@ window_size: "1920x1080"
 
 actions:
   - action: navigate
-    target: Events
+    target: Administration
     wait: 5
+    checkpoint: true
 
-  - action: navigate
-    target: Book tickets
+  - action: click_by_xpath
+    target: /html/body/div[1]/div[3]/div/div[1]/nav/div/a[12]
     wait: 2
 
-  - action: select_random_dropdown_option_by_xpath
-    target: '//*[@id="venueSelector"]'
-
-  - action: select_random_dropdown_option_by_xpath
-    target: '//*[@id="dayPicker"]'
-
-  - action: click
-    target: Order tickets
+  - action: click_by_xpath
+    target: //*[@id="Create"]
     wait: 1
 
+  - action: input_rand
+    target: "Enter the Venue Name"
+    value: "Venue "
+    wait: 1
+    checkpoint: true
+
   - action: select_random_dropdown_option_by_xpath
-    target: '//*[@id="sectionSelect"]'
-    wait: 4
+    target: '//*[@id="mediaItem"]'
 
   - action: input
-    target: Number of tickets
-    value: 25
-    wait: 1
-
-  - action: click
-    target: Add tickets
-
-  - action: input
-    target: Email
-    value: "selenium_bot@email.com"
-
-  - action: click
-    target: Checkout
-
-  - action: navigate
-    target: Events
-    wait: 5
-
-  - action: navigate
-    target: Sporting
-
-  - action: navigate
-    target: "Brazil vs. Italy"
+    target: "Enter the Venue Description"
+    value: "Venue Description"
 
   - action: select_random_dropdown_option_by_xpath
-    target: '//*[@id="venueSelector"]'
-
-  - action: click
-    target: Order tickets
-    wait: 1
-
-  - action: select_random_dropdown_option_by_xpath
-    target: '//*[@id="sectionSelect"]'
-    wait: 4
+    target: '//*[@id="sections"]'
 
   - action: input
-    target: Number of tickets
-    value: 25
-    wait: 1
-
-  - action: click
-    target: Add tickets
+    target: "Enter the Venue Capacity"
+    value: "300"
 
   - action: input
-    target: Email
-    value: "selenium_bot@email.com"
-
-  - action: click
-    target: Checkout
-
-  - action: navigate
-    target: Events
-    wait: 1
-
-  - action: navigate
-    target: Theatre
-
-  - action: navigate
-    target: "Shane's Sock Puppets"
-
-  - action: select_random_dropdown_option_by_xpath
-    target: '//*[@id="venueSelector"]'
-
-  - action: select_random_dropdown_option_by_xpath
-    target: '//*[@id="dayPicker"]'
-
-  - action: click
-    target: Order tickets
-    wait: 1
-
-  - action: select_random_dropdown_option_by_xpath
-    target: '//*[@id="sectionSelect"]'
-    wait: 4
+    target: "Enter the Venue Street"
+    value: "20 Address road"
 
   - action: input
-    target: Number of tickets
-    value: 25
-    wait: 1
-
-  - action: click
-    target: Add tickets
+    target: "Enter the Venue City"
+    value: "Dublin"
 
   - action: input
-    target: Email
-    value: "selenium_bot@email.com"
+    target: "Enter the Venue Country"
+    value: "Ireland"
 
-  - action: click
-    target: Checkout
+  - action: click_by_xpath
+    target: //*[@id="saveVenue"]
+    wait: 1
+
+  - action: click_by_xpath
+    target: /html/body/div[1]/div[3]/div/div[1]/nav/div/a[10]
+    wait: 1
+    checkpoint: true
+
+  - action: click_by_xpath
+    target: //*[@id="Create"]
+    wait: 1
+    checkpoint: true
+
+  - action: input_rand
+    target: "Enter the TicketCategory Description"
+    value: "Student"
+
+  - action: click_by_xpath
+    target: //*[@id="saveTicketCategory"]
+
+  - action: click_by_xpath
+    target: /html/body/div[1]/div[3]/div/div[1]/nav/div/a[2]
+    checkpoint: true
+
+  - action: click_by_xpath
+    target: //*[@id="Create"]
+    wait: 1
+    checkpoint: true
+
+  - action: input_rand
+    target: "Enter the Event Name"
+    value: "Random Event "
+
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="mediaItem"]'
+
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="category"]'
+
+  - action: input_rand
+    target: "Enter the Event Description"
+    value: "Random Event Description"
+
+  - action: click_by_xpath
+    target: //*[@id="saveEvent"]
+    wait: 1
+
+  - action: click_by_xpath
+    target: /html/body/div[1]/div[3]/div/div[1]/nav/div/a[8]
+    checkpoint: true
+
+  - action: click_by_xpath
+    target: //*[@id="Create"]
+    wait: 1
+    checkpoint: true
+
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="event"]'
+
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="performances"]'
+
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="venue"]'
+
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="ticketPrices"]'
+
+  - action: click_by_xpath
+    target: //*[@id="saveShow"]
+    wait: 1

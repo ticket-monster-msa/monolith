@@ -6,7 +6,7 @@
 
 sleep 10
 
-num_instances=4
+num_instances=8
 
 # Run the web crawler instances in parallel (example with num_instances=5)
 for index in $(seq "$num_instances"); do
