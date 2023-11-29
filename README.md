@@ -12,105 +12,52 @@ The project is broken up into two parts: the monolith and the microservices. The
 
 ## 🥅 Goal
 
-The goal of this project is to compare the power consumption of the monolith and microservice architectures, using a bash script that utilises the [Docker Stats API](https://docs.docker.com/engine/api/v1.40/#operation/ContainerStats) to monitor the CPU usage of each running container, and subsequently to calculate the power consumption..
+The goal of this project is to compare the power consumption of the monolith and microservice architectures, using a collection of bash scripts that utilise [Selenium](https://www.selenium.dev/), [Docker](https://www.docker.com/), [Newman CLI](https://github.com/postmanlabs/newman) and the [Intel Power Gadget](https://www.intel.com/content/www/us/en/developer/articles/tool/power-gadget.html) API.
+
+## 📒 Prerequisites
+
+To run this project you will need the following installed on your system:
+
+- [Docker](https://www.docker.com/)
+- [Python](https://www.python.org/downloads/)
+- [newman](https://github.com/postmanlabs/newman)
+- [Intel Power Gadget](https://www.intel.com/content/www/us/en/developer/articles/tool/power-gadget.html)
 
 ## ✅ Getting started
 
-Two run either the monolith or the microservices, you will need to have Docker installed on your system. Various bash scripts have been created to `start`, `monitor` and `shutdown` both services.
+To run this project you will need to complete the following steps:
 
-### 💻 Available commands
+1. Clone this repository to your local machine
+2. Ensure all prerequisites are installed (See previous section)
+3. You will need to provide two files for **each** architecture:
+   - `frontend.yml` - Contains a list of instructions for Selenium to follow to navigate and execute tasks on the frontend
+   - `workload.json` - Contains a list of instructions for Newman to follow to execute tasks on the backend (This can be generated using the Postman GUI, and exported to a JSON file)
+   - You can see examples of both of these files in the `/workflows/scenario-1` directory.
+4. Edit the `/workflows/experiment.yml` file with your workflow paths and various other settings.
 
-- `./benchmark.sh --duration <duration> --iterations <iterations>` Runs the entire experiment for the specified duration (in seconds) and number of iterations. The results are saved in the `output` folder.
+> Steps 3 and 4 are only if you want to create your own experiment. The default configurations are already set up so you can skip these steps if you simply want to replicate!
 
-- `./startup.sh  [--monolith | --microservice | --all]` Starts either the monolith or microservices
+5. Run `./benchmark.sh` to initiate the experiment. It will check that all dependencies are installed, and ask you to confirm the configuration before starting.
 
-- `./monitor.sh [--monolith | --microservice] <duration (optional, defaults to 10s)> [--iterations <number of iterations (optional, defaults to 1)>]` Monitors the specified service for the specified number of iterations, and a specified duration (in seconds). The results are saved in the `output` folder
+### 💻 Available Scripts
 
+- `./benchmark.sh` Runs the entire experiment based on the configurations in the `/workflows/experiment.yml` file
+
+- `./startup.sh  [--monolith | --microservice | --all]` Starts either the monolith or microservices containers based on the docker compose files
 - `./shutdown.sh` Shuts down any running services
-
-### Useful commands for Dmon System
-
-Using the `v1dmon` system, the following commands are useful:
-
-- `go run dmon.go -i en0 -n bridge0 -f structure`
-- `flow -f workflows/workflow.yml -o output`
-- `./read_log.sh -f path_to_file.log` to see a cleaned up output of CPU usage by container
+- `./paralell.sh` Used to debug parallel Chrome instances using Selenium at the same time
+- `./monitor.sh [--monolith | --microservice] <duration (optional, defaults to 10s)> [--iterations <number of iterations (optional, defaults to 1)>]` Monitors the specified service for the specified number of iterations, and a specified duration (in seconds). The results are saved in the `output` folder
+- `./prereq.sh --mono_frontend="/X" --mono_backend="/Y" --micro_frontend="/Z" --micro_backend="/J"` Well check the paths and configuration of your experiment setup, and will check all dependencies are installed
 
 ### Selenium Commands
 
-Recently added selenium script can be run through instructed to navigate and perfrom actions on the website based on a yaml script. Can be run using the following command:
+Selenium can be tested separate of the entire experiment by navigating to the `selenium` directory and running the following command:
 
-`python3 web_crawler.py microservice-config.yaml`
+`python web_crawler.py microservice-config.yaml`
 
 > Make sure you have the dependencies installed first `pip install -r dependencies.txt`
 
-### State Diagram
-
-```mermaid
-stateDiagram-v2
-    direction LR
-    state if_more_iterations <<choice>>
-
-    check_prerequisite: Check Prereqsuities
-    install_dependencies: Install Dependencies
-    commence_monolith: Commence Monolith
-    commence_microservice: Commence Microservices
-    test_frontend_time: Test Frontend Time
-    test_backend_time: Test Backend Time
-
-    start_containers: Start Containers
-    shutdown_containers: Shutdown Containers
-    monitor_start_containers: Start Containers
-    monitor_shutdown_containers: Shutdown Containers
-
-    baseline_monitor_api: Baseline Monitor API
-    monitor_api: Monitor API
-    baseline_monitor_frontend: Baseline Monitor Frontend
-    monitor_frontend: Monitor Frontend
-    more_iterations: More Iterations?
-
-    sleep1: Sleep
-    sleep2: Sleep
-    sleep3: Sleep
-    sleep4: Sleep
-
-
-    [*] --> check_prerequisite
-    check_prerequisite --> install_dependencies
-    install_dependencies --> commence_monolith
-    install_dependencies --> commence_microservice
-    commence_monolith --> MonitorSetup
-    commence_microservice --> MonitorSetup
-
-    state MonitorSetup {
-        [*] --> start_containers
-        start_containers --> test_frontend_time
-        test_frontend_time --> test_backend_time
-        test_backend_time --> shutdown_containers
-        shutdown_containers --> [*]
-    }
-
-    MonitorSetup --> Monitor
-
-    state Monitor {
-        [*] --> monitor_start_containers
-        monitor_start_containers --> sleep1
-        sleep1 --> baseline_monitor_api
-        baseline_monitor_api --> sleep2
-        sleep2 --> monitor_api
-        monitor_api --> sleep3
-        sleep3 --> baseline_monitor_frontend
-        baseline_monitor_frontend --> sleep4
-        sleep4 --> monitor_frontend
-        monitor_frontend --> monitor_shutdown_containers
-        monitor_shutdown_containers --> more_iterations
-        more_iterations --> if_more_iterations
-        if_more_iterations --> monitor_start_containers: yes
-        if_more_iterations --> [*]: no
-    }
-```
-
-# UML Sequence Diagrams
+# UML Sequence Diagrams For each scenario
 
 ## Scenario 1
 
@@ -448,10 +395,4 @@ sequenceDiagram
   OrdersService-->>Backend: Purchase Confirmation
   Backend-->>Frontend: Purchase Confirmation
   Frontend-->>User: Display Purchase Confirmation
-```
-
-## New Architecture
-
-```mermaid
-
 ```
