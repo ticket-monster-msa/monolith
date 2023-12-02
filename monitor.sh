@@ -110,11 +110,13 @@ echo "---------------------------------------------"
 # Record the start time
 start_time=$(date +%s.%N)
 
-# Run the web crawler instances in parallel (example with num_instances=5)
-for index in $(seq "$num_instances"); do
-    python ./selenium/web_crawler.py "$frontend_workflow" &
-done
+./remote.sh --frontend $remote_machine_ip $current_machine_ip --num-instances $num_instances --frontend-workflow $frontend_workflow
+# # Run the web crawler instances in parallel (example with num_instances=5)
+# for index in $(seq "$num_instances"); do
+#     python ./selenium/web_crawler.py "$frontend_workflow" &
+# done
 
+exit;
 # Wait for all background processes to finish
 wait
 

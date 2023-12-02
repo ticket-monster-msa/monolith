@@ -9,3 +9,5 @@ experiments:
     monolith_backend_workflow: ./workflows/scenario-2/monolith/workload.json
     microservice_frontend_workflow: ./workflows/scenario-2/microservice/frontend.yml
     microservice_backend_workflow: ./workflows/scenario-2/microservice/workload.json
+    host_machine_ip: 192.168.178.218
+    remote_machine_ip: 192.168.178.16
