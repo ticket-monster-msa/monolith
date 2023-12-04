@@ -10,6 +10,10 @@ sampling_frequency=""
 num_instances=5
 frontend_workflow=""
 backend_workflow=""
+remote_machine_ip=""
+remote_machine_user=""
+remote_dir=""
+current_machine_ip=$(ipconfig getifaddr en0)
 
 # Process command line arguments
 while [[ $# -gt 0 ]]; do
@@ -40,6 +44,15 @@ while [[ $# -gt 0 ]]; do
       ;;
     --backend_workflow=*)
       backend_workflow="${1#*=}"
+      ;;
+    --remote_machine_ip=*)
+      remote_machine_ip="${1#*=}"
+      ;;
+    --remote_machine_user=*)
+      remote_machine_user="${1#*=}"
+      ;;
+    --remote_dir=*)
+      remote_dir="${1#*=}"
       ;;
     *)
       echo "Unknown option: $1" >&2
@@ -95,11 +108,29 @@ done
 
 echo "All containers are running. "
 
-sleep 30
+sleep 10
+
+echo "---------------------------------------------"
+echo "Commencing remote setup on $remote_machine_ip"
+echo "---------------------------------------------"
+
+mkdir ./remote
+cp $frontend_workflow remote
+cp $backend_workflow remote
+cp remote-execute.sh remote
+
+./remote-setup.sh --files_to_copy=./remote
+
+rm -rf ./remote
+
+sleep 10
 
 echo "---------------------------------------------"
 echo "Commencing monitoring script"
 echo "---------------------------------------------"
+
+
+./remote-execute.sh --remote_addr=$remote_machine_ip $current_machine_ip --num-instances $num_instances --frontend-workflow $frontend_workflow
 
 
 
@@ -110,7 +141,7 @@ echo "---------------------------------------------"
 # Record the start time
 start_time=$(date +%s.%N)
 
-./remote.sh --frontend $remote_machine_ip $current_machine_ip --num-instances $num_instances --frontend-workflow $frontend_workflow
+./remote-execute.sh --frontend $remote_machine_ip $current_machine_ip --num-instances $num_instances --frontend-workflow $frontend_workflow
 # # Run the web crawler instances in parallel (example with num_instances=5)
 # for index in $(seq "$num_instances"); do
 #     python ./selenium/web_crawler.py "$frontend_workflow" &
