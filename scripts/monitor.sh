@@ -122,12 +122,7 @@ echo "---------------------------------------------"
 # Record the start time
 start_time=$(date +%s.%N)
 
-echo "$PROJECT_DIR/scripts/host-execute.sh --frontend $num_instances --$name"
-exit
-# # Run the web crawler instances in parallel (example with num_instances=5)
-# for index in $(seq "$num_instances"); do
-#     python ./selenium/web_crawler.py "$frontend_workflow" &
-# done
+"$PROJECT_DIR"/scripts/host-execute.sh --frontend "$num_instances" --"$name"
 
 # Wait for all background processes to finish
 wait
@@ -142,7 +137,6 @@ echo "Web Crawker test complete in $frontend_total_time seconds"
 echo "---------------------------------------------"
 
 echo "$name Frontend Test Duration: $frontend_total_time" >> "$output_folder/test_results.csv"
-exit;
 
 echo "---------------------------------------------"
 echo "Testing workload generator, check duration of test"
@@ -169,7 +163,6 @@ wait
 end_time=$(date +%s.%N)
 backend_total_time=$(bc <<< "$end_time - $start_time")
 
-exit
 
 echo "---------------------------------------------"
 echo "Workgen test complete in $backend_total_time"
@@ -181,6 +174,7 @@ echo "$name Backend Test Duration: $backend_total_time" >> "$output_folder/test_
 $PROJECT_DIR/scripts/shutdown.sh
 
 sleep 5
+exit 1
 
 # Loop over the number of iterations
 for (( i = 1; i <= iterations; i++ )); do

@@ -29,15 +29,19 @@ run_frontend() {
 
   # Add your frontend-specific commands here
   # for index in $(seq "$NUM_INSTANCES"); do
-  
-  /usr/local/bin/python3 web_crawler.py "$architecture"_frontend.yml $HOST_IP &
+  #   /usr/local/bin/python3 web_crawler.py "$architecture"_frontend.yml $HOST_IP &
   # done
+
+  wait
 }
 
 # Function for backend experiment
 run_backend() {
   echo "Running backend function with $NUM_INSTANCES instances and $architecture ..."
   # Add your backend-specific commands here
+  
+  newman run "$backend_workflow" -n "$NUM_INSTANCES"
+  wait
 }
 
 # Check the experiment type and run the corresponding function

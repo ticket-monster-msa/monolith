@@ -159,7 +159,7 @@ if __name__ == "__main__":
     driver = webdriver.Chrome(options=chrome_options)
     driver.implicitly_wait(15)
 
-    driver.get(config['website_url'])
+    driver.get(website_url)
     time.sleep(1)
 
     start_time = time.time()

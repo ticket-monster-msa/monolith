@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Enable "exit on error" behavior
+set -e
+
 # Load environment variables from .env file
 if [ -f .env ]; then
   source .env
@@ -187,7 +190,6 @@ perform_experiment() {
   datetime=$(date +"%d-%m-%yT%H-%M-%S")
   echo "Microservice Experiment: $datetime" >> "$output_folder/test_results.csv"
 
-  pmset sleepnow
 }
 
 # Read the YAML configuration file using Python3

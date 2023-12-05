@@ -25,10 +25,11 @@ ARCHITECTURE=$3
 # Check the experiment type and execute the remote script
 case $EXPERIMENT_TYPE in
   "--frontend" | "--backend")
-    REMOTE_SCRIPT_PATH="$SSH_PATH/remote-files/remote-execute.sh"  # Specify the path to the script on the remote machine
-    SSH_COMMAND="ssh -i $SSH_KEY_PATH -o ConnectTimeout=10 $SSH_USER@$SSH_HOST \"bash -s\" <<EOF
+    SSH_COMMAND="ssh -i $SSH_KEY_PATH -o ConnectTimeout=10 $SSH_USER@$SSH_HOST \"/bin/zsh -i -s\" <<EOF
+      export PATH=$PATH:/usr/local/bin
       cd $SSH_PATH/remote-files/
-      $REMOTE_SCRIPT_PATH $EXPERIMENT_TYPE $NUM_INSTANCES $ARCHITECTURE
+      ./remote-execute.sh $EXPERIMENT_TYPE $NUM_INSTANCES $ARCHITECTURE
+      exit
 EOF"
 
     echo "Executing remote script..."
