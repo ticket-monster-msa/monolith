@@ -19,7 +19,8 @@ The goal of this project is to compare the power consumption of the monolith and
 To run this project you will need the following installed on your system:
 
 - [Docker](https://www.docker.com/)
-- [Python](https://www.python.org/downloads/)
+- [Python3](https://www.python.org/downloads/)
+- jq (`sudo apt-get install jq -y`)
 - [newman](https://github.com/postmanlabs/newman)
 - [Intel Power Gadget](https://www.intel.com/content/www/us/en/developer/articles/tool/power-gadget.html)
 

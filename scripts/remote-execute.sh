@@ -4,23 +4,39 @@
 set -e
 
 # Check the number of command-line arguments
-if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 [--frontend | --backend]"
+if [ "$#" -ne 3 ]; then
+  echo "Usage: $0 [--frontend | --backend] <num_instances> [--mono | --micro]"
   exit 1
 fi
 
-# Parse command-line argument
+# Parse command-line arguments
 EXPERIMENT_TYPE=$1
+NUM_INSTANCES=$2
+ARCHITECTURE_FLAG=$3
+architecture=${ARCHITECTURE_FLAG:2}
+
+# Load environment variables from .env file
+if [ -f .env ]; then
+  source .env
+else
+  echo "Error: .env file not found."
+  exit 1
+fi
 
 # Function for frontend experiment
 run_frontend() {
-  echo "Running frontend function..."
+  echo "Running frontend function with $NUM_INSTANCES instances and $architecture ..."
+
   # Add your frontend-specific commands here
+  # for index in $(seq "$NUM_INSTANCES"); do
+  
+  /usr/local/bin/python3 web_crawler.py "$architecture"_frontend.yml $HOST_IP &
+  # done
 }
 
 # Function for backend experiment
 run_backend() {
-  echo "Running backend function..."
+  echo "Running backend function with $NUM_INSTANCES instances and $architecture ..."
   # Add your backend-specific commands here
 }
 
@@ -33,7 +49,7 @@ case $EXPERIMENT_TYPE in
     run_backend
     ;;
   *)
-    echo "Invalid experiment type. Usage: $0 [--frontend | --backend]"
+    echo "Invalid experiment type. Usage: $0 [--frontend | --backend] <num_instances> [--mono | --micro]"
     exit 1
     ;;
 esac

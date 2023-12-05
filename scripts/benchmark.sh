@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Enable "exit on error" behavior
-set -e
-
 # Load environment variables from .env file
 if [ -f .env ]; then
   source .env
@@ -91,21 +88,21 @@ perform_experiment() {
     rm -r $PROJECT_DIR/remote-files/*
   fi
 
-  cp $monolith_frontend_workflow $PROJECT_DIR/remote-files
-  cp $monolith_backend_workflow $PROJECT_DIR/remote-files
-  cp $microservice_frontend_workflow $PROJECT_DIR/remote-files
-  cp $microservice_backend_workflow $PROJECT_DIR/remote-files
+  cp $monolith_frontend_workflow $PROJECT_DIR/remote-files/mono_frontend.yml
+  cp $monolith_backend_workflow $PROJECT_DIR/remote-files/mono_workload.json
+  cp $microservice_frontend_workflow $PROJECT_DIR/remote-files/micro_frontend.yml
+  cp $microservice_backend_workflow $PROJECT_DIR/remote-files/micro_workload.json
   cp $PROJECT_DIR/selenium/web_crawler.py $PROJECT_DIR/remote-files
   cp $PROJECT_DIR/selenium/dependencies.txt $PROJECT_DIR/remote-files
   cp $PROJECT_DIR/workflows/experiment.yml $PROJECT_DIR/remote-files
   cp $PROJECT_DIR/scripts/remote-setup.sh $PROJECT_DIR/remote-files
   cp $PROJECT_DIR/scripts/remote-execute.sh $PROJECT_DIR/remote-files
-
+  touch $PROJECT_DIR/remote-files/.env
+  # Store the result of the command in the variable
+  ipv4_address=$(hostname -I | cut -d' ' -f1)
+  echo "HOST_IP=$ipv4_address" > $PROJECT_DIR/remote-files/.env
   $PROJECT_DIR/scripts/host-setup.sh --files=$PROJECT_DIR/remote-files
 
-  exit 1;
-
-  # pip install -r $PROJECT_DIR/selenium/dependencies.txt
 
   datetime=$(date +"%d-%m-%yT%H-%M-%S")
   output_folder="$output/$datetime"
@@ -136,7 +133,6 @@ perform_experiment() {
   echo "---------------------------------------------"
   echo "Commencing Monolith Experiment"
   echo "---------------------------------------------"
-
   $PROJECT_DIR/scripts/startup.sh --monolith
 
   sleep 5
@@ -152,7 +148,7 @@ perform_experiment() {
   --frontend_workflow="$monolith_frontend_workflow" \
   --backend_workflow="$monolith_backend_workflow" \
 
-  $PROJECT_DIR/shutdown.sh
+  $PROJECT_DIR/scripts/shutdown.sh
 
   datetime=$(date +"%d-%m-%yT%H-%M-%S")
   echo "Monolith Experiment: $datetime" >> "$output_folder/test_results.csv"
@@ -194,8 +190,8 @@ perform_experiment() {
   pmset sleepnow
 }
 
-# Read the YAML configuration file using Python
-json_data=$(python -c '
+# Read the YAML configuration file using Python3
+json_data=$(python3 -c '
 import yaml
 import json
 import os

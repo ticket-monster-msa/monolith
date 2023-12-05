@@ -3,6 +3,14 @@
 # Enable "exit on error" behavior
 set -e
 
+# Load environment variables from .env file
+if [ -f .env ]; then
+  source .env
+else
+  echo "Error: .env file not found."
+  exit 1
+fi
+
 # Initialize variables
 architecture=""
 iterations=""
@@ -16,7 +24,6 @@ backend_workflow=""
 remote_machine_ip=""
 remote_machine_user=""
 remote_dir=""
-current_machine_ip=$(ipconfig getifaddr en0)
 
 # Process command line arguments
 while [[ $# -gt 0 ]]; do
@@ -71,17 +78,6 @@ if [[ -z "$architecture" || -z "$iterations" || -z "$workload_iterations" || -z 
   exit 1
 fi
 
-# Use the extracted values in your script
-echo "Architecture: $architecture"
-echo "Iterations: $iterations"
-echo "Workload Iterations: $workload_iterations"
-echo "Sleep Time: $sleep_time"
-echo "Output Folder: $output_folder"
-echo "Sampling Frequency: $sampling_frequency"
-echo "Number of Instances: $num_instances"
-echo "Frontend Workflow: $frontend_workflow"
-echo "Backend Workflow: $backend_workflow"
-
 output_csv="$output_folder/test_results.csv"
 
 # Checking parameters (whether its a monolith or microservice test)
@@ -117,11 +113,6 @@ echo "---------------------------------------------"
 echo "Commencing monitoring script"
 echo "---------------------------------------------"
 
-$PROJECT_DIR/scripts/host-execute.sh --frontend
-
-
-exit 1;
-
 
 
 echo "---------------------------------------------"
@@ -131,13 +122,13 @@ echo "---------------------------------------------"
 # Record the start time
 start_time=$(date +%s.%N)
 
-$PROJECT_DIR/scripts/remote-execute.sh --frontend $remote_machine_ip $current_machine_ip --num-instances $num_instances --frontend-workflow $frontend_workflow
+echo "$PROJECT_DIR/scripts/host-execute.sh --frontend $num_instances --$name"
+exit
 # # Run the web crawler instances in parallel (example with num_instances=5)
 # for index in $(seq "$num_instances"); do
 #     python ./selenium/web_crawler.py "$frontend_workflow" &
 # done
 
-exit;
 # Wait for all background processes to finish
 wait
 
@@ -151,6 +142,7 @@ echo "Web Crawker test complete in $frontend_total_time seconds"
 echo "---------------------------------------------"
 
 echo "$name Frontend Test Duration: $frontend_total_time" >> "$output_folder/test_results.csv"
+exit;
 
 echo "---------------------------------------------"
 echo "Testing workload generator, check duration of test"
@@ -160,14 +152,15 @@ echo "---------------------------------------------"
 start_time=$(date +%s.%N)
 
 # Function to run newman command
-run_newman() {
-    output=$(newman run "$backend_workflow" -n "$workload_iterations" 2>&1)
-}
+$PROJECT_DIR/scripts/remote-execute.sh --backend $num_instances --"$name"
+# run_newman() {
+#     output=$(newman run "$backend_workflow" -n "$workload_iterations" 2>&1)
+# }
 
-# Run multiple instances of newman in parallel
-for index in $(seq "$num_instances"); do
-    run_newman &
-done
+# # Run multiple instances of newman in parallel
+# for index in $(seq "$num_instances"); do
+#     run_newman &
+# done
 
 # Wait for all background processes to finish
 wait
@@ -176,6 +169,7 @@ wait
 end_time=$(date +%s.%N)
 backend_total_time=$(bc <<< "$end_time - $start_time")
 
+exit
 
 echo "---------------------------------------------"
 echo "Workgen test complete in $backend_total_time"

@@ -4,8 +4,8 @@
 set -e
 
 # Check the number of command-line arguments
-if [ "$#" -lt 1 ]; then
-  echo "Usage: $0 <experiment_type>"
+if [ "$#" -lt 3 ]; then
+  echo "Usage: $0 [--frontend | --backend] <num_instances> [--mono | --micro]"
   exit 1
 fi
 
@@ -17,15 +17,18 @@ else
   exit 1
 fi
 
-# Parse command-line argument
+# Parse command-line arguments
 EXPERIMENT_TYPE=$1
+NUM_INSTANCES=$2
+ARCHITECTURE=$3
 
 # Check the experiment type and execute the remote script
 case $EXPERIMENT_TYPE in
   "--frontend" | "--backend")
     REMOTE_SCRIPT_PATH="$SSH_PATH/remote-files/remote-execute.sh"  # Specify the path to the script on the remote machine
     SSH_COMMAND="ssh -i $SSH_KEY_PATH -o ConnectTimeout=10 $SSH_USER@$SSH_HOST \"bash -s\" <<EOF
-      $REMOTE_SCRIPT_PATH $EXPERIMENT_TYPE
+      cd $SSH_PATH/remote-files/
+      $REMOTE_SCRIPT_PATH $EXPERIMENT_TYPE $NUM_INSTANCES $ARCHITECTURE
 EOF"
 
     echo "Executing remote script..."
@@ -38,7 +41,7 @@ EOF"
     fi
     ;;
   *)
-    echo "Invalid experiment type. Usage: $0 [--frontend | --backend]"
+    echo "Invalid experiment type. Usage: $0 [--frontend | --backend] <num_instances> [--mono | --micro]"
     exit 1
     ;;
 esac

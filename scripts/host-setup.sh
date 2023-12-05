@@ -42,13 +42,12 @@ if [[ -z "$SSH_KEY_PATH" || -z "$SSH_PATH" || -z "$SSH_USER" || -z "$SSH_HOST" ]
   exit 1
 fi
 
-
 # Copy files to the remote machine
 echo "Copying files to remote machine..."
 
 ssh_uri="$SSH_USER@$SSH_HOST:$SSH_PATH"
 
-rsync -avz -e "ssh -i $SSH_KEY_PATH" "$files" "$ssh_uri/"
+rsync -avz -e "ssh -o ConnectTimeout=10 -i $SSH_KEY_PATH" "$files" "$ssh_uri/"
 
 # Check the exit status of the rsync command
 if [ $? -ne 0 ]; then
@@ -57,8 +56,13 @@ if [ $? -ne 0 ]; then
 fi
 
 # execute the remote-setup.sh script on the remote machine
-ssh -i "$SSH_KEY_PATH" "$SSH_USER@$SSH_HOST" "cd $SSH_PATH/remote-files && ./remote-setup.sh"
+SSH_COMMAND="ssh -i $SSH_KEY_PATH -o ConnectTimeout=10 $SSH_USER@$SSH_HOST \"/bin/zsh -s\" <<EOF
+      cd $SSH_PATH/remote-files/
+      ./remote-setup.sh
+      exit
+EOF"
 
+eval "$SSH_COMMAND"
 
 echo "Files copied to remote machine."
 echo "Script executed successfully."

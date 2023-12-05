@@ -39,9 +39,8 @@ done
 
 # Array of commands/applications to check
 commands_to_check=(
-    "/Applications/Intel Power Gadget/PowerLog:PowerLog application"
-    "newman:Newman (Postman command-line tool)"
-    "python:Python"
+    "powerstat:PowerStat"
+    "python3:Python3"
     "docker:Docker"
 )
 

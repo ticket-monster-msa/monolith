@@ -10,6 +10,7 @@ from selenium.webdriver.common.alert import Alert
 from selenium.common.exceptions import TimeoutException  # Import TimeoutException
 from selenium.common.exceptions import ElementClickInterceptedException
 import time
+import os
 
 max_retries = 3
 
@@ -132,13 +133,24 @@ def execute_actions(driver, actions, action_timeout=10):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Execute actions based on YAML configuration.")
-    parser.add_argument("config_path", help="Path to the YAML configuration file")
+
+    parser = argparse.ArgumentParser(description="Your script description here.")
+    parser.add_argument("config_path", type=str, help="Path to the configuration file")
+    parser.add_argument("host_ip", type=str, help="Host IP address")
 
     args = parser.parse_args()
 
     with open(args.config_path, "r") as config_file:
         config = yaml.safe_load(config_file)
+    
+    host_ip = args.host_ip
+
+    website_url = config['website_url']
+
+    if host_ip:
+        website_url = website_url.replace('localhost', host_ip)
+
+    print(f"Opening website: {website_url}")
 
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--incognito")
