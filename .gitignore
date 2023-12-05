@@ -12,3 +12,5 @@ v1dmon/*
 output/*
 .DS_STORE
 .env
+id_rsa
+remote-files/*

@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Enable "exit on error" behavior
+set -e
+
+# Load environment variables from .env file
+if [ -f .env ]; then
+  source .env
+else
+  echo "Error: .env file not found."
+  exit 1
+fi
+
 # How frequently Intel Power Gadget should sample (in milliseconds)
 sampling_frequency=1000
 # Default sleep time between monitoring
@@ -12,14 +23,15 @@ workload_iterations=200
 num_instances=5
 
 # Workflow files
-monolith_frontend_workflow="./workflows/monolith/frontend.yml"
-monolith_backend_workflow="./workflows/monolith/workload.json"
-microservice_frontend_workflow="./workflows/microservice/frontend.yml"
-microservice_backend_workflow="./workflows/microservice/workload.json"
+
+monolith_frontend_workflow="$PROJECT_DIR/workflows/monolith/frontend.yml"
+monolith_backend_workflow="$PROJECT_DIR/workflows/monolith/workload.json"
+microservice_frontend_workflow="$PROJECT_DIR/workflows/microservice/frontend.yml"
+microservice_backend_workflow="$PROJECT_DIR/workflows/microservice/workload.json"
 
 
 # Output
-output="./output"
+output="$PROJECT_DIR/output"
 
 
 # Enable "exit on error" behavior
@@ -58,13 +70,42 @@ Continue with the experiment? (y/n): " choice
 
 # Function to perform a single experiment
 perform_experiment() {
-  ./prereq.sh \
+  $PROJECT_DIR/scripts/prereq.sh \
     --mono_frontend="$monolith_frontend_workflow" \
     --mono_backend="$monolith_backend_workflow" \
     --micro_frontend="$microservice_frontend_workflow" \
     --micro_backend="$microservice_backend_workflow"
 
-  pip install -r ./selenium/dependencies.txt
+  echo "---------------------------------------------"
+  echo "Commencing remote setup"
+  echo "---------------------------------------------"
+
+  # check if remote files directory exists
+  if [ ! -d "$PROJECT_DIR/remote-files" ]; then
+    mkdir "$PROJECT_DIR"/remote-files
+  fi
+
+  # check if any existing files
+  if [ "$(ls -A $PROJECT_DIR/remote-files)" ]; then
+    echo "remote-files directory is not empty. Clearing directory..."
+    rm -r $PROJECT_DIR/remote-files/*
+  fi
+
+  cp $monolith_frontend_workflow $PROJECT_DIR/remote-files
+  cp $monolith_backend_workflow $PROJECT_DIR/remote-files
+  cp $microservice_frontend_workflow $PROJECT_DIR/remote-files
+  cp $microservice_backend_workflow $PROJECT_DIR/remote-files
+  cp $PROJECT_DIR/selenium/web_crawler.py $PROJECT_DIR/remote-files
+  cp $PROJECT_DIR/selenium/dependencies.txt $PROJECT_DIR/remote-files
+  cp $PROJECT_DIR/workflows/experiment.yml $PROJECT_DIR/remote-files
+  cp $PROJECT_DIR/scripts/remote-setup.sh $PROJECT_DIR/remote-files
+  cp $PROJECT_DIR/scripts/remote-execute.sh $PROJECT_DIR/remote-files
+
+  $PROJECT_DIR/scripts/host-setup.sh --files=$PROJECT_DIR/remote-files
+
+  exit 1;
+
+  # pip install -r $PROJECT_DIR/selenium/dependencies.txt
 
   datetime=$(date +"%d-%m-%yT%H-%M-%S")
   output_folder="$output/$datetime"
@@ -96,11 +137,11 @@ perform_experiment() {
   echo "Commencing Monolith Experiment"
   echo "---------------------------------------------"
 
-  ./startup.sh --monolith
+  $PROJECT_DIR/scripts/startup.sh --monolith
 
   sleep 5
 
- ./monitor.sh \
+ $PROJECT_DIR/scripts/monitor.sh \
   --monolith \
   --iterations="$iterations" \
   --workload_iterations="$workload_iterations" \
@@ -111,7 +152,7 @@ perform_experiment() {
   --frontend_workflow="$monolith_frontend_workflow" \
   --backend_workflow="$monolith_backend_workflow" \
 
-  ./shutdown.sh
+  $PROJECT_DIR/shutdown.sh
 
   datetime=$(date +"%d-%m-%yT%H-%M-%S")
   echo "Monolith Experiment: $datetime" >> "$output_folder/test_results.csv"
@@ -126,11 +167,11 @@ perform_experiment() {
   echo "Commencing Microservice Experiment"
   echo "---------------------------------------------"
 
-  ./startup.sh --microservice
+  $PROJECT_DIR/scripts/startup.sh --microservice
 
   sleep 5
 
-  ./monitor.sh \
+  $PROJECT_DIR/scripts/monitor.sh \
     --microservice \
     --iterations="$iterations" \
     --workload_iterations="$workload_iterations" \
@@ -141,7 +182,7 @@ perform_experiment() {
     --frontend_workflow="$microservice_frontend_workflow" \
     --backend_workflow="$microservice_backend_workflow" \
 
-  ./shutdown.sh
+  $PROJECT_DIR/scripts/shutdown.sh
 
   echo "---------------------------------------------"
   echo "Microservice Experiment Complete"
@@ -157,8 +198,11 @@ perform_experiment() {
 json_data=$(python -c '
 import yaml
 import json
+import os
 
-data = yaml.safe_load(open("./workflows/experiment.yml", "r"))
+relative_file_path = os.path.join("workflows", "experiment.yml")
+
+data = yaml.safe_load(open(relative_file_path, "r"))
 
 # Filter and convert the data to JSON for easy parsing in Bash
 filtered_data = [

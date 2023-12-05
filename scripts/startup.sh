@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Enable "exit on error" behavior
+set -e
+
 echo "Commencing startup"
 
 if [[ "$1" == "--all" ]]; then
@@ -30,5 +33,5 @@ if [[ "$2" == "--monitor" ]]; then
 
   # Call the monitor script based on the same flag and duration
   echo "Running monitor script for $duration seconds..."
-  ./monitor.sh "$1" "$duration"
+  $PROJECT_DIR/scripts/monitor.sh "$1" "$duration"
 fi

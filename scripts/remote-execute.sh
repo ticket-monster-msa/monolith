@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Enable "exit on error" behavior
+set -e
+
 # Check the number of command-line arguments
 if [ "$#" -ne 1 ]; then
   echo "Usage: $0 [--frontend | --backend]"

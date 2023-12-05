@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Enable "exit on error" behavior
+set -e
+
 # Initialize variables
 architecture=""
 iterations=""
@@ -111,26 +114,13 @@ echo "All containers are running. "
 sleep 10
 
 echo "---------------------------------------------"
-echo "Commencing remote setup on $remote_machine_ip"
-echo "---------------------------------------------"
-
-mkdir ./remote
-cp $frontend_workflow remote
-cp $backend_workflow remote
-cp remote-execute.sh remote
-
-./remote-setup.sh --files_to_copy=./remote
-
-rm -rf ./remote
-
-sleep 10
-
-echo "---------------------------------------------"
 echo "Commencing monitoring script"
 echo "---------------------------------------------"
 
+$PROJECT_DIR/scripts/host-execute.sh --frontend
 
-./remote-execute.sh --remote_addr=$remote_machine_ip $current_machine_ip --num-instances $num_instances --frontend-workflow $frontend_workflow
+
+exit 1;
 
 
 
@@ -141,7 +131,7 @@ echo "---------------------------------------------"
 # Record the start time
 start_time=$(date +%s.%N)
 
-./remote-execute.sh --frontend $remote_machine_ip $current_machine_ip --num-instances $num_instances --frontend-workflow $frontend_workflow
+$PROJECT_DIR/scripts/remote-execute.sh --frontend $remote_machine_ip $current_machine_ip --num-instances $num_instances --frontend-workflow $frontend_workflow
 # # Run the web crawler instances in parallel (example with num_instances=5)
 # for index in $(seq "$num_instances"); do
 #     python ./selenium/web_crawler.py "$frontend_workflow" &
@@ -194,14 +184,14 @@ echo "---------------------------------------------"
 echo "$name Backend Test Duration: $backend_total_time" >> "$output_folder/test_results.csv"
 
 
-./shutdown.sh
+$PROJECT_DIR/scripts/shutdown.sh
 
 sleep 5
 
 # Loop over the number of iterations
 for (( i = 1; i <= iterations; i++ )); do
   prefix="["$name"-"$i"/"$((iterations))"]"
-  ./startup.sh "$architecture"
+  $PROJECT_DIR/scripts/startup.sh "$architecture"
 
   sleep 5
 
@@ -283,7 +273,7 @@ for (( i = 1; i <= iterations; i++ )); do
 
   # Define a function to run the web crawler
   run_web_crawler() {
-      python ./selenium/web_crawler.py "$frontend_workflow"
+      python $PROJECT_DIR/selenium/web_crawler.py "$frontend_workflow"
   }
 
   # Run multiple instances in parallel
@@ -299,7 +289,7 @@ for (( i = 1; i <= iterations; i++ )); do
   echo "$prefix Monitoring complete"
   echo "---------------------------------------------"
 
-  ./shutdown.sh
+  $PROJECT_DIR/scripts/shutdown.sh
 done 
 
 echo "---------------------------------------------"
