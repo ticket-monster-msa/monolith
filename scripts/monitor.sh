@@ -146,7 +146,7 @@ echo "---------------------------------------------"
 start_time=$(date +%s.%N)
 
 # Function to run newman command
-$PROJECT_DIR/scripts/remote-execute.sh --backend $num_instances --"$name"
+$PROJECT_DIR/scripts/host-execute.sh --backend $num_instances --"$name"
 # run_newman() {
 #     output=$(newman run "$backend_workflow" -n "$workload_iterations" 2>&1)
 # }

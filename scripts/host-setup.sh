@@ -56,7 +56,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # execute the remote-setup.sh script on the remote machine
-SSH_COMMAND="ssh -t -i $SSH_KEY_PATH -o ConnectTimeout=10 $SSH_USER@$SSH_HOST \"/bin/zsh -i -s\" <<EOF
+SSH_COMMAND="ssh -t -i $SSH_KEY_PATH -o ConnectTimeout=10 $SSH_USER@$SSH_HOST \"/bin/zsh -s\" <<EOF
       export PATH=$PATH:/usr/local/bin
       cd $SSH_PATH/remote-files/
       ./remote-setup.sh

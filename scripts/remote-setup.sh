@@ -9,8 +9,8 @@ echo "---------------------------------------------"
 
 # Array of commands/applications to check
 commands_to_check=(
-    "/usr/local/bin/newman:Newman (Postman command-line tool)"
-    "/usr/local/bin/python3:Python"
+    "newman:Newman (Postman command-line tool)"
+    "python3:Python"
 )
 
 for command_entry in "${commands_to_check[@]}"; do
@@ -25,7 +25,7 @@ done
 
 # Install Python dependencies
 echo "[REMOTE] - Installing Python dependencies..."
-/usr/local/bin/pip3 install -r dependencies.txt
+pip3 install -r dependencies.txt
 
 echo "---------------------------------------------"
 echo "[REMOTE] - Prerequisites check complete"

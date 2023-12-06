@@ -104,6 +104,8 @@ perform_experiment() {
   # Store the result of the command in the variable
   ipv4_address=$(hostname -I | cut -d' ' -f1)
   echo "HOST_IP=$ipv4_address" > $PROJECT_DIR/remote-files/.env
+  echo "HOST_URL_MONO=http://$ipv4_address:8080/ticket-monster" >> $PROJECT_DIR/remote-files/.env
+  echo "HOST_URL_MICRO=http://$ipv4_address:5000" >> $PROJECT_DIR/remote-files/.env
   $PROJECT_DIR/scripts/host-setup.sh --files=$PROJECT_DIR/remote-files
 
 
