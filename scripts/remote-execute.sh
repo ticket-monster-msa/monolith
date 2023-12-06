@@ -56,7 +56,7 @@ run_backend() {
     server_url=$HOST_URL_MICRO
   fi
   
-  newman run "$architecture"_workload.json -n "$NUM_INSTANCES" --env-var "server_url=$server_url" --delay-request 1000
+  newman run "$architecture"_workload.json -n "$NUM_INSTANCES" --env-var "server_url=$server_url" --delay-request 200
   wait
 }
 

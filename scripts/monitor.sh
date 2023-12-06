@@ -152,7 +152,7 @@ echo "---------------------------------------------"
 start_time=$(date +%s.%N)
 
 # Run the workload generator from the remote machine
-$PROJECT_DIR/scripts/host-execute.sh --backend $num_instances --"$name"
+$PROJECT_DIR/scripts/host-execute.sh --backend $workload_iterations --"$name"
 
 # Wait for all background processes to finish
 wait
@@ -234,7 +234,7 @@ for (( i = 1; i <= iterations; i++ )); do
 
   # /Applications/Intel\ Power\ Gadget/PowerLog -duration "$backend_total_time" -resolution 1000 -file "$output_folder/$name/$i-api-monitor.csv"
   powerstat -DtfcRn 1 -d 2 $backend_total_time > $output_folder/$name/$i-api-monitor.csv
-  $PROJECT_DIR/scripts/host-execute.sh --backend $num_instances --"$name"
+  $PROJECT_DIR/scripts/host-execute.sh --backend $workload_iterations --"$name"
 
   wait
 
