@@ -133,17 +133,21 @@ def execute_actions(driver, actions, action_timeout=10):
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(description="Your script description here.")
     parser.add_argument("config_path", type=str, help="Path to the configuration file")
-    parser.add_argument("website_url", type=str, help="Website URL")
+    parser.add_argument("host_ip", type=str, help="Website URL")
 
     args = parser.parse_args()
 
     with open(args.config_path, "r") as config_file:
         config = yaml.safe_load(config_file)
     
-    website_url = args.website_url
+    host_ip = args.host_ip
+    website_url = config['website_url']
+
+    if host_ip:
+        website_url = website_url.replace('localhost', host_ip)
+
 
     print(f"Opening website: {website_url}")
 

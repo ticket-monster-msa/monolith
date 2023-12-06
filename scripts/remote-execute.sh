@@ -37,7 +37,7 @@ run_frontend() {
   fi
   # Add your frontend-specific commands here
   for index in $(seq "$NUM_INSTANCES"); do
-    /usr/local/bin/python3 web_crawler.py "$architecture"_frontend.yml $server_url &
+    /usr/local/bin/python3 web_crawler.py "$architecture"_frontend.yml $HOST_IP &
   done
 
   wait

@@ -103,6 +103,7 @@ perform_experiment() {
   touch $PROJECT_DIR/remote-files/.env
   # Store the result of the command in the variable
   ipv4_address=$(hostname -I | cut -d' ' -f1)
+  echo "HOST_IP=$ipv4_address" >> $PROJECT_DIR/remote-files/.env
   echo "HOST_URL_MONO=http://$ipv4_address:8080/ticket-monster" >> $PROJECT_DIR/remote-files/.env
   echo "HOST_URL_MICRO=http://$ipv4_address:5000" >> $PROJECT_DIR/remote-files/.env
   $PROJECT_DIR/scripts/host-setup.sh --files=$PROJECT_DIR/remote-files
@@ -141,16 +142,16 @@ perform_experiment() {
 
   sleep 5
 
- $PROJECT_DIR/scripts/monitor.sh \
-  --monolith \
-  --iterations="$iterations" \
-  --workload_iterations="$workload_iterations" \
-  --sleep_time="$sleep_time" \
-  --output="$output_folder" \
-  --sampling_frequency="$sampling_frequency" \
-  --num_instances="$num_instances" \
-  --frontend_workflow="$monolith_frontend_workflow" \
-  --backend_workflow="$monolith_backend_workflow" \
+$PROJECT_DIR/scripts/monitor.sh \
+ --monolith \
+ --iterations="$iterations" \
+ --workload_iterations="$workload_iterations" \
+ --sleep_time="$sleep_time" \
+ --output="$output_folder" \
+ --sampling_frequency="$sampling_frequency" \
+ --num_instances="$num_instances" \
+ --frontend_workflow="$monolith_frontend_workflow" \
+ --backend_workflow="$monolith_backend_workflow" \
 
   $PROJECT_DIR/scripts/shutdown.sh
 
