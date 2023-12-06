@@ -122,6 +122,7 @@ echo "---------------------------------------------"
 # Record the start time
 start_time=$(date +%s.%N)
 
+# Run the web crawler from the remote machine
 "$PROJECT_DIR"/scripts/host-execute.sh --frontend "$num_instances" --"$name"
 
 # Wait for all background processes to finish
@@ -129,7 +130,12 @@ wait
 
 # Calculate the total execution time
 end_time=$(date +%s.%N)
-frontend_total_time=$(bc <<< "$end_time - $start_time")
+# calculate total frontend time and add 5 seconds as a buffer
+frontend_total_time=$(bc <<< "$end_time - $start_time + 5")
+# check if its below 60 seconds and if so make it 60 seconds
+if (( $(echo "$frontend_total_time < 60" | bc -l) )); then
+  frontend_total_time=60
+fi
 
 
 echo "---------------------------------------------"
@@ -145,24 +151,20 @@ echo "---------------------------------------------"
 # Record the start time
 start_time=$(date +%s.%N)
 
-# Function to run newman command
+# Run the workload generator from the remote machine
 $PROJECT_DIR/scripts/host-execute.sh --backend $num_instances --"$name"
-# run_newman() {
-#     output=$(newman run "$backend_workflow" -n "$workload_iterations" 2>&1)
-# }
-
-# # Run multiple instances of newman in parallel
-# for index in $(seq "$num_instances"); do
-#     run_newman &
-# done
 
 # Wait for all background processes to finish
 wait
 
 # Calculate the total execution time
 end_time=$(date +%s.%N)
-backend_total_time=$(bc <<< "$end_time - $start_time")
-
+# calculate total backend time and add 5 seconds as a buffer
+backend_total_time=$(bc <<< "$end_time - $start_time + 5")
+# check if its below 60 seconds and if so make it 60 seconds
+if (( $(echo "$backend_total_time < 60" | bc -l) )); then
+  backend_total_time=60
+fi
 
 echo "---------------------------------------------"
 echo "Workgen test complete in $backend_total_time"
@@ -174,7 +176,6 @@ echo "$name Backend Test Duration: $backend_total_time" >> "$output_folder/test_
 $PROJECT_DIR/scripts/shutdown.sh
 
 sleep 5
-exit 1
 
 # Loop over the number of iterations
 for (( i = 1; i <= iterations; i++ )); do
@@ -211,7 +212,9 @@ for (( i = 1; i <= iterations; i++ )); do
   echo "$prefix Commencing API baseline monitoring for $backend_total_time seconds..."
   echo "---------------------------------------------"
 
-  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$backend_total_time" -resolution 1000 -file "$output_folder/$name/$i-api-baseline.csv"
+  # /Applications/Intel\ Power\ Gadget/PowerLog -duration "$backend_total_time" -resolution 1000 -file "$output_folder/$name/$i-api-baseline.csv"
+  # Run the powerstat command instead of Intel Power Gadget
+  powerstat -DtfcRn 1 -d 2 $backend_total_time > $output_folder/$name/$i-api-baseline.csv
 
   echo "$prefix Baseline monitoring completed."
 
@@ -223,17 +226,15 @@ for (( i = 1; i <= iterations; i++ )); do
   echo "$prefix Commencing workgen & monitoring for $backend_total_time seconds..."
   echo "---------------------------------------------"
   
-  # Function to run newman command
-  run_newman() {
-      output=$(newman run "$backend_workflow" -n "$workload_iterations" 2>&1)
-  }
+  # # Function to run newman command
+  # run_newman() {
+  #     output=$(newman run "$backend_workflow" -n "$workload_iterations" 2>&1)
+  # }
 
 
-  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$backend_total_time" -resolution 1000 -file "$output_folder/$name/$i-api-monitor.csv"
-  # Run multiple instances of newman in parallel
-  for index in $(seq "$num_instances"); do
-      run_newman &
-  done
+  # /Applications/Intel\ Power\ Gadget/PowerLog -duration "$backend_total_time" -resolution 1000 -file "$output_folder/$name/$i-api-monitor.csv"
+  powerstat -DtfcRn 1 -d 2 $backend_total_time > $output_folder/$name/$i-api-monitor.csv
+  $PROJECT_DIR/scripts/host-execute.sh --backend $num_instances --"$name"
 
   wait
 
@@ -249,7 +250,8 @@ for (( i = 1; i <= iterations; i++ )); do
   echo "$prefix Commencing Frontend baseline monitoring for $frontend_total_time seconds..."
   echo "---------------------------------------------"
 
-  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$frontend_total_time" -resolution 1000 -file "$output_folder/$name/$i-frontend-baseline.csv"
+  # /Applications/Intel\ Power\ Gadget/PowerLog -duration "$frontend_total_time" -resolution 1000 -file "$output_folder/$name/$i-frontend-baseline.csv"
+  powerstat -DtfcRn 1 -d 2 $frontend_total_time > $output_folder/$name/$i-frontend-baseline.csv
 
   echo "$prefix Frontend Baseline monitoring completed."
 
@@ -259,17 +261,10 @@ for (( i = 1; i <= iterations; i++ )); do
 
   sleep "$sleep_time"
 
-  # Define a function to run the web crawler
-  run_web_crawler() {
-      python $PROJECT_DIR/selenium/web_crawler.py "$frontend_workflow"
-  }
 
-  # Run multiple instances in parallel
-  for index in $(seq "$num_instances"); do
-      run_web_crawler &
-  done
-
-  /Applications/Intel\ Power\ Gadget/PowerLog -duration "$frontend_total_time" -resolution 1000 -file "$output_folder/$name/$i-frontend-monitor.csv"
+  # /Applications/Intel\ Power\ Gadget/PowerLog -duration "$frontend_total_time" -resolution 1000 -file "$output_folder/$name/$i-frontend-monitor.csv"
+  powerstat -DtfcRn 1 -d 2 $frontend_total_time > $output_folder/$name/$i-frontend-monitor.csv
+  $PROJECT_DIR/scripts/host-execute.sh --frontend $num_instances --"$name"
 
   wait
 

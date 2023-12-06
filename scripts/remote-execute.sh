@@ -27,10 +27,18 @@ fi
 run_frontend() {
   echo "[REMOTE] Running frontend function with $NUM_INSTANCES instances and $architecture ..."
 
+  server_url=""
+  if [ "$architecture" = "mono" ]; then
+    echo "[REMOTE] Running monolith backend"
+    server_url=$HOST_URL_MONO
+  else
+    echo "[REMOTE] Running microservice backend"
+    server_url=$HOST_URL_MICRO
+  fi
   # Add your frontend-specific commands here
-  # for index in $(seq "$NUM_INSTANCES"); do
-  #   /usr/local/bin/python3 web_crawler.py "$architecture"_frontend.yml $HOST_IP &
-  # done
+  for index in $(seq "$NUM_INSTANCES"); do
+    /usr/local/bin/python3 web_crawler.py "$architecture"_frontend.yml $server_url &
+  done
 
   wait
 }
@@ -48,7 +56,7 @@ run_backend() {
     server_url=$HOST_URL_MICRO
   fi
   
-  newman run "$architecture"_workload.json -n "$NUM_INSTANCES" --env-var "server_url=$server_url"
+  newman run "$architecture"_workload.json -n "$NUM_INSTANCES" --env-var "server_url=$server_url" --delay-request 1000
   wait
 }
 
