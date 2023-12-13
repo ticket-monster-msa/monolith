@@ -1,0 +1,14 @@
+Ticket Monster Experiment: 07-12-23T20-32-01
+Workflow Path: ./workflows/scenario-2/monolith/frontend.yml
+Number of Iterations: 30
+StartTimestamp: 07-12-23T20-32-01
+Workload Iterations: 50
+Sleep Time: 300
+Sampling Frequency: 1000
+Number of Instances: 5
+mono Frontend Test Duration: 60
+mono Backend Test Duration: 219.470833191
+Monolith Experiment: 08-12-23T13-27-55
+micro Frontend Test Duration: 82.772259376
+micro Backend Test Duration: 196.672078813
+Microservice Experiment: 09-12-23T06-24-41

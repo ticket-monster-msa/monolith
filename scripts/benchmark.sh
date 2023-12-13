@@ -192,6 +192,13 @@ $PROJECT_DIR/scripts/monitor.sh \
   datetime=$(date +"%d-%m-%yT%H-%M-%S")
   echo "Microservice Experiment: $datetime" >> "$output_folder/test_results.csv"
 
+
+  SSH_COMMAND="ssh -t -i $SSH_KEY_PATH -o ConnectTimeout=10 $SSH_USER@$SSH_HOST \"/bin/zsh -s\" <<EOF
+        # shut down the mac os x
+        pmset sleepnow
+  EOF"
+  eval "$SSH_COMMAND"
+  shutdown -h now
 }
 
 # Read the YAML configuration file using Python3

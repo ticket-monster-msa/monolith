@@ -10,6 +10,7 @@ orders-service/ObjectStore/
 deployment/kubernetes/istio/istio-0.*
 v1dmon/*
 output/*
+remote-output/*
 .DS_STORE
 .env
 id_rsa
