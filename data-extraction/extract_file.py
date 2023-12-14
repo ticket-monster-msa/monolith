@@ -30,6 +30,14 @@ def extract_info_from_test_results(test_results_file):
                 info['monolith_experiment'] = line.split()[-1]
             elif "Microservice Experiment" in line:
                 info['microservice_experiment'] = line.split()[-1]
+            elif "mono Frontend Test Duration" in line:
+                info['mono_frontend_test_duration'] = line.split()[-1]
+            elif "mono Backend Test Duration" in line:
+                info['mono_backend_test_duration'] = line.split()[-1]
+            elif "micro Frontend Test Duration" in line:
+                info['micro_frontend_test_duration'] = line.split()[-1]
+            elif "micro Backend Test Duration" in line:
+                info['micro_backend_test_duration'] = line.split()[-1]
 
     return info
 
@@ -98,7 +106,7 @@ def write_to_csv(file_path, header, data_rows, input_file_path, architecture, in
             csv_writer.writerow(['InputFileName', 'Architecture', 'ExperimentDate', 'ScenarioPath',
                                 'NumberOfInstances', 'SleepTime', 'WorkloadIterations',
                                 'NumberOfIterations', 'StartTimestamp', 'MonolithExperiment',
-                                'MicroserviceExperiment'] + header)
+                                'MicroserviceExperiment', 'MonoFrontendDuration', 'MonoBackendDuration', 'MicroFrontendDuration', 'MicroBackendDuration'] + header)
         
         # Write data to CSV if available
         if data_rows:
@@ -110,7 +118,7 @@ def write_to_csv(file_path, header, data_rows, input_file_path, architecture, in
                                         info.get('number_of_instances', ''), info.get('sleep_time', ''),
                                         info.get('workload_iterations', ''), info.get('number_of_iterations', ''),
                                         info.get('start_timestamp', ''), info.get('monolith_experiment', ''),
-                                        info.get('microservice_experiment', '')] +
+                                        info.get('microservice_experiment', ''), info.get('mono_frontend_test_duration'), info.get('mono_backend_test_duration'), info.get('micro_frontend_test_duration'), info.get('mono_backend_test_duration')] +
                                         [iteration] + row)
                     iteration += 1
                 else:
@@ -119,7 +127,7 @@ def write_to_csv(file_path, header, data_rows, input_file_path, architecture, in
                                         info.get('number_of_instances', ''), info.get('sleep_time', ''),
                                         info.get('workload_iterations', ''), info.get('number_of_iterations', ''),
                                         info.get('start_timestamp', ''), info.get('monolith_experiment', ''),
-                                        info.get('microservice_experiment', '')] + row)
+                                        info.get('microservice_experiment', ''), info.get('mono_frontend_test_duration'), info.get('mono_backend_test_duration'), info.get('micro_frontend_test_duration'), info.get('mono_backend_test_duration')] + row)
 
 if __name__ == "__main__":
     # Check if the correct number of arguments is provided
