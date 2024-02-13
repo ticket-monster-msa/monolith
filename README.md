@@ -1,5 +1,7 @@
 # 📈 Monolith vs. Microservices Power Consumption Comparison
 
+> This README is now outdated and will be updated soon
+
 This project contains both a monolith and micro-services version of the Ticket Monster application (forked from [ticket-monster-msa](https://github.com/ticket-monster-msa/monolith)), and is used to compare the power consumption of the two architectures.
 
 ## 🏗️ Project structure
@@ -22,7 +24,8 @@ To run this project you will need the following installed on your system:
 - [Python3](https://www.python.org/downloads/)
 - jq (`sudo apt-get install jq -y`)
 - [newman](https://github.com/postmanlabs/newman)
-- [Intel Power Gadget](https://www.intel.com/content/www/us/en/developer/articles/tool/power-gadget.html)
+- [Powerstat](https://github.com/ColinIanKing/powerstat)
+- pyyaml - `pip3 install pyyaml`
 
 ## ✅ Getting started
 

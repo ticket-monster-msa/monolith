@@ -12,6 +12,7 @@ mono_frontend=""
 mono_backend=""
 micro_frontend=""
 micro_backend=""
+application_dir_path=""
 
 # Process command line arguments
 while [[ $# -gt 0 ]]; do
@@ -27,6 +28,9 @@ while [[ $# -gt 0 ]]; do
       ;;
     --micro_backend=*)
       micro_backend="${1#*=}"
+      ;;
+    --application_dir_path=*)
+      application_dir_path="${1#*=}"
       ;;
     *)
       echo "Unknown option: $1" >&2
