@@ -79,6 +79,12 @@ perform_experiment() {
     --micro_backend="$microservice_backend_workflow" \
     --application_dir_path="$application_dir_path"
 
+  
+  echo "---------------------------------------------"
+  echo "Checking for any existing containers"
+  echo "---------------------------------------------"
+  ./scripts/shutdown.sh --application_dir_path="./applications/ticketmonster"
+
   echo "---------------------------------------------"
   echo "Commencing remote setup"
   echo "---------------------------------------------"

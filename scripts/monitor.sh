@@ -24,6 +24,7 @@ backend_workflow=""
 remote_machine_ip=""
 remote_machine_user=""
 remote_dir=""
+application_dir_path=""
 
 # Process command line arguments
 while [[ $# -gt 0 ]]; do
@@ -64,6 +65,9 @@ while [[ $# -gt 0 ]]; do
     --remote_dir=*)
       remote_dir="${1#*=}"
       ;;
+    --application_dir_path=*)
+      application_dir_path="${1#*=}"
+      ;;
     *)
       echo "Unknown option: $1" >&2
       exit 1
@@ -73,19 +77,20 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Check for missing required options
-if [[ -z "$architecture" || -z "$iterations" || -z "$workload_iterations" || -z "$sleep_time" || -z "$output_folder" || -z "$sampling_frequency" || -z "$frontend_workflow" || -z "$backend_workflow" ]]; then
+if [[ -z "$architecture" || -z "$iterations" || -z "$workload_iterations" || -z "$sleep_time" || -z "$output_folder" || -z "$sampling_frequency" || -z "$frontend_workflow" || -z "$backend_workflow" || -z "$application_dir_path" ]]; then
   echo "All of the following options are required: --architecture (--monolith || --microservice), --iterations (number), --workload_iterations (number), --sleep_time (number in seconds), --output (relative directory path), --sampling_frequency (number, default is 1000), --frontend_workflow (relative directory path), --backend_workflow (relative directory path)" >&2
   exit 1
 fi
 
 output_csv="$output_folder/test_results.csv"
+docker_compose_file=""
 
 # Checking parameters (whether its a monolith or microservice test)
 if [[ "$architecture" == "--monolith" ]]; then
-  containers=("univaq-masters-thesis-monolith-1")
+  docker_compose_file="$PROJECT_DIR/$application_dir_path/monolith-compose.yml"
   name="mono"
 elif [[ "$architecture" == "--microservice" ]]; then
-  containers=("univaq-masters-thesis-tm-ui-v2-1" "univaq-masters-thesis-orders-service-1" "univaq-masters-thesis-backend-1")
+  docker_compose_file="$PROJECT_DIR/$application_dir_path/microservice-compose.yml"
   name="micro"
 fi
 
@@ -93,16 +98,14 @@ echo "Waiting for containers..."
 start_time=$(date +%s)
 timeout=10
 
-for container in "${containers[@]}"; do
-  while ! docker container inspect "$container" >/dev/null 2>&1; do
-    current_time=$(date +%s)
-    elapsed_time=$((current_time - start_time))
-    if (( elapsed_time > timeout )); then
-      echo "Timeout: Containers did not start within $timeout seconds."
-      exit 1
-    fi
-    sleep 1
-  done
+while ! docker-compose -f "$docker_compose_file" ps | grep -q "Up"; do
+  current_time=$(date +%s)
+  elapsed_time=$((current_time - start_time))
+  if (( elapsed_time > timeout )); then
+    echo "Timeout: Containers did not start within $timeout seconds."
+    exit 1
+  fi
+  sleep 1
 done
 
 echo "All containers are running. "
@@ -173,14 +176,14 @@ echo "---------------------------------------------"
 echo "$name Backend Test Duration: $backend_total_time" >> "$output_folder/test_results.csv"
 
 
-$PROJECT_DIR/scripts/shutdown.sh
+$PROJECT_DIR/scripts/shutdown.sh --application_dir_path="$application_dir_path"
 
 sleep 5
 
 # Loop over the number of iterations
 for (( i = 1; i <= iterations; i++ )); do
   prefix="["$name"-"$i"/"$((iterations))"]"
-  $PROJECT_DIR/scripts/startup.sh "$architecture"
+  $PROJECT_DIR/scripts/startup.sh "$architecture" --application_dir_path="$application_dir_path"
 
   sleep 5
 
@@ -272,7 +275,7 @@ for (( i = 1; i <= iterations; i++ )); do
   echo "$prefix Monitoring complete"
   echo "---------------------------------------------"
 
-  $PROJECT_DIR/scripts/shutdown.sh
+  $PROJECT_DIR/scripts/shutdown.sh --application_dir_path="$application_dir_path"
 done 
 
 echo "---------------------------------------------"

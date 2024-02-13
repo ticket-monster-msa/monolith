@@ -29,10 +29,10 @@ run_frontend() {
 
   server_url=""
   if [ "$architecture" = "mono" ]; then
-    echo "[REMOTE] Running monolith backend"
+    echo "[REMOTE] Running monolith frontend"
     server_url=$HOST_URL_MONO
   else
-    echo "[REMOTE] Running microservice backend"
+    echo "[REMOTE] Running microservice frontend"
     server_url=$HOST_URL_MICRO
   fi
   # Add your frontend-specific commands here
