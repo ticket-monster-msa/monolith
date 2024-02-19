@@ -60,9 +60,22 @@ def execute_actions(driver, actions, action_timeout=10):
                     input_element.send_keys(value)
                     action_successful = True
 
+                elif action_type == 'input_by_id':
+                    input_element = WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.XPATH, f"//input[@id='{target}']"))
+                    )
+                    input_element.send_keys(value)
+                    action_successful = True
+
                 elif action_type == 'input_rand':
                     input_element = WebDriverWait(driver, action_timeout).until(
                         EC.presence_of_element_located((By.XPATH, f"//input[@placeholder='{target}']"))
+                    )
+                    input_element.send_keys(value + str(random.randint(1,1000)))
+                    action_successful = True
+                elif action_type == 'input_rand_by_id':
+                    input_element = WebDriverWait(driver, action_timeout).until(
+                        EC.presence_of_element_located((By.XPATH, f"//input[@id='{target}']"))
                     )
                     input_element.send_keys(value + str(random.randint(1,1000)))
                     action_successful = True
