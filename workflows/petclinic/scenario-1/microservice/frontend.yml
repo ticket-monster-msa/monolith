@@ -1,0 +1,93 @@
+website_url: "http://localhost:8080/"
+window_size: "1920x1080"
+
+actions:
+  - action: click_by_xpath
+    target: //*[@id="main-navbar"]/ul/li[2]/a
+    wait: 5
+    checkpoint: true
+
+  - action: click_by_xpath
+    target: //*[@id="search-owner-form"]/a
+    wait: 2
+
+  - action: input_rand_by_id
+    target: "firstName"
+    value: "John"
+    wait: 1
+    checkpoint: true
+
+  - action: input_rand_by_id
+    target: "lastName"
+    value: "Dunne"
+    wait: 1
+
+  - action: input_rand_by_id
+    target: "address"
+    value: "20 Address road"
+    wait: 1
+
+  - action: input_by_id
+    target: "city"
+    value: "Dublin"
+    wait: 1
+
+  - action: input_by_id
+    target: "telephone"
+    value: "0000000000"
+    wait: 1
+
+  - action: click_by_xpath
+    target: //*[@id="add-owner-form"]/div[2]/div/button
+    wait: 2
+
+  - action: click_by_xpath
+    target: /html/body/div/div/a[2]
+    wait: 2
+
+  - action: input_rand_by_id
+    target: "name"
+    value: "Alfredo"
+    wait: 1
+    checkpoint: true
+
+  - action: input_by_id
+    target: "birthDate"
+    value: "12/05/2020"
+    wait: 1
+
+  - action: select_random_dropdown_option_by_xpath
+    target: '//*[@id="type"]'
+
+  - action: click_by_xpath
+    target: /html/body/div/div/form/div[2]/div/button
+    wait: 2
+
+  - action: click_by_xpath
+    target: //*[@id="main-navbar"]/ul/li[3]/a
+    wait: 4
+
+  - action: click_by_xpath
+    target: /html/body/div/div/div[1]/span[4]/a
+    wait: 2
+
+  - action: click_by_xpath
+    target: //*[@id="main-navbar"]/ul/li[2]/a
+    wait: 2
+
+  - action: input_by_id
+    target: "lastName"
+    value: "Dunne"
+    wait: 2
+
+  - action: click_by_xpath
+    target: //*[@id="search-owner-form"]/div[2]/div/button
+    wait: 2
+
+  - action: click_by_xpath
+    target: //*[@id="owners"]/tbody/tr[1]/td[1]/a
+    wait: 2
+
+  - action: click_by_xpath
+    target: //*[@id="main-navbar"]/ul/li[1]/a
+    wait: 2
