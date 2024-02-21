@@ -118,34 +118,34 @@ echo "---------------------------------------------"
 
 
 
-echo "---------------------------------------------"
-echo "Testing web crawler to check duration of test"
-echo "---------------------------------------------"
+# echo "---------------------------------------------"
+# echo "Testing web crawler to check duration of test"
+# echo "---------------------------------------------"
 
-# Record the start time
-start_time=$(date +%s.%N)
+# # Record the start time
+# start_time=$(date +%s.%N)
 
-# Run the web crawler from the remote machine
-"$PROJECT_DIR"/scripts/host-execute.sh --frontend "$num_instances" --"$name"
+# # Run the web crawler from the remote machine
+# "$PROJECT_DIR"/scripts/host-execute.sh --frontend "$num_instances" --"$name"
 
-# Wait for all background processes to finish
-wait
+# # Wait for all background processes to finish
+# wait
 
-# Calculate the total execution time
-end_time=$(date +%s.%N)
-# calculate total frontend time and add 5 seconds as a buffer
-frontend_total_time=$(bc <<< "$end_time - $start_time + 5")
-# check if its below 60 seconds and if so make it 60 seconds
-if (( $(echo "$frontend_total_time < 60" | bc -l) )); then
-  frontend_total_time=60
-fi
+# # Calculate the total execution time
+# end_time=$(date +%s.%N)
+# # calculate total frontend time and add 5 seconds as a buffer
+# frontend_total_time=$(bc <<< "$end_time - $start_time + 5")
+# # check if its below 60 seconds and if so make it 60 seconds
+# if (( $(echo "$frontend_total_time < 60" | bc -l) )); then
+#   frontend_total_time=60
+# fi
 
 
-echo "---------------------------------------------"
-echo "Web Crawker test complete in $frontend_total_time seconds"
-echo "---------------------------------------------"
+# echo "---------------------------------------------"
+# echo "Web Crawker test complete in $frontend_total_time seconds"
+# echo "---------------------------------------------"
 
-echo "$name Frontend Test Duration: $frontend_total_time" >> "$output_folder/test_results.csv"
+# echo "$name Frontend Test Duration: $frontend_total_time" >> "$output_folder/test_results.csv"
 
 echo "---------------------------------------------"
 echo "Testing workload generator, check duration of test"
@@ -246,34 +246,34 @@ for (( i = 1; i <= iterations; i++ )); do
   echo "$prefix API Monitoring complete"
   echo "---------------------------------------------"
 
-  echo "$prefix Commencing frontend monitoring in $sleep_time seconds..."
-  sleep "$sleep_time"
+  # echo "$prefix Commencing frontend monitoring in $sleep_time seconds..."
+  # sleep "$sleep_time"
 
-  echo "---------------------------------------------"
-  echo "$prefix Commencing Frontend baseline monitoring for $frontend_total_time seconds..."
-  echo "---------------------------------------------"
+  # echo "---------------------------------------------"
+  # echo "$prefix Commencing Frontend baseline monitoring for $frontend_total_time seconds..."
+  # echo "---------------------------------------------"
 
-  # /Applications/Intel\ Power\ Gadget/PowerLog -duration "$frontend_total_time" -resolution 1000 -file "$output_folder/$name/$i-frontend-baseline.csv"
-  powerstat -DtfcRn 1 -d 2 $frontend_total_time > $output_folder/$name/$i-frontend-baseline.csv
+  # # /Applications/Intel\ Power\ Gadget/PowerLog -duration "$frontend_total_time" -resolution 1000 -file "$output_folder/$name/$i-frontend-baseline.csv"
+  # powerstat -DtfcRn 1 -d 2 $frontend_total_time > $output_folder/$name/$i-frontend-baseline.csv
 
-  echo "$prefix Frontend Baseline monitoring completed."
+  # echo "$prefix Frontend Baseline monitoring completed."
 
-  echo "---------------------------------------------"
-  echo "$prefix Commencing frontend monitoring in $sleep_time seconds..."
-  echo "---------------------------------------------"
+  # echo "---------------------------------------------"
+  # echo "$prefix Commencing frontend monitoring in $sleep_time seconds..."
+  # echo "---------------------------------------------"
 
-  sleep "$sleep_time"
+  # sleep "$sleep_time"
 
 
-  # /Applications/Intel\ Power\ Gadget/PowerLog -duration "$frontend_total_time" -resolution 1000 -file "$output_folder/$name/$i-frontend-monitor.csv"
-  powerstat -DtfcRn 1 -d 2 $frontend_total_time > $output_folder/$name/$i-frontend-monitor.csv
-  $PROJECT_DIR/scripts/host-execute.sh --frontend $num_instances --"$name"
+  # # /Applications/Intel\ Power\ Gadget/PowerLog -duration "$frontend_total_time" -resolution 1000 -file "$output_folder/$name/$i-frontend-monitor.csv"
+  # powerstat -DtfcRn 1 -d 2 $frontend_total_time > $output_folder/$name/$i-frontend-monitor.csv
+  # $PROJECT_DIR/scripts/host-execute.sh --frontend $num_instances --"$name"
 
-  wait
+  # wait
 
-  echo "---------------------------------------------"
-  echo "$prefix Monitoring complete"
-  echo "---------------------------------------------"
+  # echo "---------------------------------------------"
+  # echo "$prefix Monitoring complete"
+  # echo "---------------------------------------------"
 
   $PROJECT_DIR/scripts/shutdown.sh --application_dir_path="$application_dir_path"
 done 

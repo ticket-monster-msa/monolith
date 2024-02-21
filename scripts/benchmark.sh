@@ -109,6 +109,12 @@ perform_experiment() {
   cp $PROJECT_DIR/workflows/experiment.yml $PROJECT_DIR/remote-files
   cp $PROJECT_DIR/scripts/remote-setup.sh $PROJECT_DIR/remote-files
   cp $PROJECT_DIR/scripts/remote-execute.sh $PROJECT_DIR/remote-files
+  
+  
+  if [ -f $PROJECT_DIR/remote-files/.env ]; then
+    rm $PROJECT_DIR/remote-files/.env
+  fi
+  
   touch $PROJECT_DIR/remote-files/.env
   # Store the result of the command in the variable
   ipv4_address=$(hostname -I | cut -d' ' -f1)

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Enable "exit on error" behavior
-set -e
-
 # Check the number of command-line arguments
 if [ "$#" -ne 3 ]; then
   echo "[REMOTE] Usage: $0 [--frontend | --backend] <num_instances> [--mono | --micro]"
