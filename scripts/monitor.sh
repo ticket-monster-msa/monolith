@@ -176,7 +176,7 @@ echo "---------------------------------------------"
 echo "$name Backend Test Duration: $backend_total_time" >> "$output_folder/test_results.csv"
 
 
-$PROJECT_DIR/scripts/shutdown.sh --application_dir_path="$application_dir_path"
+$PROJECT_DIR/scripts/shutdown.sh --all --application_dir_path="$application_dir_path"
 
 sleep 5
 
@@ -275,7 +275,7 @@ for (( i = 1; i <= iterations; i++ )); do
   # echo "$prefix Monitoring complete"
   # echo "---------------------------------------------"
 
-  $PROJECT_DIR/scripts/shutdown.sh --application_dir_path="$application_dir_path"
+  $PROJECT_DIR/scripts/shutdown.sh --all --application_dir_path="$application_dir_path"
 done 
 
 echo "---------------------------------------------"

@@ -13,7 +13,7 @@ fi
 
 # Check if Docker Compose directory path is provided and exists
 if [[ -z "$2" || ! -d "${2#*=}" ]]; then
-  echo "Docker Compose directory path not provided or directory does not exist. Usage: ./startup.sh [--monolith | --microservice] --application_dir_path=<path>"
+  echo "Docker Compose directory path not provided or directory does not exist. Usage: ./shutdown.sh [--monolith | --microservice | --all] --application_dir_path=<path>"
   exit 1
 fi
 
@@ -26,9 +26,13 @@ if [[ "$1" == "--monolith" ]]; then
 elif [[ "$1" == "--microservice" ]]; then
   echo "Shutting down monolithic containers at $application_dir_path"
   containers_running=$(docker-compose -f "$application_dir_path/microservice-compose.yml" ps -q | awk '{print $1}')
+elif [[ "$1" == "--all" ]]; then
+  echo "Shutting down all containers at $application_dir_path"
+  containers_running=$(docker-compose -f "$application_dir_path/monolith-compose.yml" ps -q | awk '{print $1}')
+  containers_running+=$(docker-compose -f "$application_dir_path/microservice-compose.yml" ps -q | awk '{print $1}')
 else
   # Invalid or no flag provided
-   echo "Invalid flag or no flag provided. Usage: ./startup.sh [--monolith | --microservice] --application_dir_path=<path>"
+   echo "Invalid flag or no flag provided. Usage: ./shutdown.sh [--monolith | --microservice | --all] --application_dir_path=<path>"
   exit 1
 fi
 

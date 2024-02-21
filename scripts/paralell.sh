@@ -11,7 +11,7 @@ else
   exit 1
 fi
 
-$PROJECT_DIR/scripts/shutdown.sh --application_dir_path="$PROJECT_DIR/$application_dir_path"
+$PROJECT_DIR/scripts/shutdown.sh --all --application_dir_path="$PROJECT_DIR/$application_dir_path"
 
 $PROJECT_DIR/scripts/startup.sh --monolith --application_dir_path="$PROJECT_DIR/$application_dir_path"
 
