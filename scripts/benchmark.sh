@@ -79,6 +79,12 @@ perform_experiment() {
     --micro_backend="$microservice_backend_workflow" \
     --application_dir_path="$application_dir_path"
 
+  
+  echo "---------------------------------------------"
+  echo "Checking for any existing containers"
+  echo "---------------------------------------------"
+  ./scripts/shutdown.sh --all --application_dir_path="./applications/ticketmonster"
+
   echo "---------------------------------------------"
   echo "Commencing remote setup"
   echo "---------------------------------------------"
@@ -103,6 +109,12 @@ perform_experiment() {
   cp $PROJECT_DIR/workflows/experiment.yml $PROJECT_DIR/remote-files
   cp $PROJECT_DIR/scripts/remote-setup.sh $PROJECT_DIR/remote-files
   cp $PROJECT_DIR/scripts/remote-execute.sh $PROJECT_DIR/remote-files
+  
+  
+  if [ -f $PROJECT_DIR/remote-files/.env ]; then
+    rm $PROJECT_DIR/remote-files/.env
+  fi
+  
   touch $PROJECT_DIR/remote-files/.env
   # Store the result of the command in the variable
   ipv4_address=$(hostname -I | cut -d' ' -f1)
@@ -157,7 +169,7 @@ $PROJECT_DIR/scripts/monitor.sh \
  --backend_workflow="$monolith_backend_workflow" \
  --application_dir_path="$application_dir_path"
 
-  $PROJECT_DIR/scripts/shutdown.sh --application_dir_path="$application_dir_path"
+  $PROJECT_DIR/scripts/shutdown.sh --monolith --application_dir_path="$application_dir_path"
 
   datetime=$(date +"%d-%m-%yT%H-%M-%S")
   echo "Monolith Experiment: $datetime" >> "$output_folder/test_results.csv"
@@ -188,7 +200,7 @@ $PROJECT_DIR/scripts/monitor.sh \
     --backend_workflow="$microservice_backend_workflow" \
     --application_dir_path="$application_dir_path"
 
-  $PROJECT_DIR/scripts/shutdown.sh --application_dir_path="$application_dir_path"
+  $PROJECT_DIR/scripts/shutdown.sh --microservice --application_dir_path="$application_dir_path"
 
   echo "---------------------------------------------"
   echo "Microservice Experiment Complete"

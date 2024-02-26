@@ -1,8 +1,19 @@
 #!/bin/bash
 
-$PROJECT_DIR/scripts/shutdown.sh
+# Enable "exit on error" behavior
+set -e
 
-$PROJECT_DIR/scripts/startup.sh --monolith
+# Load environment variables from .env file
+if [ -f .env ]; then
+  source .env
+else
+  echo "Error: .env file not found."
+  exit 1
+fi
+
+$PROJECT_DIR/scripts/shutdown.sh --all --application_dir_path="$PROJECT_DIR/$application_dir_path"
+
+$PROJECT_DIR/scripts/startup.sh --monolith --application_dir_path="$PROJECT_DIR/$application_dir_path"
 
 sleep 10
 

@@ -46,7 +46,6 @@ fi
 echo "Copying files to remote machine..."
 
 ssh_uri="$SSH_USER@$SSH_HOST:$SSH_PATH"
-
 rsync -avz -e "ssh -o ConnectTimeout=10 -i $SSH_KEY_PATH" "$files" "$ssh_uri/"
 
 # Check the exit status of the rsync command

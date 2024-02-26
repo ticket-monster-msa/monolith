@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Enable "exit on error" behavior
-set -e
-
 # Check the number of command-line arguments
 if [ "$#" -lt 3 ]; then
   echo "Usage: $0 [--frontend | --backend] <num_instances> [--mono | --micro]"
@@ -25,7 +22,7 @@ ARCHITECTURE=$3
 # Check the experiment type and execute the remote script
 case $EXPERIMENT_TYPE in
   "--frontend" | "--backend")
-    SSH_COMMAND="ssh -t -i $SSH_KEY_PATH -o ConnectTimeout=10 $SSH_USER@$SSH_HOST \"/bin/zsh -s\" <<EOF
+    SSH_COMMAND="ssh -t -i $SSH_KEY_PATH -o ConnectTimeout=10 -o ServerAliveInterval=60 -o ServerAliveCountMax=5 $SSH_USER@$SSH_HOST \"/bin/zsh -s\" <<EOF
       export PATH=$PATH:/usr/local/bin
       cd $SSH_PATH/remote-files/
       ./remote-execute.sh $EXPERIMENT_TYPE $NUM_INSTANCES $ARCHITECTURE
