@@ -2,7 +2,7 @@ version: "3.8"
 services:
   monolith:
     build:
-      context: ./spring-petclinic/
+      context: ./spring-petclinic-rest/
       dockerfile: Dockerfile
     ports:
-      - 8080:8080
+      - 9966:9966

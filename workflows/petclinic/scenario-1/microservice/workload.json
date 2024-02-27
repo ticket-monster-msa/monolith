@@ -1,0 +1,260 @@
+{
+	"info": {
+		"_postman_id": "999be9ad-0a2e-4ae9-bd3a-bea01b9cd325",
+		"name": "[Micro] Pet Clinic Scenario 1 - User Light Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9152223"
+	},
+	"item": [
+		{
+			"name": "GET Owners",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"const index = 6;",
+							"",
+							"pm.collectionVariables.set(\"owner_id\", jsonData[index].id);",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/customer/owners",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"owners"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Owner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
+							"const index = 0;",
+							"",
+							"pm.collectionVariables.set(\"pet_id\", jsonData.pets[index].id);",
+							"",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/customer/owners/{{owner_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"owners",
+						"{{owner_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Pet By Owner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/customer/owners/{{owner_id}}/pets/{{pet_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"owners",
+						"{{owner_id}}",
+						"pets",
+						"{{pet_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Visits By Pets",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/visit/owners/{{owner_id}}/pets/{{pet_id}}/visits",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"visit",
+						"owners",
+						"{{owner_id}}",
+						"pets",
+						"{{pet_id}}",
+						"visits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET PetTypes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/customer/petTypes",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"petTypes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Vets",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/vet/vets",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"vet",
+						"vets"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "owner_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "pet_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
