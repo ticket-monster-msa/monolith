@@ -31,9 +31,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/petclinic/api/owners",
+					"raw": "{{server_url}}/petclinic/api/owners",
 					"host": [
-						"{{host}}"
+						"{{server_url}}"
 					],
 					"path": [
 						"petclinic",
@@ -70,9 +70,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/petclinic/api/owners/6",
+					"raw": "{{server_url}}/petclinic/api/owners/6",
 					"host": [
-						"{{host}}"
+						"{{server_url}}"
 					],
 					"path": [
 						"petclinic",
@@ -103,9 +103,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/petclinic/api/owners/{{owner_id}}",
+					"raw": "{{server_url}}/petclinic/api/owners/{{owner_id}}",
 					"host": [
-						"{{host}}"
+						"{{server_url}}"
 					],
 					"path": [
 						"petclinic",
@@ -136,9 +136,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/petclinic/api/visits",
+					"raw": "{{server_url}}/petclinic/api/visits",
 					"host": [
-						"{{host}}"
+						"{{server_url}}"
 					],
 					"path": [
 						"petclinic",
@@ -168,9 +168,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/petclinic/api/pettypes",
+					"raw": "{{server_url}}/petclinic/api/pettypes",
 					"host": [
-						"{{host}}"
+						"{{server_url}}"
 					],
 					"path": [
 						"petclinic",
@@ -201,9 +201,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/petclinic/api/vets",
+					"raw": "{{server_url}}/petclinic/api/vets",
 					"host": [
-						"{{host}}"
+						"{{server_url}}"
 					],
 					"path": [
 						"petclinic",
@@ -237,7 +237,7 @@
 	],
 	"variable": [
 		{
-			"key": "host",
+			"key": "server_url",
 			"value": "http://localhost:9966",
 			"type": "string"
 		},

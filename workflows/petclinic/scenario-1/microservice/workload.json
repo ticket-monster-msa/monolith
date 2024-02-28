@@ -31,9 +31,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/customer/owners",
+					"raw": "{{server_url}}/api/customer/owners",
 					"host": [
-						"{{host}}"
+						"{{server_url}}"
 					],
 					"path": [
 						"api",
@@ -70,9 +70,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/customer/owners/{{owner_id}}",
+					"raw": "{{server_url}}/api/customer/owners/{{owner_id}}",
 					"host": [
-						"{{host}}"
+						"{{server_url}}"
 					],
 					"path": [
 						"api",
@@ -103,9 +103,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/customer/owners/{{owner_id}}/pets/{{pet_id}}",
+					"raw": "{{server_url}}/api/customer/owners/{{owner_id}}/pets/{{pet_id}}",
 					"host": [
-						"{{host}}"
+						"{{server_url}}"
 					],
 					"path": [
 						"api",
@@ -138,9 +138,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/visit/owners/{{owner_id}}/pets/{{pet_id}}/visits",
+					"raw": "{{server_url}}/api/visit/owners/{{owner_id}}/pets/{{pet_id}}/visits",
 					"host": [
-						"{{host}}"
+						"{{server_url}}"
 					],
 					"path": [
 						"api",
@@ -174,9 +174,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/customer/petTypes",
+					"raw": "{{server_url}}/api/customer/petTypes",
 					"host": [
-						"{{host}}"
+						"{{server_url}}"
 					],
 					"path": [
 						"api",
@@ -206,9 +206,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/vet/vets",
+					"raw": "{{server_url}}/api/vet/vets",
 					"host": [
-						"{{host}}"
+						"{{server_url}}"
 					],
 					"path": [
 						"api",
@@ -242,7 +242,7 @@
 	],
 	"variable": [
 		{
-			"key": "host",
+			"key": "server_url",
 			"value": "http://localhost:8080",
 			"type": "string"
 		},
