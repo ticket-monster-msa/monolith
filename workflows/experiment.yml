@@ -5,10 +5,10 @@ experiments:
     output_folder: ./output
     sampling_frequency: 1000
     num_instances: 5
-    monolith_frontend_workflow: ./workflows/petclinic/scenario-1/monolith/frontend.yml
-    monolith_backend_workflow: ./workflows/petclinic/scenario-1/monolith/workload.json
-    microservice_frontend_workflow: ./workflows/petclinic/scenario-1/microservice/frontend.yml
-    microservice_backend_workflow: ./workflows/petclinic/scenario-1/microservice/workload.json
+    monolith_frontend_workflow: ./workflows/petclinic/scenario-2/monolith/frontend.yml
+    monolith_backend_workflow: ./workflows/petclinic/scenario-2/monolith/workload.json
+    microservice_frontend_workflow: ./workflows/petclinic/scenario-2/microservice/frontend.yml
+    microservice_backend_workflow: ./workflows/petclinic/scenario-2/microservice/workload.json
     application_dir_path: ./applications/petclinic/
     monolith_host_url: http://192.168.178.148:9966
     microservice_host_url: http://192.168.178.148:8080
