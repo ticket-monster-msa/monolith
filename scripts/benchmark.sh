@@ -249,7 +249,7 @@ filtered_data = [
         "monolith_backend_workflow": item.get("monolith_backend_workflow", "./workflows/monolith/workload.json"),
         "microservice_frontend_workflow": item.get("microservice_frontend_workflow", "./workflows/microservice/frontend.yml"),
         "microservice_backend_workflow": item.get("microservice_backend_workflow", "./workflows/microservice/workload.json"),
-        "application_dir_path": item.get("application_dir_path", "./docker-compose.yml")
+        "application_dir_path": item.get("application_dir_path", "./docker-compose.yml"),
         "monolith_host_url": item.get("monolith_host_url", "http://localhost:8080/ticket-monster"),
         "microservice_host_url": item.get("microservice_host_url", "http://localhost:5000")
     }
