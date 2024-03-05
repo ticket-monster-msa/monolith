@@ -9,3 +9,5 @@ experiments:
     monolith_backend_workflow: ./workflows/monolith/workload.json
     microservice_frontend_workflow: ./workflows/microservice/frontend.yml
     microservice_backend_workflow: ./workflows/microservice/workload.json
+    monolith_host_url: http://192.168.178.148:8080/ticket-monster
+    microservice_host_url: http://192.168.178.148:5000

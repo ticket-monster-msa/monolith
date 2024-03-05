@@ -1,12 +1,14 @@
 experiments:
-  - iterations: 2
-    workload_iterations: 5
-    sleep_time: 5
+  - iterations: 30
+    workload_iterations: 50
+    sleep_time: 300
     output_folder: ./output
     sampling_frequency: 1000
     num_instances: 5
-    monolith_frontend_workflow: ./workflows/ticketmonster/scenario-1/monolith/frontend.yml
-    monolith_backend_workflow: ./workflows/ticketmonster/scenario-1/monolith/workload.json
-    microservice_frontend_workflow: ./workflows/ticketmonster/scenario-1/microservice/frontend.yml
-    microservice_backend_workflow: ./workflows/ticketmonster/scenario-1/microservice/workload.json
-    application_dir_path: ./applications/ticketmonster/
+    monolith_frontend_workflow: ./workflows/petclinic/scenario-1/monolith/frontend.yml
+    monolith_backend_workflow: ./workflows/petclinic/scenario-1/monolith/workload.json
+    microservice_frontend_workflow: ./workflows/petclinic/scenario-1/microservice/frontend.yml
+    microservice_backend_workflow: ./workflows/petclinic/scenario-1/microservice/workload.json
+    application_dir_path: ./applications/petclinic/
+    monolith_host_url: http://192.168.178.148:9966
+    microservice_host_url: http://192.168.178.148:8080
