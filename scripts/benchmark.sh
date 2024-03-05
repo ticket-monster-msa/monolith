@@ -24,6 +24,9 @@ num_instances=5
 # Path to the Docker Compose file
 application_dir_path=""
 
+monolith_host_url=""
+microservice_host_url=""
+
 # Workflow files
 
 monolith_frontend_workflow="$PROJECT_DIR/workflows/monolith/frontend.yml"
@@ -119,8 +122,10 @@ perform_experiment() {
   # Store the result of the command in the variable
   ipv4_address=$(hostname -I | cut -d' ' -f1)
   echo "HOST_IP=$ipv4_address" >> $PROJECT_DIR/remote-files/.env
-  echo "HOST_URL_MONO=http://$ipv4_address:8080/ticket-monster" >> $PROJECT_DIR/remote-files/.env
-  echo "HOST_URL_MICRO=http://$ipv4_address:5000" >> $PROJECT_DIR/remote-files/.env
+  # echo "HOST_URL_MONO=http://$ipv4_address:8080/ticket-monster" >> $PROJECT_DIR/remote-files/.env
+  # echo "HOST_URL_MICRO=http://$ipv4_address:5000" >> $PROJECT_DIR/remote-files/.env
+  echo "HOST_URL_MONO=$monolith_host_url" >> $PROJECT_DIR/remote-files/.env
+  echo "HOST_URL_MICRO=$microservice_host_url" >> $PROJECT_DIR/remote-files/.env
   $PROJECT_DIR/scripts/host-setup.sh --files=$PROJECT_DIR/remote-files
 
 
@@ -149,6 +154,9 @@ perform_experiment() {
   echo "Sleep Time: $sleep_time" >> "$output_folder/test_results.csv"
   echo "Sampling Frequency: $sampling_frequency" >> "$output_folder/test_results.csv"
   echo "Number of Instances: $num_instances" >> "$output_folder/test_results.csv"
+  echo "Application Directory Path: $application_dir_path" >> "$output_folder/test_results.csv"
+  echo "Monolith Host URL: $monolith_host_url" >> "$output_folder/test_results.csv"
+  echo "Microservice Host URL: $microservice_host_url" >> "$output_folder/test_results.csv"
 
   echo "---------------------------------------------"
   echo "Commencing Monolith Experiment"
@@ -242,6 +250,8 @@ filtered_data = [
         "microservice_frontend_workflow": item.get("microservice_frontend_workflow", "./workflows/microservice/frontend.yml"),
         "microservice_backend_workflow": item.get("microservice_backend_workflow", "./workflows/microservice/workload.json"),
         "application_dir_path": item.get("application_dir_path", "./docker-compose.yml")
+        "monolith_host_url": item.get("monolith_host_url", "http://localhost:8080/ticket-monster"),
+        "microservice_host_url": item.get("microservice_host_url", "http://localhost:5000")
     }
     for item in data.get("experiments", [])
 ]
@@ -249,7 +259,7 @@ filtered_data = [
 print(json.dumps(filtered_data))
 ')
 
-experiments=($(echo "$json_data" | jq -r '.[] | "\(.iterations) \(.workload_iterations) \(.sleep_time) \(.output_folder) \(.sampling_frequency) \(.num_instances) \(.monolith_frontend_workflow) \(.monolith_backend_workflow) \(.microservice_frontend_workflow) \(.microservice_backend_workflow) \(.application_dir_path)"'))
+experiments=($(echo "$json_data" | jq -r '.[] | "\(.iterations) \(.workload_iterations) \(.sleep_time) \(.output_folder) \(.sampling_frequency) \(.num_instances) \(.monolith_frontend_workflow) \(.monolith_backend_workflow) \(.microservice_frontend_workflow) \(.microservice_backend_workflow) \(.application_dir_path) \(.monolith_host_url) \(.microservice_host_url)"'))
 
 
 
@@ -266,6 +276,8 @@ for ((i = 0; i < ${#experiments[@]}; i += 5)); do
   microservice_frontend_workflow="${experiments[i+8]}"
   microservice_backend_workflow="${experiments[i+9]}"
   application_dir_path="${experiments[i+10]}"
+  monolith_host_url="${experiments[i+11]}"
+  microservice_host_url="${experiments[i+12]}"
   
   # Call the confirm_experiment function
   confirm_experiment
